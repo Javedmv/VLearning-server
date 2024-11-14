@@ -1,0 +1,32 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "description": "auth service of VLearning",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "start:dev": "concurrently --kill-others-on-fail \"npm run build\" \"npm run start\""
+  },
+  "author": "Javed",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.7"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.9.0",
+    "concurrently": "^9.1.0",
+    "node": "^18.20.5",
+    "typescript": "^5.6.3"
+  }
+}
