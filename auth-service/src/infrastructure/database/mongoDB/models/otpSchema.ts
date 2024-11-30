@@ -20,7 +20,7 @@ const otpSchema:Schema = new Schema({
     timestamps: true
 })
 
-export const Otp = model<IOtp>("otp",otpSchema)
+export const Otp = model<IOtp>("otps",otpSchema)
 
 export interface IotpDocument extends IOtp {
     createdAt: Date,

@@ -33,20 +33,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const server = __importStar(require("./presentation/server"));
-const config_1 = require("./config/envConfig/config");
+const config_1 = require("./__boot/config");
+const consumer_1 = require("./__boot/consumer");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         server;
-        yield (0, config_1.connectDB)();
+        yield Promise.all([(0, config_1.connectDB)(), (0, consumer_1.runConsumer)()])
+            .then(() => {
+            console.log("kafka consumer is running");
+        })
+            .catch((error) => {
+            console.error(`Error while initializing Kafka consumer: ${error}`);
+            process.exit(0);
+        });
+        // console.log("Server and Kafka consumer are running...");
     }
     catch (error) {
-        console.error("issues in running server:", error);
-        throw new Error("issues in running server");
+        console.error("Error during initialization:", error);
+        process.exit(1); // Exit with failure if startup fails
     }
-    finally {
-        process.on("SIGINT", () => __awaiter(void 0, void 0, void 0, function* () {
-            console.log("server shutting down");
-            process.exit();
-        }));
-    }
+    // Handle graceful shutdown signals
+    process.on("SIGTERM", () => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("SIGTERM received. Shutting down...");
+        yield cleanupAndExit();
+    }));
+    process.on("SIGINT", () => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("SIGINT received. Shutting down...");
+        yield cleanupAndExit();
+    }));
+    // Cleanup function to stop consumer and exit process
+    const cleanupAndExit = () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            console.log("Stopping Kafka consumer...");
+            yield (0, consumer_1.stopConsumer)();
+            console.log("Kafka consumer stopped.");
+        }
+        catch (error) {
+            console.error("Error while stopping Kafka consumer:", error);
+        }
+        finally {
+            console.log("Process exiting...");
+            process.exit(0);
+        }
+    });
 }))();

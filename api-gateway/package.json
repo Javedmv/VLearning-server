@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "api-gatway for VLearning",
   "main": "index.js",
-"scripts": {
-  "start": "nodemon --watch src --exec ts-node src/index.ts",
-  "build": "tsc",
-  "start:build": "npm run build && npm start"
-}
-,
+  "scripts": {
+    "start": "nodemon --watch src --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start:build": "npm run build && npm start",
+    "start:dev": "tsc && concurrently --kill-others-on-fail \"tsc --watch\" \"nodemon dist/index.js\""
+  },
   "author": "Javed",
   "license": "ISC",
   "dependencies": {
@@ -27,6 +27,7 @@
     "@types/express": "^5.0.0",
     "@types/express-http-proxy": "^1.6.6",
     "@types/morgan": "^1.9.9",
+    "concurrently": "^9.1.0",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"

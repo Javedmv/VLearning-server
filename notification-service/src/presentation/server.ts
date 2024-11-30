@@ -1,6 +1,8 @@
 import express,{ Application, Request, Response, urlencoded} from 'express';
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import { notificationRoutes } from '../infrastructure/routes';
+import { dependencies } from '../__boot/dependencies';
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ app.get("/",(req:Request, res:Response) => {
         message:"Notification service is ON!!!!"
     })
 })
+
+app.use("/notification", notificationRoutes(dependencies))
 
 app.listen(PORT,() => {
     console.log(`connected to notification service at http://localhost:${PORT}`);  

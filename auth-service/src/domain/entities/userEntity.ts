@@ -31,6 +31,7 @@ interface Profile {
 
 export interface UserEntity {
     _id?: ObjectId;
+    username: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -44,4 +45,5 @@ export interface UserEntity {
     createdAt?: Date;
     updatedAt?: Date;
     profession?: string;
+    isNewUser?: boolean;
 }

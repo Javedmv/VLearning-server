@@ -4,17 +4,29 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "start:dev": "tsc && concurrently --kill-others-on-fail \"tsc --watch\" \"nodemon dist/index.js\""
   },
   "author": "Javed",
   "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1"
+    "express": "^4.21.1",
+    "kafkajs": "^2.2.4",
+    "nodemailer": "^6.9.16"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.7",
-    "@types/express": "^5.0.0"
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "@types/nodemailer": "^6.4.16",
+    "concurrently": "^9.1.0",
+    "node": "^18.20.5",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.6.3"
   }
 }

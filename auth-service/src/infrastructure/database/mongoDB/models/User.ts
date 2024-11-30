@@ -1,18 +1,21 @@
 import {model,Schema} from 'mongoose';
 import { UserEntity } from '../../../../domain/entities';
+import { required, string } from 'joi';
 
 const userSchema = new Schema({
+    username: {
+        type: String,
+        required: true
+    },
     firstName: {
         type: String,
-        required:true,
     },
     lastName: {
         type: String,
-        required:true
     },
     email:{
         type: String,
-        reqruired: true,
+        required: true,
         unique: true,
         index: true
     },
@@ -61,15 +64,19 @@ const userSchema = new Schema({
     profession:{
         type:String
     },
-    otp:{
-        type:String
-    },
     profit:{
         type:Number,
         default:0
+    },
+    cv: {
+        type: String,
+    },
+    isNewUser: {
+        type:Boolean,
+        default: true
     }
 },{
     timestamps:true
 })
 
-export const User = model<UserEntity>("user",userSchema)
+export const User = model<UserEntity>("users",userSchema)

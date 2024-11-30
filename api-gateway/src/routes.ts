@@ -13,6 +13,18 @@ export const routes = (app: Application) => {
         },
     }))
 
+    app.use("/notification", proxy(Service.NOTIFICATION_SERVICE_URL,{
+        proxyReqPathResolver(req){
+            return req.url
+        }
+    }))
+
+    app.use("/user", proxy(Service.USER_SERVICE_URL,{
+        proxyReqPathResolver(req){
+            return req.url
+        }
+    }))
+
     app.use("*",(req:Request, res:Response) => {
         res.status(404).json({error: "route not found"})
     })

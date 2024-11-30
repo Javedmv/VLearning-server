@@ -8,7 +8,10 @@ export const applySecurityMiddleware = (app:Application) => {
     app.use(helmet())
 
     app.use(cors({
-        origin:[Service.CLIENT_URL], credentials:true
+        origin:[Service.CLIENT_URL!],
+        methods: ["GET","POST","HEAD","PUT","PATCH","DELETE"],
+        credentials:true,
+        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
     }))
 
     const limiter = rateLimit({
