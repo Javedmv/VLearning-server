@@ -15,6 +15,9 @@ export const signupController = (dependencies: IDependencies) => {
             const userCredentials = req.body;
             const {username, email, otp, password, confirmPassword, role} = userCredentials
 
+            console.log(userCredentials,"userCredentials");
+            
+
             if(password !== confirmPassword) next(ErrorResponse.badRequest("Passwords do not match"));
             
             //checking user email is taken or not

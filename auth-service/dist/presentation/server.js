@@ -12,6 +12,7 @@ const config_1 = require("../__boot/config");
 const dependencies_1 = require("../__boot/dependencies");
 const routes_1 = require("../infrastructure/routes");
 const error_1 = require("../_lib/common/error");
+// import { multerError } from "../_lib/common/error/multerError";
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -24,6 +25,7 @@ app.use('*', (req, res) => {
     res.status(404).json({ success: false, message: 'api not found' });
 });
 app.use(error_1.errorHandler);
+// app.use(multerError);
 app.listen(config_1.PORT, () => {
     console.log(`auth server running on port: http://localhost${config_1.PORT}`);
 });

@@ -19,9 +19,9 @@ declare global{
 export const jwtMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
         console.log(req.body)
-        console.log("Full cookies:", req.cookies);
-        console.log("Access token:", req.cookies.access_token);
-        console.log("Refresh token:", req.cookies.refresh_token);
+        // console.log("Full cookies:", req.cookies);
+        // console.log("Access token:", req.cookies.access_token);
+        // console.log("Refresh token:", req.cookies.refresh_token);
 
         const {access_token, refresh_token } = req.cookies
         
@@ -48,6 +48,7 @@ export const jwtMiddleware = async (req: Request, res: Response, next: NextFunct
             }
         }
         req.user = user;
+        
         next();
     } catch (error) {
         console.error("Error in JWT middleware:",error)

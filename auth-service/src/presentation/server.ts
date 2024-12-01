@@ -8,7 +8,7 @@ import { PORT } from "../__boot/config";
 import { dependencies } from "../__boot/dependencies";
 import { routes } from "../infrastructure/routes";
 import { errorHandler } from "../_lib/common/error";
-import { multerError } from "../_lib/common/error/multerError";
+// import { multerError } from "../_lib/common/error/multerError";
 
 const app:Application = express();
 
@@ -27,7 +27,7 @@ app.use('*',(req:Request,res:Response)=>{
 });
 
 app.use(errorHandler);
-
+// app.use(multerError);
 app.listen(PORT,() => {
     console.log(`auth server running on port: http://localhost${PORT}`);
 })

@@ -14,9 +14,9 @@ export const verifyStudentUser = async(req:Request, res:Response, next: NextFunc
             return next(ErrorResponse.unauthorized("user(student) not found"));
         }
     
-        if (user.role !== "student") {
+        if (user.role !== "student" && user.role !== "instructor") {
             return next(ErrorResponse.unauthorized("Role mismatch,verify student"));
-        }
+        }        
         next()
     } catch (error) {
         console.error("Error in JWT verify user:",error)

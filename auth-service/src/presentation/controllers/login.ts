@@ -10,6 +10,8 @@ export const loginController = (dependencies: IDependencies) => {
 
     return async (req:Request,res: Response, next: NextFunction) => {
         try {
+            console.log(req.body,"loginController");
+            
             const {value, error} = loginValidation.validate(req.body);
 
             if(error){

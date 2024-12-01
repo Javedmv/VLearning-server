@@ -5,6 +5,7 @@ import { ErrorResponse } from "../../_lib/common/error";
 export const getUserController = (dependencies:IDependencies) => {
     const {useCases: { findUserByIdUseCase} } = dependencies;
     return async (req:Request,res: Response, next: NextFunction) => {
+        
         try {
             if(!req.user){
                 // throw new Error("Authentication required: No User Provided")
