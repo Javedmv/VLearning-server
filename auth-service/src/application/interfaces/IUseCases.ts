@@ -1,9 +1,11 @@
-import { ICreateUserUseCase, IFindUserByEmailUseCase, IFindUserByIdUseCase, ILoginUserUseCase, IVerifyOtpUseCase } from "../../domain/useCases";
+import { ICreateUserUseCase, IFindUserByEmailUseCase, IFindUserByIdUseCase, ILoginUserUseCase, IVerifyOtpUseCase, IFormSubmitByEmailUseCase } from "../../domain/useCases";
+import { IDependencies } from "./IDependencies";
 
 export interface IUseCases {
-    createUserUseCase: (dependencies: any) => ICreateUserUseCase;
-    findUserByEmailUseCase: (dependencies: any) => IFindUserByEmailUseCase;
-    verifyOtpUseCase: (dependencies: any) => IVerifyOtpUseCase;
-    loginUserUseCase: (dependencies: any) => ILoginUserUseCase;
-    findUserByIdUseCase: (dependencies:any) => IFindUserByIdUseCase
+    createUserUseCase: (dependencies: IDependencies) => ICreateUserUseCase;
+    findUserByEmailUseCase: (dependencies: IDependencies) => IFindUserByEmailUseCase;
+    verifyOtpUseCase: (dependencies: IDependencies) => IVerifyOtpUseCase;
+    loginUserUseCase: (dependencies: IDependencies) => ILoginUserUseCase;
+    findUserByIdUseCase: (dependencies:IDependencies) => IFindUserByIdUseCase;
+    formSubmitByEmailUseCase: (dependencies:IDependencies) => IFormSubmitByEmailUseCase;
 }

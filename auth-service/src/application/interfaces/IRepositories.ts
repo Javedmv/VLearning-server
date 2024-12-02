@@ -5,4 +5,5 @@ export interface IRepositories {
     findByEmail: (email: string) => Promise<UserEntity | null>;
     verifyOtp: (email: string, otp : string) => Promise<Boolean | null>
     findById: (id: string) => Promise<UserEntity | null>
+    addUserForm: (data: UserEntity) => Promise<UserEntity | null>
 }

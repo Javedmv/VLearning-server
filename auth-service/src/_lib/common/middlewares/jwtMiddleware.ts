@@ -18,7 +18,7 @@ declare global{
 
 export const jwtMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         // console.log("Full cookies:", req.cookies);
         // console.log("Access token:", req.cookies.access_token);
         // console.log("Refresh token:", req.cookies.refresh_token);

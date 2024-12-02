@@ -46,4 +46,6 @@ export interface UserEntity {
     updatedAt?: Date;
     profession?: string;
     isNewUser?: boolean;
+    additionalEmail?:string;
+    profileDescription?:string;
 }
