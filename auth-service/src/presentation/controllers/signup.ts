@@ -10,7 +10,7 @@ export const signupController = (dependencies: IDependencies) => {
     
     const {useCases: {createUserUseCase, findUserByEmailUseCase , verifyOtpUseCase}, } = dependencies;
 
-    return async (req: Request, res: Response, next: NextFunction):Promise<void> => {   
+    return async (req: Request, res: Response, next: NextFunction):Promise<void> => {
         try {
             const userCredentials = req.body;
             const {username, email, otp, password, confirmPassword, role} = userCredentials
@@ -25,14 +25,10 @@ export const signupController = (dependencies: IDependencies) => {
                 try {
                     const userExist: any = await findUserByEmailUseCase(dependencies).execute(email)
                     if(userExist){
-                        return next(
-                            ErrorResponse.conflict(
-                                "Email is already registed try another email"
-                            )
-                        )
+                        return next(ErrorResponse.conflict("Email is already registed try another email"));
                     }
                 } catch (error:any) {
-                    console.log(error,"Something went wrong");
+                    console.log(error,"Error USER ALREDY EXISTS");
                     next(error)
                 }
             }

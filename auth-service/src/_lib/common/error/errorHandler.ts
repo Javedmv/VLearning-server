@@ -1,21 +1,23 @@
 import { Request, Response, NextFunction } from "express";
 import ErrorResponse from "./errorResponse";
 
-const errorHandler = (err: any, req:Request, res:Response, next: NextFunction): any => {
+const errorHandler = (err: any, req:Request, res:Response, next: NextFunction) => {
     console.log("yes error handler is executed",err)
     if(err instanceof ErrorResponse){
-        return res.status(err.status).json({
+            res.status(err.status).json({
             success: false,
-            message: err.message,
-            status: err.status
+            status: err.status,
+            message: err.message
         })
+        return;
     }
 
-    return res.status(400).json({
+    res.status(400).json({
         success: false,
-        status: err.status || 500,
+        status: err?.status || 400,
         message: "Internal Server Error",
     })
+    return;
 };
 
 export default errorHandler;

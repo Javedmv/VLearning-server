@@ -5,8 +5,9 @@ import { runConsumer, stopConsumer } from "./__boot/consumer";
 (async () => {
     try {
         server;
-
+        // await Promise.all([connectDB()]) 
         await Promise.all([connectDB(), runConsumer()])
+        // TODO: disconnected the consumer reconnect it when needed
         .then(() => {
             console.log("kafka consumer is running")
         })
@@ -45,3 +46,4 @@ import { runConsumer, stopConsumer } from "./__boot/consumer";
         }
     };
 })();
+

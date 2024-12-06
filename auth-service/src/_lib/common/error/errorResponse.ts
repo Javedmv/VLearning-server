@@ -5,9 +5,9 @@ export default class ErrorResponse extends Error {
 
     constructor (status: number, message: string){
         super(message)
-        this.status = status,
-        this.message = message,
-        this.success = false
+        this.status = status;
+        this.message = message;
+        this.success = false;
     }
 
     static badRequest(msg:string):ErrorResponse {

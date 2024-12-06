@@ -58,8 +58,9 @@ const userSchema = new Schema({
         default: false
     },
     isVerified:{
-        type:Boolean,
-        default:false
+        type:String,
+        enum:["requested","approved","declined"],
+        default:"requested"
     },
     profession:{
         type:String

@@ -5,7 +5,6 @@ export const formSubmitByEmailUseCase = (dependencies:IDependencies) => {
     const {repositories: {addUserForm}} = dependencies
     return {
         execute: async (data:UserEntity) => {
-            console.log(data)
             return await addUserForm(data)
         }
     }

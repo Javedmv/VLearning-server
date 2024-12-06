@@ -11,6 +11,12 @@ enum Gender {
     female = "female"
 }
 
+enum isVerified {
+    requested = "requested",
+    approved = "approved",
+    rejected = "rejected"
+}
+
 interface SocialMedia {
     instagram?: string;
     linkedIn?: string;
@@ -41,7 +47,7 @@ export interface UserEntity {
     profile?: Profile;
     contact?: Contact;
     isBlocked: boolean;
-    isVerified: boolean;
+    isVerified: isVerified;
     createdAt?: Date;
     updatedAt?: Date;
     profession?: string;

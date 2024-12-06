@@ -38,7 +38,9 @@ const consumer_1 = require("./__boot/consumer");
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         server;
+        // await Promise.all([connectDB()]) 
         yield Promise.all([(0, config_1.connectDB)(), (0, consumer_1.runConsumer)()])
+            // TODO: disconnected the consumer reconnect it when needed
             .then(() => {
             console.log("kafka consumer is running");
         })

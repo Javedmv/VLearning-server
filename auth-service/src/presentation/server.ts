@@ -26,8 +26,8 @@ app.use('*',(req:Request,res:Response)=>{
     res.status(404).json({success:false, message:'api not found'})
 });
 
-app.use(errorHandler);
-// app.use(multerError);
+app.use(errorHandler)
+
 app.listen(PORT,() => {
     console.log(`auth server running on port: http://localhost${PORT}`);
 })
