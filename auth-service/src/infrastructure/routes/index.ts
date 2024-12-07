@@ -8,7 +8,8 @@ import { verifyAdmin,verifyUser } from "../../_lib/jwt";
 
 export const routes = (dependencies: IDependencies) => {
     const {signup, findUserByEmail, resendOtp, login , getUser, postUserForm, logout , adminGetAllStudents,
-         adminBlockUser, adminGetAllInstructors, adminVerifyInstructor} = controllers(dependencies);
+         adminBlockUser, adminGetAllInstructors, adminVerifyInstructor, forgotPassword ,forgotPasswordSubmit,
+         updateForgotPassword} = controllers(dependencies);
     
     const router = Router();
     
@@ -18,7 +19,9 @@ export const routes = (dependencies: IDependencies) => {
     router.route("/login").post(login);
     router.route("/").get(jwtMiddleware, getUser);
     router.route("/logout").post(jwtMiddleware,logout)
-    
+    router.route("/forgot-password").post(forgotPassword)
+    router.route("/forgot-password/otp-submit").post(forgotPasswordSubmit);
+    router.route("/forgot-password/update-passoword").post(updateForgotPassword)
 
     // user
     router.route("/multipart/user-form").post(

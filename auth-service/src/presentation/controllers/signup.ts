@@ -40,8 +40,7 @@ export const signupController = (dependencies: IDependencies) => {
                      res.status(200).json({
                       success: true,
                       message: "otp sent successfully",
-                    });
-                    return;
+                    })
                   } catch (error: any) {
                     console.log(error, "Something Went Wrong in OTP section");
                     return next(ErrorResponse.badRequest("Something went wrong in otp"))
@@ -63,7 +62,6 @@ export const signupController = (dependencies: IDependencies) => {
                           });
                           return;
                     }
-                    console.log("otp correct")
                 } catch (error:any) {
                     console.log(error, "Something went wrong in verifyOtp");
                     return next(ErrorResponse.badRequest("Otp invalid"))

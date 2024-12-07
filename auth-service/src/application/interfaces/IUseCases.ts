@@ -1,5 +1,6 @@
 import { ICreateUserUseCase, IFindUserByEmailUseCase, IFindUserByIdUseCase, ILoginUserUseCase, IVerifyOtpUseCase, 
-    IFormSubmitByEmailUseCase, IGetAllStudentsUseCase, IBlockUserUseCase, IGetAllInstructorsUseCase,IVerifyInstructorUseCase} from "../../domain/useCases";
+    IFormSubmitByEmailUseCase, IGetAllStudentsUseCase, IBlockUserUseCase, IGetAllInstructorsUseCase,IVerifyInstructorUseCase,
+    IUpdatePasswordUseCase} from "../../domain/useCases";
 
 import { IDependencies } from "./IDependencies";
 
@@ -13,5 +14,6 @@ export interface IUseCases {
     getAllStudentsUseCase:(dependencies:IDependencies) => IGetAllStudentsUseCase;
     blockUserUseCase:(dependencies:IDependencies) => IBlockUserUseCase;
     getAllInstructorsUseCase: (dependencies:IDependencies) => IGetAllInstructorsUseCase;
-    verifyInstructorUseCase: (dependencies:IDependencies) => IVerifyInstructorUseCase
+    verifyInstructorUseCase: (dependencies:IDependencies) => IVerifyInstructorUseCase;
+    updatePasswordUseCase: (dependencies:IDependencies) => IUpdatePasswordUseCase;
 }
