@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../_lib/common/error";
+import jwt ,{VerifyErrors , JwtPayload} from 'jsonwebtoken';
 
 export const getUserController = (dependencies:IDependencies) => {
     const {useCases: { findUserByIdUseCase} } = dependencies;
