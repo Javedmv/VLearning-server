@@ -17,6 +17,7 @@ app.get("/",(req:Request, res:Response) => {
     })
 })
 
+
 app.listen(PORT,() => {
     console.log(`connected to course service at http://localhost:${PORT}`);  
 })
