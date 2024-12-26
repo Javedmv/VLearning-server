@@ -16,8 +16,7 @@ export const postUserFormController = (dependencies:IDependencies) => {
 
     return async(req:Request, res:Response, next:NextFunction) => {
         try {
-            console.log(req.body)
-            const { username,firstName , lastName, email, phoneNumber , role, profile : {dob, gender} , profession , profileDescription , isNewUser , additionalEmail, files:{avatar: avatarLocalDestination,cv: cvLocalDestination}} = req.body;
+            const { username,firstName , lastName, email, phoneNumber , role, profile : {dob, gender} , profession , profileDescription , isNewUser , files:{avatar: avatarLocalDestination,cv: cvLocalDestination}, qualification, contact} = req.body;
             
             const avatarFilename = (req.files as CustomRequest["files"])?.['files.avatar']?.[0]?.filename || "No avatar uploaded";
             const cvFilename = (req.files as CustomRequest["files"])?.['files.cv']?.[0]?.filename || "No CV uploaded";
@@ -77,8 +76,8 @@ export const postUserFormController = (dependencies:IDependencies) => {
                 return;
             }
             if(result){
-                const {_id, email, role , username, isNewUser} = result;
-                res.status(200).json({success: true, data: {_id, email, role, username, isNewUser}});
+                const {_id, email, role , username, isNewUser, isBlocked, isVerified, profession, profileDescription} = result;
+                res.status(200).json({success: true, data: {_id, email, role, username, isNewUser,isBlocked, isVerified, profession, profileDescription}});
             }
         } catch (error) {
             next(error);

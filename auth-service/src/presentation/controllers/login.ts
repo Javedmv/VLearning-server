@@ -19,7 +19,7 @@ export const loginController = (dependencies: IDependencies) => {
             }
             const result = await loginUserUseCase(dependencies).execute(value.email);
             if(result){
-                const {password,_id, email, role, username, isNewUser, ...restResult} = result;
+                const {password,_id, email, role, username, isNewUser,isBlocked, isVerified, profession, profileDescription, ...restResult} = result;
                 if(result.isBlocked){
                     return next(ErrorResponse.unauthorized("Sorry, Your Account Is Blocked!"));
                 }
@@ -53,7 +53,7 @@ export const loginController = (dependencies: IDependencies) => {
                 
                 res.status(200).json({
                     success: true,
-                    data: {_id, email, role, username, isNewUser},
+                    data: {_id, email, role, username, isNewUser,isBlocked, isVerified, profession, profileDescription},
                     message:"Login Successfull!"
                 })
             }else{

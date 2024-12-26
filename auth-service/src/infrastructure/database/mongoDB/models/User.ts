@@ -59,8 +59,8 @@ const userSchema = new Schema({
     },
     isVerified:{
         type:String,
-        enum:["requested","approved","declined"],
-        default:"requested"
+        enum:["requested","approved","declined","false"],
+        default:"false"
     },
     profession:{
         type:String
@@ -75,6 +75,12 @@ const userSchema = new Schema({
     isNewUser: {
         type:Boolean,
         default: true
+    },
+    qualification:{
+        type: String,
+    },
+    profileDescription:{
+        type: String,
     }
 },{
     timestamps:true

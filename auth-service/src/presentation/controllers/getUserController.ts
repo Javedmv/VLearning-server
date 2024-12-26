@@ -17,14 +17,13 @@ export const getUserController = (dependencies:IDependencies) => {
             if(!result){
                 return(next(ErrorResponse.notFound("User not found!")));
             }
-            const  {_id,email,role,username, isNewUser} = result
-            
+            const  {_id,email,role,username, isNewUser,isBlocked, isVerified, profession, profileDescription} = result;
             res.status(200).json({
                 success: true,
-                data:  {_id,email,role,username,isNewUser},
+                data:  {_id,email,role,username,isNewUser,isBlocked, isVerified , profession, profileDescription},
                 message: "User Exist!!"
             })
-
+            return;
         } catch (error) {
             next(error)
         }

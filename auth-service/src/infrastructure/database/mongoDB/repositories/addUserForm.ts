@@ -14,7 +14,8 @@ export const addUserForm = async (data:any): Promise<UserEntity | null> => {
             cvPath,
             profession,
             profileDescription,
-
+            qualification,
+            contact
         } = data;
 
         const updatedData = {
@@ -29,7 +30,16 @@ export const addUserForm = async (data:any): Promise<UserEntity | null> => {
             isNewUser,
             cv: cvPath,
             profession,
-            profileDescription
+            profileDescription,
+            contact: {
+                additionalEmail: contact?.additionalEmail,
+                socialMedia: {
+                    instagram: contact?.socialMedia?.instagram,
+                    linkedIn: contact?.socialMedia?.linkedIn,
+                    github: contact?.socialMedia?.github,
+                }
+            },
+            qualification
         };
 
         const result = await User.findOneAndUpdate(

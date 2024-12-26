@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { Router } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { controllers } from "../../presentation/controllers";
 import { jwtMiddleware } from "../../_lib/common";
@@ -9,7 +9,8 @@ import { verifyAdmin,verifyUser } from "../../_lib/jwt";
 export const routes = (dependencies: IDependencies) => {
     const {signup, findUserByEmail, resendOtp, login , getUser, postUserForm, logout , adminGetAllStudents,
          adminBlockUser, adminGetAllInstructors, adminVerifyInstructor, forgotPassword ,forgotPasswordSubmit,
-         updateForgotPassword} = controllers(dependencies);
+         updateForgotPassword, adminGetProfile, adminUpdatePassword, getUserDetails, updateUserProfile, updatePassword,
+         postApplyTeach ,postInstructorReapply} = controllers(dependencies);
     
     const router = Router();
     
@@ -30,8 +31,17 @@ export const routes = (dependencies: IDependencies) => {
         verifyUser, 
         postUserForm
     );
+    router.route("/profile/:id").get(jwtMiddleware,verifyUser,getUserDetails)
+    .post(jwtMiddleware,verifyUser,updateUserProfile)
+    router.route("/update/password").post(jwtMiddleware, verifyUser, updatePassword)
+
+    router.route("/multipart/apply-teach").post(uploadMiddleware,jwtMiddleware,verifyUser,postApplyTeach)
+    router.route("/multipart/instructor-reapply").post(uploadMiddleware,jwtMiddleware,verifyUser,postInstructorReapply)
     
     // admin
+    router.route("/admin-profile").get(jwtMiddleware,verifyAdmin, adminGetProfile)
+    router.route("/update-password").post(jwtMiddleware,verifyAdmin, adminUpdatePassword)
+
     router.route("/students").get(jwtMiddleware,verifyAdmin,adminGetAllStudents)
     router.route("/student/block/:id").put(jwtMiddleware,verifyAdmin,adminBlockUser)
     

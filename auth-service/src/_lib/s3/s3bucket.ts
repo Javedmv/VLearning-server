@@ -1,5 +1,7 @@
-import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, PutObjectCommandInput, GetObjectCommand } from "@aws-sdk/client-s3";
 import { readFile } from "fs/promises";
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
 
 export const s3Client = new S3Client({
     region: process.env.AWS_REGION,
@@ -44,3 +46,25 @@ export async function uploadToS3(
         throw error;
     }
 }
+
+
+
+/**
+ * Generates a publicly accessible URL for an S3 object valid for 1 day (24 hours).
+ * 
+ * @param {string} bucketName - Name of the S3 bucket.
+ * @param {string} filePath - Path of the file in the S3 bucket.
+ * @returns {Promise<string>} - Publicly accessible URL.
+ */
+export const getPublicUrl = async (bucketName:string, filePath:string) => {
+    try {
+      const command = new GetObjectCommand({Bucket: bucketName, Key: filePath });
+      
+      // Generate a signed URL
+      const url = getSignedUrl(s3Client,command,{ expiresIn: 15 * 60 } );
+      return url;
+    } catch (error) {
+      console.error('Error generating signed URL:', error);
+      throw new Error('Could not generate signed URL');
+    }
+  };

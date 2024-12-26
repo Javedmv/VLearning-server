@@ -13,6 +13,13 @@ import { adminVerifyInstructorController } from "./adminVerifyInstructorControll
 import { forgotPasswordController } from "./forgotPasswordController";
 import { forgotPasswordSubmitController } from "./forgotPasswordSubmitController";
 import { updateForgotPasswordController } from "./updateForgotPasswordController";
+import { adminGetProfileController } from "./adminGetProfileController";
+import { adminUpdatePasswordController } from "./adminUpdatePasswordController";
+import { getUserDetailsController } from "./getUserDetailsController";
+import { updateUserProfileController } from "./updateUserProfileController";
+import { updatePasswordController } from "./updatePasswordController";
+import { postApplyTeachController } from "./postApplyTeachController";
+import { postInstructorReapplyController } from "./postInstructorReapplyController";
 
 export const controllers = (dependencies: IDependencies) =>  {
     return {
@@ -26,9 +33,18 @@ export const controllers = (dependencies: IDependencies) =>  {
         forgotPassword: forgotPasswordController(dependencies),
         forgotPasswordSubmit: forgotPasswordSubmitController(dependencies),
         updateForgotPassword: updateForgotPasswordController(dependencies),
+        
+        getUserDetails: getUserDetailsController(dependencies),
+        updateUserProfile: updateUserProfileController(dependencies),
+        updatePassword: updatePasswordController(dependencies),
+        postApplyTeach: postApplyTeachController(dependencies),
+        postInstructorReapply: postInstructorReapplyController(dependencies),
+
         adminGetAllStudents: adminGetAllStudentsController(dependencies),
         adminBlockUser: adminBlockUserController(dependencies),
         adminGetAllInstructors: adminGetAllInstructorsController(dependencies),
         adminVerifyInstructor: adminVerifyInstructorController(dependencies),
+        adminGetProfile: adminGetProfileController(dependencies),
+        adminUpdatePassword: adminUpdatePasswordController(dependencies),
     }
 }

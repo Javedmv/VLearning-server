@@ -5,7 +5,7 @@ import { connectDB } from "./__boot/config";
     try {
         server;
         await connectDB();
-        console.log("user service is running");
+        console.log("course service is running");
     } catch (error) {
         console.error("issues in running server:", error);
         throw new Error("issues in running server");

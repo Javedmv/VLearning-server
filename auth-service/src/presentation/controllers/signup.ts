@@ -8,7 +8,7 @@ import { generateAccessToken,generateRefreshToken } from '../../_lib/jwt';
 
 export const signupController = (dependencies: IDependencies) => {
     
-    const {useCases: {createUserUseCase, findUserByEmailUseCase , verifyOtpUseCase}, } = dependencies;
+    const {useCases: {createUserUseCase, findUserByEmailUseCase , verifyOtpUseCase} } = dependencies;
 
     return async (req: Request, res: Response, next: NextFunction):Promise<void> => {
         try {
@@ -52,10 +52,10 @@ export const signupController = (dependencies: IDependencies) => {
             if(otp){
                 try {
                     const isOtpVerified = await verifyOtpUseCase(dependencies).execute(email,otp);
-                    
+                    console.log(isOtpVerified, "otp verifed")
                     if(!isOtpVerified){
                         const { email , ...restValues} = userCredentials;
-                         res.status(401).json({
+                            res.status(401).json({
                             user: email,
                             success: false,
                             message: "OTP is Invalid try another",
@@ -118,7 +118,7 @@ export const signupController = (dependencies: IDependencies) => {
                     sameSite:"none",
                   });
           
-                res.status(200).json({
+                  res.status(200).json({
                     success: true,
                     data: {_id, email, role, username, isNewUser},
                     message: "User created!",

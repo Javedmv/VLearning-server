@@ -15,7 +15,7 @@ export const connectDB = async () => {
         if(client){
             console.log(`
                 -----------------------------------
-                -     USER SRV MONGODB CONNECTED  -
+                -     COURSE SRV MONGODB CONNECTED  -
                 -----------------------------------
               `);
         }else{

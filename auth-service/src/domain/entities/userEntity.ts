@@ -24,9 +24,8 @@ interface SocialMedia {
 }
 
 interface Contact {
-    phone?: string;
     additionalEmail?: string;
-    socialMedia?: string;
+    socialMedia?: SocialMedia;
 }
 
 interface Profile {
@@ -54,4 +53,6 @@ export interface UserEntity {
     isNewUser?: boolean;
     additionalEmail?:string;
     profileDescription?:string;
+    qualification?: string;
+    cv?:string;
 }

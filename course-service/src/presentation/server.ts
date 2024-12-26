@@ -13,12 +13,12 @@ app.use(cookieParser());
 
 app.get("/",(req:Request, res:Response) => {
     res.status(200).json({
-        message:"user service is ON!!!!"
+        message:"course service is ON!!!!"
     })
 })
 
 app.listen(PORT,() => {
-    console.log(`connected to user service at http://localhost:${PORT}`);  
+    console.log(`connected to course service at http://localhost:${PORT}`);  
 })
 
 export default app;
