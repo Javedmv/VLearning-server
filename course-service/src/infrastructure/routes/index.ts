@@ -12,7 +12,7 @@ export const courseRoutes = (dependencies:IDependencies) => {
 
     const router = Router();
 
-    router.route("/multipart/add-category").post(uploadMiddleware,jwtMiddleware,verifyAdmin,addCategory)
+    router.route("/multipart/add-category").post(uploadMiddleware,addCategory)
 
     return router;
 }

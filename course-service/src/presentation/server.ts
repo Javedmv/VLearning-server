@@ -1,11 +1,12 @@
 import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import { config } from 'dotenv';
-import { dependencies } from "../__boot/dependencies";
-import courseRoutes from "../infrastructure/routes";
-import { errorHandler } from "../_lib/error";
 
 config();
+
+import { errorHandler } from "../_lib/error";
+import courseRoutes from "../infrastructure/routes";
+import { dependencies } from "../__boot/dependencies";
 
 const app: Application = express();
 const PORT: number = Number(process.env.PORT!)
@@ -20,6 +21,11 @@ app.use(cookieParser());
 //     })
 // })
 app.use('/',courseRoutes(dependencies));
+
+
+app.use('*',(req:Request,res:Response)=>{
+    res.status(404).json({success:false, message:'api not found'})
+});
 
 app.use(errorHandler)
 
