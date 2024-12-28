@@ -48,7 +48,6 @@ export const jwtMiddleware = async (req: Request, res: Response, next: NextFunct
             }
         }
         req.user = user;
-        
         next();
     } catch (error) {
         console.error("Error in JWT middleware:",error)

@@ -34,7 +34,11 @@ export const routes = (app: Application) => {
     app.use("/auth", createRegularProxy(Service.AUTH_SERVICE_URL))
 
     app.use("/notification", createRegularProxy(Service.NOTIFICATION_SERVICE_URL))
-    app.use("/user", createRegularProxy(Service.USER_SERVICE_URL))
+
+    // Use regular proxy for other course routes
+    app.use("/course", createRegularProxy(Service.COURSE_SERVICE_URL))
+    // Use multipart proxy only for file upload routes
+    app.use("/course/multipart", createMultipartProxy(Service.COURSE_SERVICE_URL))
 
     app.use("*",(req:Request, res:Response) => {
         res.status(404).json({error: "route not found"})
