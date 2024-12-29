@@ -16,5 +16,3 @@ export const courseRoutes = (dependencies:IDependencies) => {
 
     return router;
 }
-
-export default courseRoutes;

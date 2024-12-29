@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser"
 import morgan from "morgan"
 
+
 dotenv.config();
 import { PORT } from "../__boot/config";
 import { dependencies } from "../__boot/dependencies";

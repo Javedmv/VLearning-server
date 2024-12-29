@@ -5,11 +5,11 @@ import { NextFunction, Request, Response } from "express";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      const projectRoot = path.resolve(__dirname, '..', '..', '..');
+      const projectRoot = path.join(process.cwd());
       let uploadPath = path.join(projectRoot, 'uploads');
       console.log(projectRoot, 'here is hte path and ')
   
-      if (file.fieldname === 'files.category') {
+      if (file.fieldname === 'category') {
         uploadPath = path.join(uploadPath, 'category');
       }
       fs.mkdirSync(uploadPath, { recursive: true });
@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
   });
   
   const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    if (file.fieldname === 'files.category') {
+    if (file.fieldname === 'category') {
       if (file.mimetype.startsWith('image/')) {
         cb(null, true);
       } else {
@@ -40,9 +40,7 @@ const storage = multer.diskStorage({
     limits: {
       fileSize: 100 * 1024 * 1024 // 100 MB limit
     }
-  }).fields([
-    { name: 'files.category', maxCount: 1 }
-  ]);
+  }).single("category");
   
   export const uploadMiddleware = (req: Request, res: Response, next: NextFunction) => {
     console.log("Middleware reached");
@@ -63,16 +61,25 @@ const storage = multer.diskStorage({
       }
   
       // Process the uploaded files
-      if (req.files) {
-        const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+      if (req.file) {
+        const file = req.file as Express.Multer.File;
         if (!req.body.files) req.body.files = {};
-  
-        if (files['files.category']) {
-          req.body.files.category = files['files.category'][0].path;
-        }
-      }
+        req.body.files.category = file.path;
+    }
   
       console.log('Files processed successfully:', req.body.files);
       next();
     });
   };
+
+// export const uploadMiddleware = multer({
+//     storage: multer.diskStorage({
+//       destination: function (req, file, cb) {
+//         const uploadPath = path.join(process.cwd(), 'uploads');
+//         cb(null, uploadPath);
+//       },
+//       filename: function (req, file, cb) {
+//         cb(null, Date.now() + '-' + file.originalname);
+//       }
+//     })
+//   }).single('category');

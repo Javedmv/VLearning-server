@@ -1,7 +1,7 @@
-import {Types} from "mongoose"
+import {ObjectId} from "mongoose"
 
 export interface CategoryEntity {
-	_id: Types.ObjectId;
+	_id?: ObjectId;
 	name: string;
     description:string;
     imageUrl:string;

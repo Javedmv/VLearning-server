@@ -1,2 +1,5 @@
-export const cvFilePath ="/home/javed/Desktop/VLearning/Backend/auth-service/uploads/documents";
-export const avatarFilePath ="/home/javed/Desktop/VLearning/Backend/auth-service/uploads/avatars";
+import path from "path";
+
+export const cvFilePath = process.cwd() + "/uploads/documents";
+console.log(cvFilePath);
+export const avatarFilePath = process.cwd() + "/uploads/avatars";

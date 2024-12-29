@@ -1,1 +1,1 @@
-export const m = "s"
+export * from "./addCategory"
