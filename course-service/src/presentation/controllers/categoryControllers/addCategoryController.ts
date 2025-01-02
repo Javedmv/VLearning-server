@@ -23,6 +23,7 @@ export const addCategoryController = (dependencies:IDependencies) => {
             }
 
             const category:CategoryEntity = {name, description, status, imageUrl:filename}
+            console.log(category,typeof category, 'this is inside controller')
             const response = await addCategoryUseCase(dependencies).execute(category)
             console.log(response);
 
