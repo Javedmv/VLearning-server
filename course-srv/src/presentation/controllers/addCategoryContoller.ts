@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request, response } from "express"
 import { IDependencies } from "../../application/interfaces/IDependencies"
 import { ErrorResponse } from "../../_lib/error";
+import { uploadToS3 } from "../../_lib/s3/s3bucket";
 
 export const addCategoryController = (dependencies:IDependencies) => {
     const {useCases:{addCategoryUseCase}} = dependencies;
@@ -14,22 +15,40 @@ export const addCategoryController = (dependencies:IDependencies) => {
             if(!req.file){
                 return next(ErrorResponse.badRequest("Please add image"));
             }
+            console.log(req.file,"req.file")
+            console.log(req.file.filename, "file name");
             const filename = req.file?.filename ?? "no filename";
             const mimetype = req.file?.mimetype ?? "no mime";
+            const categoryS3Path = `category/${filename}`
             
             if(filename){
-                // TODO:UPLOAD TO S3
+                await uploadToS3(
+                    req.file.path,
+                    process.env.S3_BUCKET_NAME!,
+                    categoryS3Path,
+                    {
+                        contentType: mimetype,
+                        metadata: {
+                            'x-amz-meta-original-filename': req.file.originalname,
+                            'x-amz-meta-file-size': req.file.size.toString(),
+                            'x-amz-meta-upload-date': new Date().toISOString()
+                        }
+                    }
+                )
             }
 
-            const category = {name, description, status, imageUrl:filename}
-            console.log(category,typeof category, 'this is inside controller')
+            const category = {name, description, status, imageUrl:categoryS3Path}
             const response = await addCategoryUseCase(dependencies).execute(category)
-            console.log(response);
-
-
-
-
-             
+            if(!response){
+                return next(ErrorResponse.badRequest("Failed to add the category"));
+            }
+            console.log(response,"response in conroller")
+            res.status(200).json({
+                success:true,
+                data: response,
+                message: `category added successfully`
+            })
+            return;
         } catch (error) {
             console.log(error)
         }

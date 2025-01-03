@@ -19,6 +19,8 @@ export const postApplyTeachController = (dependencies: IDependencies) => {
             const {profession, profileDescription, files: {cv}} = req.body;
             const cvFilename = (req.files as CustomRequest["files"])?.['files.cv']?.[0]?.filename || "No CV uploaded";
             const cvS3Path = cv ? `cv/${cvFilename}_${Date.now()}` : '';
+            console.log(cv,"cv")
+            console.log(cvS3Path, "cvpath")
 
             if(cv){
                 await uploadToS3(
@@ -39,7 +41,6 @@ export const postApplyTeachController = (dependencies: IDependencies) => {
             if (cvS3Path && cvS3Path !== "") {
                 args.push(cvS3Path);
             }
-            console.log(args.length)
             if(args.length !== 4){
                 return next(ErrorResponse.badRequest("All field must be filled."));
             }
