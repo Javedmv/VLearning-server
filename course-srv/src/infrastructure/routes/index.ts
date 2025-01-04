@@ -6,12 +6,13 @@ import { Router } from "express"
 import {controllers} from "../../presentation/controllers"
 
 export const routes = (dependencies:IDependencies) => {
-    const { addCategory,getCategory } = controllers(dependencies);
+    const { addCategory,getCategory,updateCategory } = controllers(dependencies);
 
     const router = Router();
 
-    router.route("/multipart/add-category").post(uploadMiddleware,addCategory)
-    router.route("/all-category").get(jwtMiddleware,verifyAdmin, getCategory)
+    router.route("/multipart/add-category").post(uploadMiddleware,addCategory);
+    router.route("/all-category").get(jwtMiddleware,verifyAdmin, getCategory);
+    router.route("/multipart/update-category/:catId").post(uploadMiddleware,jwtMiddleware,verifyAdmin, updateCategory);
 
     return router;
 }

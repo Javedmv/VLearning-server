@@ -15,8 +15,8 @@ export const addCategoryController = (dependencies:IDependencies) => {
             if(!req.file){
                 return next(ErrorResponse.badRequest("Please add image"));
             }
-            console.log(req.file,"req.file")
-            console.log(req.file.filename, "file name");
+            // console.log(req.file,"req.file")
+            // console.log(req.file.filename, "file name");
             const filename = req.file?.filename ?? "no filename";
             const mimetype = req.file?.mimetype ?? "no mime";
             const categoryS3Path = `category/${filename}`
@@ -42,7 +42,7 @@ export const addCategoryController = (dependencies:IDependencies) => {
             if(!response){
                 return next(ErrorResponse.badRequest("Failed to add the category"));
             }
-            console.log(response,"response in conroller")
+            // console.log(response,"response in conroller")
             res.status(200).json({
                 success:true,
                 data: response,
