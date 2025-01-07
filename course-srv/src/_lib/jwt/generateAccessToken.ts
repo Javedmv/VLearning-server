@@ -1,19 +1,25 @@
 import jwt from "jsonwebtoken"
 
-export const generateAccessToken = (payload:{
-    _id:string,
-    email:string,
-    role:string
-}) => {
+interface TokenPayload {
+    _id: string;
+    email: string;
+    role: string;
+}
+
+export const generateAccessToken = (payload: TokenPayload): string => {
     try {
-        const secret = process.env.JWT_ACCESS_TOKEN_SECRET!;
+        const secret = process.env.JWT_ACCESS_TOKEN_SECRET;
         if(!secret){
-            throw new Error("Access token not defined")
+            throw new Error("JWT_ACCESS_TOKEN_SECRET is not defined");
         }
 
-        // const {_id,email,role} = payload;
-        return jwt.sign(payload,secret,{expiresIn:"24h"})
+        const { iat, exp, ...cleanPayload } = payload as TokenPayload & { iat?: number, exp?: number };
+
+        return jwt.sign(cleanPayload, secret, {
+            expiresIn: "24h"
+        });
     } catch (error) {
+        console.error("Token generation error:", error);
         throw new Error("Failed to generate access token.");
     }
 }

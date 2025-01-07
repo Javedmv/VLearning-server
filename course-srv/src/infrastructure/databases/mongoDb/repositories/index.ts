@@ -1,3 +1,5 @@
 export * from "./addCategory"
 export * from "./getAllCategory"
 export * from "./updateCategory"
+export * from "./updateCategoryStatus"
+export * from "./deleteCategory"

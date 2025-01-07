@@ -20,12 +20,10 @@ export const updateCategory = async (catId: string, category: UpdateCategoryEnti
             console.log('Category not found:', catId);
             return null;
         }
-
-        console.log('Updated category:', updatedCategory);
         
         return updatedCategory as CategoryEntity;
     } catch (error) {
-        console.error('Error updating category:', error);
+        console.error('Error updating category repo:', error);
         return null;
     }
 }

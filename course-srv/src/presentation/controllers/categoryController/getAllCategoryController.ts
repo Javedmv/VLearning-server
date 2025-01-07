@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { IDependencies } from "../../application/interfaces/IDependencies";
-import { CategoryEntity } from "../../domain/entities";
-import { getPublicUrl } from "../../_lib/s3/s3bucket";
+import { IDependencies } from "../../../application/interfaces/IDependencies";
+import { CategoryEntity } from "../../../domain/entities";
+import { getPublicUrl } from "../../../_lib/s3/s3bucket";
 
 export const getAllCategoryController = (dependencies: IDependencies) => {
     const { useCases: { getAllCategoryUseCase } } = dependencies;

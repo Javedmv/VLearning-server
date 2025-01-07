@@ -19,7 +19,7 @@ export const addCategory = async (category: CategoryEntity): Promise<CategoryEnt
         console.log(categoryData,"repo");
         return categoryData;
     } catch (error) {
-        console.log(error);
+        console.log(error,"error in category add repo");
         return null;
     }
 }

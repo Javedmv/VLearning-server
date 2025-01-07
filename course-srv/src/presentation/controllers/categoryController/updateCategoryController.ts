@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { IDependencies } from "../../application/interfaces/IDependencies";
-import { uploadToS3 } from "../../_lib/s3/s3bucket";
-import { ErrorResponse } from "../../_lib/error";
+import { IDependencies } from "../../../application/interfaces/IDependencies";
+import { uploadToS3 } from "../../../_lib/s3/s3bucket";
+import { ErrorResponse } from "../../../_lib/error";
 
 export const updateCategoryController = (dependencies: IDependencies) => {
     const {useCases: {updateCategoryUseCase}} = dependencies;
@@ -53,9 +53,9 @@ export const updateCategoryController = (dependencies: IDependencies) => {
 
             
             const updatedCategory = await updateCategoryUseCase(dependencies).execute(catId,categoryUpdate);
-            console.log('Category Update Object:', updatedCategory);
 
             if(!updatedCategory){
+                console.log("updatedCategory Error")
                 return next(ErrorResponse.badRequest("Something went wrong, please try again."))
             }
 

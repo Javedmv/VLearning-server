@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request, response } from "express"
-import { IDependencies } from "../../application/interfaces/IDependencies"
-import { ErrorResponse } from "../../_lib/error";
-import { uploadToS3 } from "../../_lib/s3/s3bucket";
+import { IDependencies } from "../../../application/interfaces/IDependencies"
+import { ErrorResponse } from "../../../_lib/error";
+import { uploadToS3 } from "../../../_lib/s3/s3bucket";
 
 export const addCategoryController = (dependencies:IDependencies) => {
     const {useCases:{addCategoryUseCase}} = dependencies;

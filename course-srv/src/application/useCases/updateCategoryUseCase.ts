@@ -8,8 +8,7 @@ export const updateCategoryUseCase = (dependencies:IDependencies) => {
             try {
                 return await updateCategory(catId,category);
             } catch (error:any) {
-                throw new Error(error?.message || "category fetch failed")
-
+                throw new Error(error?.message || "category update failed")
             }
         }
     }
