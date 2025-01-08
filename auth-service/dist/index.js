@@ -42,7 +42,7 @@ const consumer_1 = require("./__boot/consumer");
         yield Promise.all([(0, config_1.connectDB)(), (0, consumer_1.runConsumer)()])
             // TODO: disconnected the consumer reconnect it when needed
             .then(() => {
-            console.log("kafka consnnumer is running");
+            console.log("kafka consumer is running");
         })
             .catch((error) => {
             console.error(`Error while initializing Kafka consumer: ${error}`);

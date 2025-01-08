@@ -6,4 +6,5 @@ export interface IRepositories {
     updateCategory: (catId:string, category:UpdateCategoryEntity) => Promise<CategoryEntity | null>;
     updateCategoryStatus: (catId:string, status:Boolean) => Promise<Boolean | null>;
     deleteCategory: (catId:string) => Promise<CategoryEntity | null>
+    getActiveCategory: () => Promise<CategoryEntity[] | null>
 }

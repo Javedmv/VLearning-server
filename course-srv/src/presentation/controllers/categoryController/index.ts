@@ -4,6 +4,7 @@ import { IDependencies } from '../../../application/interfaces/IDependencies';
 import { updateCategoryController } from './updateCategoryController';
 import { updateCategoryStatusController } from './updateCategoryStatusController';
 import { deleteCategoryController } from './deleteCategoryController';
+import {getTrueCategoryController} from "./getTrueCategoryController"
 
 
 export const categoryControllers = (dependencies: IDependencies) =>  {
@@ -12,6 +13,7 @@ export const categoryControllers = (dependencies: IDependencies) =>  {
         getCategory: getAllCategoryController(dependencies),
         updateCategory: updateCategoryController(dependencies),
         updateCategoryStatus: updateCategoryStatusController(dependencies),
-        deleteCategory: deleteCategoryController(dependencies)
+        deleteCategory: deleteCategoryController(dependencies),
+        getTrueCategory: getTrueCategoryController(dependencies)
     }
 }
