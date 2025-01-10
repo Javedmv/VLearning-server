@@ -1,4 +1,4 @@
-import { CategoryEntity, UpdateCategoryEntity } from "../../domain/entities";
+import { CategoryEntity, CourseEntity, UpdateCategoryEntity } from "../../domain/entities";
 
 export interface IRepositories {
     addCategory:(category:CategoryEntity) => Promise<CategoryEntity | null>
@@ -7,4 +7,7 @@ export interface IRepositories {
     updateCategoryStatus: (catId:string, status:Boolean) => Promise<Boolean | null>;
     deleteCategory: (catId:string) => Promise<CategoryEntity | null>
     getActiveCategory: () => Promise<CategoryEntity[] | null>
+    addCourse: (course:CourseEntity,instrId:string) => Promise<CourseEntity | null>
+    getAllCourses: () => Promise<CourseEntity[] | null>
+    getAllInstructorCourses: (instrId:string) => Promise<CourseEntity[] | null>
 }

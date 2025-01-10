@@ -4,3 +4,7 @@ export * from "./updateCategoryUseCase"
 export * from "./updateCategoryStatusUseCase"
 export * from "./deleteCategoryUseCase"
 export * from "./getActiveCategoryUseCase"
+
+export * from "./addCourseUseCase"
+export * from "./getAllCoursesUseCase"
+export * from "./getAllInstructorCoursesUseCase"
