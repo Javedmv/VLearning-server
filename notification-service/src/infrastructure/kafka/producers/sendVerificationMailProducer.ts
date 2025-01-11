@@ -10,7 +10,7 @@ export default async (
         await producer.connect();
 
         const message = {
-            topic: "notification-service-topic",
+            topic: "auth-srv-topic",
             messages: [{
                 key: "sendVerificationMail",
                 value: JSON.stringify(data)

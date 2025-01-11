@@ -6,7 +6,7 @@ export const runConsumer = async () => {
         await consumer.connect();
 
         await consumer.subscribe({
-            topic: "notification-service-topic",
+            topic: "auth-srv-topic",
             fromBeginning: true
         })
         
@@ -21,11 +21,15 @@ export const runConsumer = async () => {
                 const subscriberData = JSON.parse(String(value));
                 console.log(subscriberMethod)
 
-                try {
-                    await subscriber[subscriberMethod](subscriberData);
-                } catch (error:any) {
-                    console.error(`Error processing message from topic: ${error.message}`);
-                    throw new Error(error?.message);
+                if (subscriber[subscriberMethod] && typeof subscriber[subscriberMethod] === 'function') {
+                    try {
+                        await subscriber[subscriberMethod](subscriberData);
+                    } catch (error: any) {
+                        console.error(`Error processing message from topic: ${error.message}`);
+                        throw new Error(error?.message);
+                    }
+                } else {
+                    console.error(`Method ${subscriberMethod} does not exist on subscriber`);
                 }
             }
         });
