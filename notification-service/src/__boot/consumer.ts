@@ -5,7 +5,7 @@ export const runConsumer = async () => {
     try {
         await consumer.connect();
         await consumer.subscribe({
-            topic: "auth-service-topic",
+            topic: "notification-srv-topic",
             fromBeginning:true
         })
 

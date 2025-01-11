@@ -2,6 +2,8 @@ import { NextFunction, Response, Request } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../_lib/common/error";
 import { userCreatedProducer } from "../../infrastructure/kafka/producers";
+import {NOTIFICATION_SERVICE_TOPIC} from '../../_lib/common/messages/topics'
+
 
 export const resendOtpController = (dependencies:IDependencies) => {
     const {useCases: {findUserByEmailUseCase}} = dependencies;
@@ -20,7 +22,7 @@ export const resendOtpController = (dependencies:IDependencies) => {
                 )
             }
 
-            await userCreatedProducer(userCredentials.email,'auth-service-topic');
+            await userCreatedProducer(userCredentials.email,NOTIFICATION_SERVICE_TOPIC);
             res.status(200).json({
                 success: true,
                 message: "otp sent successfully",

@@ -5,6 +5,7 @@ import { userCreatedProducer } from '../../infrastructure/kafka/producers';
 import { signupValidation } from '../../_lib/validation';
 import { hashPassword } from '../../_lib/bcrypt';
 import { generateAccessToken,generateRefreshToken } from '../../_lib/jwt';
+import { NOTIFICATION_SERVICE_TOPIC } from '../../_lib/common';
 
 export const signupController = (dependencies: IDependencies) => {
     
@@ -36,7 +37,7 @@ export const signupController = (dependencies: IDependencies) => {
             // if no user sent otp to user using nodemailer
             if(!otp){
                 try {
-                    await userCreatedProducer(email,'auth-service-topic');
+                    await userCreatedProducer(email,NOTIFICATION_SERVICE_TOPIC);
                      res.status(200).json({
                       success: true,
                       message: "otp sent successfully",

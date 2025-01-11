@@ -1,1 +1,1 @@
-export declare const NOTIFICATION_SERVICE_TOPIC = "notification-service-topic";
+export const NOTIFICATION_SERVICE_TOPIC = "notification-srv-topic";
