@@ -3,9 +3,10 @@ import { producer } from "..";
 export default async(userId:string,topic?:string) => {
     try {
         const targetTopic = topic || "default-topic";
+
         await producer.connect();
 
-        const message = {
+        const messages = {
             topic: targetTopic,
             messages: [
                 {
@@ -15,7 +16,7 @@ export default async(userId:string,topic?:string) => {
             ]
         }
 
-        await producer.send(message);
+        await producer.send(messages);
 
     } catch (error:any) {
         console.error('kafka produce error:',error?.message)

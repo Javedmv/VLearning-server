@@ -1,6 +1,8 @@
 import sendVerificationMailConsumer from "./sendVerificationMailConsumer";
+import getUserDetailsConsumer from "./getUserDetailsConsumer";
 
 export {
-    sendVerificationMailConsumer
+    sendVerificationMailConsumer,
+    getUserDetailsConsumer
 }
 
