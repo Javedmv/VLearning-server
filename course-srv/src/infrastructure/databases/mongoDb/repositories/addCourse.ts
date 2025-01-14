@@ -1,4 +1,5 @@
 import { CourseEntity } from "../../../../domain/entities";
+import { CategoryModel } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
 export const addCourse = async (course: CourseEntity, instrId:string): Promise<CourseEntity | null> => {
@@ -39,6 +40,17 @@ export const addCourse = async (course: CourseEntity, instrId:string): Promise<C
 
         // Save the course to the database
         const savedCourse = await newCourse.save();
+
+        if (savedCourse) {
+            await CategoryModel.updateOne(
+                { _id: course.basicDetails.category },
+                { $inc: { count: 1 } } // Increment the count field by 1
+            );
+            console.log('Category count updated successfully.');
+        } else {
+            console.log('Failed to save the course.');
+        }
+
         return savedCourse as CourseEntity;
     } catch (error) {
         console.log("Error in course add repo:", error);

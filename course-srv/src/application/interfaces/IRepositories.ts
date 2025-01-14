@@ -10,4 +10,5 @@ export interface IRepositories {
     addCourse: (course:CourseEntity,instrId:string) => Promise<CourseEntity | null>
     getAllCourses: () => Promise<CourseEntity[] | null>
     getAllInstructorCourses: (instrId:string) => Promise<CourseEntity[] | null>
+    getCourseDetails: (courseId:string) => Promise<CourseEntity | null>;
 }

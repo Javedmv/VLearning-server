@@ -7,6 +7,7 @@ export const getAllCourses = async () :Promise<CourseEntity[] | null> => {
         .sort({ createdAt: -1 })
         .populate('basicDetails.category')
         .populate("instructor")
+        
         return courses as CourseEntity[]
     } catch (error) {
         console.log(error,"error in category get repo");

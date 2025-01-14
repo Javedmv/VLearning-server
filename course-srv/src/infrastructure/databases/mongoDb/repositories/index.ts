@@ -12,3 +12,4 @@ export * from "./getAllInstructorCourses"
 
 // kafka
 export * from "./addNewUser"
+export * from "./getCourseDetails"

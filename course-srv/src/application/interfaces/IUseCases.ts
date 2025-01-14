@@ -1,6 +1,7 @@
 import {IAddCategoryUseCase, IGetAllCategoryUseCase, IUpdateCategoryUseCase, IUpdateCategoryStatusUseCase, IDeleteCategoryUseCase, IGetActiveCategoryUseCase, IAddCourseUseCase, IGetAllCoursesUseCase, IGetAllInstructorCoursesUseCase} from "../../domain/useCases";
 
 import { IDependencies } from "./IDependencies";
+import { IGetCourseDetailUseCase } from '../../domain/useCases/IGetCourseDetailUseCase';
 
 export interface IUseCases {
     addCategoryUseCase: (dependencies:IDependencies) => IAddCategoryUseCase;
@@ -12,5 +13,6 @@ export interface IUseCases {
     
     addCourseUseCase: (dependencies:IDependencies) => IAddCourseUseCase;
     getAllCoursesUseCase: (dependencies:IDependencies) => IGetAllCoursesUseCase;
-    getAllInstructorCoursesUseCase: (dependencies:IDependencies) => IGetAllInstructorCoursesUseCase
+    getAllInstructorCoursesUseCase: (dependencies:IDependencies) => IGetAllInstructorCoursesUseCase;
+    getCourseDetailUseCase: (dependencies:IDependencies) => IGetCourseDetailUseCase;
 }
