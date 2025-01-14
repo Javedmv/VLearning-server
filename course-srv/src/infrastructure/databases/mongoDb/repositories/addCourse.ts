@@ -5,6 +5,7 @@ export const addCourse = async (course: CourseEntity, instrId:string): Promise<C
     try {
         const newCourse = new CourseModel({
             instructorId:instrId,
+            instructor: instrId,
             basicDetails: {
                 title: course.basicDetails.title,
                 description: course.basicDetails.description,

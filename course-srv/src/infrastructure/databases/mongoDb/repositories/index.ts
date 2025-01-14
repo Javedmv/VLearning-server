@@ -8,3 +8,7 @@ export * from "./getActiveCategory"
 export * from "./addCourse"
 export * from "./getAllCourses"
 export * from "./getAllInstructorCourses"
+
+
+// kafka
+export * from "./addNewUser"

@@ -37,11 +37,13 @@ export const signupController = (dependencies: IDependencies) => {
             // if no user sent otp to user using nodemailer
             if(!otp){
                 try {
+                  
                     await userCreatedProducer(email,NOTIFICATION_SERVICE_TOPIC);
                      res.status(200).json({
                       success: true,
                       message: "otp sent successfully",
                     })
+                    return;
                   } catch (error: any) {
                     console.log(error, "Something Went Wrong in OTP section");
                     return next(ErrorResponse.badRequest("Something went wrong in otp"))

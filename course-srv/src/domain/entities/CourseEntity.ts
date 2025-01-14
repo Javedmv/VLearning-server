@@ -1,6 +1,8 @@
 import { Document } from "mongoose";
 
 export interface CourseEntity extends Document {
+    instructorId:string,
+    instructor?: string | {},
     basicDetails: {
       title: string;
       description: string;

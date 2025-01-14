@@ -5,7 +5,11 @@ export const getAllInstructorCourses = async(instrId:string):Promise<CourseEntit
     try {
         const courses = await CourseModel.find({instructorId:instrId})
         .sort({ createdAt: -1 })
-        .populate('basicDetails.category'); 
+        .populate('instructor')
+        .populate('basicDetails.category')
+
+        console.log(courses,"no insturctor details");
+
         return courses as CourseEntity[]
     } catch (error) {
         console.log(error,"error in category get repo");
