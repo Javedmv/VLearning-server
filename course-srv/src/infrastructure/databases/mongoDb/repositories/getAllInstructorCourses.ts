@@ -10,7 +10,7 @@ export const getAllInstructorCourses = async(instrId:string):Promise<CourseEntit
 
         return courses as CourseEntity[]
     } catch (error) {
-        console.log(error,"error in category get repo");
+        console.log(error,"error in get all instructor repo");
         return Promise.resolve(null);
     }
 }

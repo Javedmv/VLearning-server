@@ -10,7 +10,7 @@ export const getAllCourses = async () :Promise<CourseEntity[] | null> => {
         
         return courses as CourseEntity[]
     } catch (error) {
-        console.log(error,"error in category get repo");
+        console.log(error,"error in get all courses repo");
         return Promise.resolve(null);
     }
 }

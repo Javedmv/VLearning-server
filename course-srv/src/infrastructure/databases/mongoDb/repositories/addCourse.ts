@@ -7,6 +7,7 @@ export const addCourse = async (course: CourseEntity, instrId:string): Promise<C
         const newCourse = new CourseModel({
             instructorId:instrId,
             instructor: instrId,
+            students:[],
             basicDetails: {
                 title: course.basicDetails.title,
                 description: course.basicDetails.description,
@@ -16,12 +17,12 @@ export const addCourse = async (course: CourseEntity, instrId:string): Promise<C
                 whatWillLearn: course.basicDetails.whatWillLearn
             },
             courseContent: {
-                lessons: course.courseContent.lessons.map(lesson => ({
+                lessons: course.courseContent.lessons.map((lesson,index) => ({
                     title: lesson.title,
                     description: lesson.description,
                     duration: lesson.duration,
                     videoUrl: lesson.videoUrl,
-                    isIntroduction: lesson.isIntroduction
+                    isIntroduction: index === 0 ? true : lesson.isIntroduction
                 }))
             },
             pricing: {

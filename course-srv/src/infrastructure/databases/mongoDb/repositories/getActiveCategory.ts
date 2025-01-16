@@ -6,7 +6,7 @@ export const getActiveCategory = async () : Promise<CategoryEntity[] | null> => 
         const category = await CategoryModel.find({status: true}).select('_id name').sort({ createdAt: -1 })
         return category;
     } catch (error:any) {
-        console.log(error,"error in category get repo");
+        console.log(error,"error in get active category repo");
         return null;
     }
 }

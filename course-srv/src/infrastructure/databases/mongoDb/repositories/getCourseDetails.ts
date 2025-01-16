@@ -9,7 +9,7 @@ export const getCourseDetails = async(courseId:string): Promise<CourseEntity | n
 
         return course as CourseEntity;
     } catch (error) {
-        console.log(error,"error in category get repo");
+        console.log(error,"error in get courseDetails repo");
         return Promise.resolve(null);
     }
 }

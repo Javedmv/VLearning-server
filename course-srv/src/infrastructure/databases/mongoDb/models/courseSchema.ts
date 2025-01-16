@@ -39,6 +39,7 @@ const PricingDetailSchema = new Schema({
 const CourseSchema = new Schema({
   instructorId: {type: String, required:true},
   instructor: { type: Types.ObjectId, ref: 'users'},
+  students: {type: [String],default:[]},
   basicDetails: { type: BasicDetailsSchema, required: true },
   courseContent: { type: CourseContentsSchema, required: true },
   pricing: { type: PricingDetailSchema, required: true },

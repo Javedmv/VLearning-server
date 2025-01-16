@@ -7,7 +7,7 @@ export const getAllCategory = async (): Promise<CategoryEntity[] | null> => {
         const categorys = await CategoryModel.find({}).sort({ createdAt: -1 });
         return categorys;
     } catch (error) {
-        console.log(error,"error in category get repo");
+        console.log(error,"error in get all category repo");
         return null;
     }
 }
