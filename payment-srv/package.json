@@ -4,15 +4,21 @@
   "description": "payment-service-for-VLearning-application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "start:dev": "tsc && concurrently --kill-others-on-fail \"tsc --watch\" \"nodemon dist/index.js\""
   },
   "author": "Javed",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^9.1.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "nodemon": "^3.1.9"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.8",
