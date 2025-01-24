@@ -1,10 +1,20 @@
 import Server from './presentation/server'
 import { connectDB } from './__boot/config';
+import { runConsumer, stopConsumer } from './__boot/consumer';
 
 (async () => {
     try {
         Server;
-        await connectDB();
+        
+        await Promise.all([connectDB(), runConsumer()])
+        // TODO: disconnected the consumer reconnect it when needed
+        .then(() => {
+            console.log("kafka consumer is running")
+        })
+        .catch((error:any) => {
+            console.error(`Error while initializing Kafka consumer: ${error}`);
+            process.exit(0);
+        });
         
     } catch (error:any) {
         console.error(`Error during initialization: ${error.message}`);
@@ -25,7 +35,7 @@ import { connectDB } from './__boot/config';
     const cleanupAndExit = async () => {
         try {
             console.log("Stopping Kafka consumer...");
-            // await stopConsumer(); TODO:CONSUMER STOP NO USE 
+            await stopConsumer();
             console.log("Kafka consumer stopped.");
         } catch (error) {
             console.error("Error while stopping Kafka consumer:", error);

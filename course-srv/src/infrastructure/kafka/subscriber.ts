@@ -1,15 +1,17 @@
-import { addUserConsumer } from "./consumers";
+import { addUserConsumer, getCourseDetailsFromPaymentConsumer } from "./consumers";
 
 export interface ISubscriber {
     addUser(data:any): Promise<void>;
+    getCourseDetailsFromPayment(courseId:string):Promise<void>;
 }
 
 
-export interface ICourseSubscriber extends Pick<ISubscriber, "addUser">{}
+export interface ICourseSubscriber extends Pick<ISubscriber, "addUser" | "getCourseDetailsFromPayment">{}
 
 
 export const createSubscriber = (): ICourseSubscriber => {
     return {
-        addUser: addUserConsumer
+        addUser: addUserConsumer,
+        getCourseDetailsFromPayment: getCourseDetailsFromPaymentConsumer
     }
 }

@@ -7,11 +7,11 @@ import { paymentController } from "../../presentation/controllers";
 
 
 export const routes = (dependencies:IDependencies) => {
-    const {} = paymentController(dependencies)
+    const {createSession} = paymentController(dependencies)
 
     const router = Router();
-    
 
+    router.route("/create-session").post(createSession)
 
 
     return router;

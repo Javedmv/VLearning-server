@@ -4,7 +4,7 @@ import { CourseModel } from "../models/courseSchema";
 export const getAllCourses = async () :Promise<CourseEntity[] | null> => {
     try {
         const courses = await CourseModel.find({})
-        .sort({ createdAt: -1 })
+        .sort({ 'metadata.createdAt': -1 })
         .populate('basicDetails.category')
         .populate("instructor")
         

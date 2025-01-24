@@ -16,11 +16,8 @@ export const addCourseController = (dependencies:IDependencies) => {
             }
             console.log(typeof req.user._id,req.user._id);
             
-            console.log('before')
             await getUserProducer(req.user._id,"auth-srv-topic")
             
-            console.log('after')
-
             const response = await addCourseUseCase(dependencies).execute(req.body, req?.user?._id)
             res.status(200).json({
                 success: true,
