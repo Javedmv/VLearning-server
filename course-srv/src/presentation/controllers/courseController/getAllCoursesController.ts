@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { CourseEntity } from "../../../domain/entities";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
+import { CourseFilters } from "../../../domain/entities/CourseFilter";
 
 export interface Lesson {
     title: string;
@@ -16,8 +17,18 @@ export const getAllCoursesController = (dependencies: IDependencies) => {
     const { useCases: { getAllCoursesUseCase } } = dependencies;
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const courses = await getAllCoursesUseCase(dependencies).execute();
+            const {search, sortBy, categories, page, limit} = req?.query;
+            const filters: CourseFilters = {
+                search: String(search) || "",
+                sortBy: String(sortBy) || "relevance",
+                categories: String(categories) || "",
+                page: parseInt(page as string, 10) || 1,
+                limit: parseInt(limit as string, 10) || 3,
+            };
+
+            const {courses , total} = await getAllCoursesUseCase(dependencies).execute(filters);
             
+            console.log(courses.length, total, "controller")
             if (!courses || !Array.isArray(courses)) {
                 res.status(404).json({ success: false, message: "No courses found" });
                 return;
@@ -57,9 +68,17 @@ export const getAllCoursesController = (dependencies: IDependencies) => {
                 return updatedCourse;
             }));
 
+            const totalPages = Math.ceil(total / filters.limit);
+
             res.status(200).json({
                 success: true,
                 data: updatedCourses,
+                meta: {
+                    total,
+                    page: filters.page,
+                    limit: filters.limit,
+                    totalPages,
+                }
             });
             return;
         } catch (error) {
