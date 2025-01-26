@@ -12,5 +12,7 @@ export interface IRepositories {
     getAllCourses: (filters:CourseFilters) => Promise<any>
     getAllInstructorCourses: (instrId:string) => Promise<CourseEntity[] | null>
     getCourseDetails: (courseId:string) => Promise<CourseEntity | null>;
-    enrollUser: (courseId:string,userId:string) => Promise<CourseEntity | null>
+    enrollUser: (courseId:string,userId:string) => Promise<CourseEntity | null>;
+    getInstructorDetails:(instrId:string) => Promise<any>;
+    getAllCoursesInstructor:(instructorId:string) => Promise<any>;
 }

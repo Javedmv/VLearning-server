@@ -13,3 +13,6 @@ export * from "./enrollUser"
 // kafka
 export * from "./addNewUser"
 export * from "./getCourseDetails"
+
+export * from "./getInstructorDetails"
+export * from "./getAllCoursesInstructor"

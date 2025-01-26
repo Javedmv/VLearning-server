@@ -10,3 +10,6 @@ export * from "./getAllCoursesUseCase"
 export * from "./getAllInstructorCoursesUseCase"
 export * from "./getCourseDetailUseCase"
 export * from "./enrollUserUseCase"
+
+export * from "./getInstructorDetailsUseCase"
+export * from "./getAllCoursesInstructorUseCase"

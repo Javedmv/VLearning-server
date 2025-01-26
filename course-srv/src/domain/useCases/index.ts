@@ -10,3 +10,6 @@ export * from "./IGetAllCoursesUseCase"
 export * from "./IGetAllInstructorCoursesUseCase"
 export * from "./IGetCourseDetailUseCase"
 export * from "./IEnrollUserUseCase"
+
+export * from "./IGetInstructorDetailsUseCase"
+export * from "./IGetAllCoursesInstructorUseCase"

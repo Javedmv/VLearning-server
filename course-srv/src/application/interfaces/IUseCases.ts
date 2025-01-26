@@ -1,7 +1,8 @@
-import {IAddCategoryUseCase, IGetAllCategoryUseCase, IUpdateCategoryUseCase, IUpdateCategoryStatusUseCase, IDeleteCategoryUseCase, IGetActiveCategoryUseCase, IAddCourseUseCase, IGetAllCoursesUseCase, IGetAllInstructorCoursesUseCase, IEnrollUserUseCase} from "../../domain/useCases";
+import {IAddCategoryUseCase, IGetAllCategoryUseCase, IUpdateCategoryUseCase, IUpdateCategoryStatusUseCase, IDeleteCategoryUseCase, IGetActiveCategoryUseCase, IAddCourseUseCase, IGetAllCoursesUseCase, IGetAllInstructorCoursesUseCase, IEnrollUserUseCase, IGetAllCoursesInstructorUseCase} from "../../domain/useCases";
 
 import { IDependencies } from "./IDependencies";
 import { IGetCourseDetailUseCase } from '../../domain/useCases/IGetCourseDetailUseCase';
+import { IGetInstructorDetailsUseCase } from '../../domain/useCases/IGetInstructorDetailsUseCase';
 
 export interface IUseCases {
     addCategoryUseCase: (dependencies:IDependencies) => IAddCategoryUseCase;
@@ -16,4 +17,6 @@ export interface IUseCases {
     getAllInstructorCoursesUseCase: (dependencies:IDependencies) => IGetAllInstructorCoursesUseCase;
     getCourseDetailUseCase: (dependencies:IDependencies) => IGetCourseDetailUseCase;
     enrollUserUseCase: (dependencies:IDependencies) => IEnrollUserUseCase;
+    getInstructorDetailsUseCase: (dependencies:IDependencies) => IGetInstructorDetailsUseCase;
+    getAllCoursesInstructorUseCase: (dependencies:IDependencies) => IGetAllCoursesInstructorUseCase;
 }

@@ -1,7 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import { config } from 'dotenv';
-//import bodyParser from "body-parser";
+import bodyParser from "body-parser";
 
 
 config();
@@ -18,7 +18,7 @@ const PORT: number = Number(process.env.PORT!)
 app.use(express.json())
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
-//app.use(bodyParser.text({type: '/'}));
+// app.use(bodyParser.text({type: '/'}));
 app.use(cors({
     origin: 'http://localhost:5173', // Your frontend URL
     credentials: true,               // Allow credentials
