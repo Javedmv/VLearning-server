@@ -10,7 +10,7 @@ export interface IRepositories {
     getActiveCategory: () => Promise<CategoryEntity[] | null>
     addCourse: (course:CourseEntity,instrId:string) => Promise<CourseEntity | null>
     getAllCourses: (filters:CourseFilters) => Promise<any>
-    getAllInstructorCourses: (instrId:string) => Promise<CourseEntity[] | null>
+    getAllInstructorCourses: (instrId:string,filters:CourseFilters) => Promise<any>
     getCourseDetails: (courseId:string) => Promise<CourseEntity | null>;
     enrollUser: (courseId:string,userId:string) => Promise<CourseEntity | null>;
     getInstructorDetails:(instrId:string) => Promise<any>;

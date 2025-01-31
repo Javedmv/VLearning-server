@@ -53,6 +53,8 @@ export const putEditCourseController = (dependencies:IDependencies) => {
                 return;
             }
             await removeFilesFromS3(result?.s3Remove)
+            
+            // TODO: need to update the payment service with the new course details by producing it
 
             res.status(200).json({
                 success:true,
