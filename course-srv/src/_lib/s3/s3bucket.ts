@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, PutObjectCommandInput, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, PutObjectCommandInput, GetObjectCommand, DeleteObjectsCommand } from "@aws-sdk/client-s3";
 import { readFile } from "fs/promises";
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
@@ -68,3 +68,26 @@ export const getPublicUrl = async (bucketName:string, filePath:string) => {
       throw new Error('Could not generate signed URL');
     }
   };
+
+
+
+
+// Function to delete files from S3 based on the array of file names
+export const removeFilesFromS3 = async (urls: string[]) => {
+    const deleteParams = {
+      Bucket: process.env.AWS_S3_BUCKET_NAME!,  // Make sure to use your bucket name from the environment
+      Delete: {
+        Objects: urls.map((fileName) => ({ Key: fileName }))
+      }
+    };
+  
+    const command = new DeleteObjectsCommand(deleteParams);
+  
+    try {
+      // Deleting the files from S3 using the send method
+      const data = await s3Client.send(command);
+      console.log('Files deleted successfully:', data);
+    } catch (error) {
+      console.error('Error deleting files from S3:', error);
+    }
+};

@@ -13,3 +13,4 @@ export * from "./IEnrollUserUseCase"
 
 export * from "./IGetInstructorDetailsUseCase"
 export * from "./IGetAllCoursesInstructorUseCase"
+export * from "./IEditCourseUseCase"

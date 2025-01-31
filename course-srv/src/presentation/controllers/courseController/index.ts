@@ -6,6 +6,7 @@ import { getAllInstructorCoursesContorller } from "./getAllInstructorCoursesCont
 import { getCourseDetailsController } from "./getCourseDetailsController";
 import { getInstructorDetailsController } from "./getInstructorDetailsController";
 import { postEnrollUserController } from "./postEnrollUserController";
+import { putEditCourseController } from "./putEditCourseController";
 
 export const courseControllers = (dependencies:IDependencies) => {
     return {
@@ -16,5 +17,6 @@ export const courseControllers = (dependencies:IDependencies) => {
         postEnrollUser: postEnrollUserController(dependencies),
         getInstructorDetails: getInstructorDetailsController(dependencies),
         getAllCoursesInstructor: getAllCoursesInstructorController(dependencies),
+        editCourse: putEditCourseController(dependencies),
     }
 }
