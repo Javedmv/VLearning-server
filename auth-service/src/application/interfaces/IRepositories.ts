@@ -1,4 +1,5 @@
 import { UserEntity } from "../../domain/entities";
+import { CourseFilters } from "../../domain/entities/CourseFilter";
 
 export interface IRepositories {
     create: (data: any) => Promise<UserEntity | null>;
@@ -6,7 +7,7 @@ export interface IRepositories {
     verifyOtp: (email: string, otp : string) => Promise<Boolean | null>;
     findById: (id: string) => Promise<UserEntity | null>;
     addUserForm: (data: UserEntity) => Promise<UserEntity | null>;
-    getStudentUser: () => Promise<UserEntity[] | null>;
+    getStudentUser: (filters:CourseFilters) => Promise<any>;
     blockUser: (id:string, block: string) => Promise<UserEntity | null>;
     getInstructorUser: () => Promise<UserEntity[] | null>;
     updateIsVerified: (id:string, verify:string) => Promise<UserEntity | null>;

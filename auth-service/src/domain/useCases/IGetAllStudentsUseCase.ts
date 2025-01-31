@@ -1,5 +1,6 @@
 import { UserEntity } from "../entities";
+import { CourseFilters } from "../entities/CourseFilter";
 
 export interface IGetAllStudentsUseCase{
-    execute():Promise<UserEntity[] | null>;
+    execute(filters:CourseFilters):Promise<any>;
 }
