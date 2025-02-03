@@ -28,7 +28,6 @@ export const getAllCoursesController = (dependencies: IDependencies) => {
 
             const {courses , total} = await getAllCoursesUseCase(dependencies).execute(filters);
             
-            console.log(courses.length, total, "controller")
             if (!courses || !Array.isArray(courses)) {
                 res.status(404).json({ success: false, message: "No courses found" });
                 return;

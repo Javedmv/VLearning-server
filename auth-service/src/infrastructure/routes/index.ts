@@ -19,10 +19,10 @@ export const routes = (dependencies: IDependencies) => {
     router.route("/find/:email").get(findUserByEmail);
     router.route("/login").post(login);
     router.route("/").get(jwtMiddleware, getUser);
-    router.route("/logout").post(jwtMiddleware,logout)
-    router.route("/forgot-password").post(forgotPassword)
+    router.route("/logout").post(jwtMiddleware,logout);
+    router.route("/forgot-password").post(forgotPassword);
     router.route("/forgot-password/otp-submit").post(forgotPasswordSubmit);
-    router.route("/forgot-password/update-passoword").post(updateForgotPassword)
+    router.route("/forgot-password/update-passoword").post(updateForgotPassword);
 
     // user
     router.route("/multipart/user-form").post(
@@ -32,26 +32,26 @@ export const routes = (dependencies: IDependencies) => {
         postUserForm
     );
     router.route("/profile/:id").get(jwtMiddleware,verifyUser,getUserDetails)
-    .post(jwtMiddleware,verifyUser,updateUserProfile)
-    router.route("/update/password").post(jwtMiddleware, verifyUser, updatePassword)
+    .post(jwtMiddleware,verifyUser,updateUserProfile);
+    router.route("/update/password").post(jwtMiddleware, verifyUser, updatePassword);
 
-    router.route("/multipart/apply-teach").post(uploadMiddleware,jwtMiddleware,verifyUser,postApplyTeach)
-    router.route("/multipart/instructor-reapply").post(uploadMiddleware,jwtMiddleware,verifyUser,postInstructorReapply)
+    router.route("/multipart/apply-teach").post(uploadMiddleware,jwtMiddleware,verifyUser,postApplyTeach);
+    router.route("/multipart/instructor-reapply").post(uploadMiddleware,jwtMiddleware,verifyUser,postInstructorReapply);
     
     // admin
-    router.route("/admin-profile").get(jwtMiddleware,verifyAdmin, adminGetProfile)
-    router.route("/update-password").post(jwtMiddleware,verifyAdmin, adminUpdatePassword)
+    router.route("/admin-profile").get(jwtMiddleware,verifyAdmin, adminGetProfile);
+    router.route("/update-password").post(jwtMiddleware,verifyAdmin, adminUpdatePassword);
 
-    router.route("/students").get(jwtMiddleware,verifyAdmin,adminGetAllStudents)
-    router.route("/student/block/:id").put(jwtMiddleware,verifyAdmin,adminBlockUser)
+    router.route("/students").get(jwtMiddleware,verifyAdmin,adminGetAllStudents);
+    router.route("/student/block/:id").put(jwtMiddleware,verifyAdmin,adminBlockUser);
     
-    router.route("/instructors").get(jwtMiddleware,verifyAdmin, adminGetAllInstructors)
-    router.route("/approve-decline/:id").put(jwtMiddleware,verifyAdmin, adminVerifyInstructor)
+    router.route("/instructors").get(jwtMiddleware,verifyAdmin, adminGetAllInstructors);
+    router.route("/approve-decline/:id").put(jwtMiddleware,verifyAdmin, adminVerifyInstructor);
 
     // Banner
-    router.route("/multipart/add-banner").post(uploadMiddleware,jwtMiddleware,verifyAdmin, addBanner)
-    router.route("/all-banner").get(jwtMiddleware,verifyAdmin, getAllBanner)
-    router.route("/delete-banner/:id").delete(jwtMiddleware,verifyAdmin, deleteBanner)
+    router.route("/multipart/add-banner").post(uploadMiddleware,jwtMiddleware,verifyAdmin, addBanner);
+    router.route("/all-banner").get(jwtMiddleware,verifyAdmin, getAllBanner);
+    router.route("/delete-banner/:id").delete(jwtMiddleware,verifyAdmin, deleteBanner);
 
 
     return router;
