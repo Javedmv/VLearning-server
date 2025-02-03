@@ -11,8 +11,7 @@ export const routes = (dependencies:IDependencies) => {
 
     const router = Router();
 
-    router.route("/create-session").post(createSession)
-
+    router.route("/create-session").post(createSession);
 
     return router;
 }

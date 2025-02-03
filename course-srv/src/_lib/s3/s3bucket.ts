@@ -75,7 +75,7 @@ export const getPublicUrl = async (bucketName:string, filePath:string) => {
 // Function to delete files from S3 based on the array of file names
 export const removeFilesFromS3 = async (urls: string[]) => {
     const deleteParams = {
-      Bucket: process.env.AWS_S3_BUCKET_NAME!,  // Make sure to use your bucket name from the environment
+      Bucket: process.env.S3_BUCKET_NAME!,  // Make sure to use your bucket name from the environment
       Delete: {
         Objects: urls.map((fileName) => ({ Key: fileName }))
       }

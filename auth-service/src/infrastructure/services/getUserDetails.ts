@@ -8,7 +8,7 @@ export const getUserDetails = async (userId:string) => {
     try {
         const userDetails = await getUser(userId)
         console.log(userDetails,"in auth service")
-        await sendUserDetailsProducer(userDetails, COURSE_SERVICE_TOPIC)
+        await sendUserDetailsProducer(userDetails, COURSE_SERVICE_TOPIC);
 
     } catch (error:any) {
         console.log(error?.message)

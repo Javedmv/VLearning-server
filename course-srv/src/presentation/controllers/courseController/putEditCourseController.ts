@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import { IDependencies } from "../../../application/interfaces/IDependencies"
 import { removeFilesFromS3 } from "../../../_lib/s3/s3bucket";
 import { CourseContent } from '../../../domain/entities/CourseEdit';
+import { sendEditCourseDetailsProducer } from "../../../infrastructure/kafka/producers";
 
 export const putEditCourseController = (dependencies:IDependencies) => {
     const {useCases:{ editCourseUseCase }} = dependencies;
@@ -52,9 +53,14 @@ export const putEditCourseController = (dependencies:IDependencies) => {
                 })
                 return;
             }
-            await removeFilesFromS3(result?.s3Remove)
+
+            if(result.s3Remove && result.s3Remove.length > 0){
+                await removeFilesFromS3(result?.s3Remove)
+            }
             
-            // TODO: need to update the payment service with the new course details by producing it
+            if(result.updatedCourse){
+                await sendEditCourseDetailsProducer(result.updatedCourse,"payment-srv-topic");
+            }
 
             res.status(200).json({
                 success:true,
