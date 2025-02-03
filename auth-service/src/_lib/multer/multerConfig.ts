@@ -14,6 +14,8 @@ const storage = multer.diskStorage({
             uploadPath = path.join(uploadPath, 'avatars');
         } else if (file.fieldname === 'files.cv') {
             uploadPath = path.join(uploadPath, 'documents');
+        }else if(file.fieldname === 'files.banner'){
+            uploadPath = path.join(uploadPath, 'banners');
         }
         
         // Create directory if it doesn't exist
@@ -41,6 +43,12 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilt
         } else {
             cb(new Error('Only PDF files are allowed for CV'));
         }
+    } else if(file.fieldname === 'files.banner'){
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed for banner'));
+        }
     } else {
         cb(null, false);
     }
@@ -54,7 +62,8 @@ const upload = multer({
     }
 }).fields([
     { name: 'files.avatar', maxCount: 1 },
-    { name: 'files.cv', maxCount: 1 }
+    { name: 'files.cv', maxCount: 1 },
+    { name: 'files.banner', maxCount: 1 }
 ]);
 
 export const uploadMiddleware = (req: Request, res: Response, next: NextFunction) => {
@@ -85,8 +94,11 @@ export const uploadMiddleware = (req: Request, res: Response, next: NextFunction
             if (files['files.cv']) {
                 req.body.files.cv = files['files.cv'][0].path;
             }
-        }
 
+            if (files['files.banner']) {
+                req.body.files.banner = files['files.banner'][0].path;
+            }
+        }
         next();
     });
 };

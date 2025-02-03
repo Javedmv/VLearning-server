@@ -20,6 +20,9 @@ import { updateUserProfileController } from "./updateUserProfileController";
 import { updatePasswordController } from "./updatePasswordController";
 import { postApplyTeachController } from "./postApplyTeachController";
 import { postInstructorReapplyController } from "./postInstructorReapplyController";
+import { addBannerController } from "./addBannerController";
+import { getAllBannerController } from "./getAllBannerController";
+import { deleteBannerController } from "./deleteBannerController";
 
 export const controllers = (dependencies: IDependencies) =>  {
     return {
@@ -46,5 +49,9 @@ export const controllers = (dependencies: IDependencies) =>  {
         adminVerifyInstructor: adminVerifyInstructorController(dependencies),
         adminGetProfile: adminGetProfileController(dependencies),
         adminUpdatePassword: adminUpdatePasswordController(dependencies),
+
+        addBanner: addBannerController(dependencies),
+        getAllBanner: getAllBannerController(dependencies),
+        deleteBanner: deleteBannerController(dependencies)
     }
 }

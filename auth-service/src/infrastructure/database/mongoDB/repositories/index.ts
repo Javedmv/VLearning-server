@@ -11,3 +11,7 @@ export * from "./updateIsVerified"
 export * from "./updatePassword"
 export * from "./updateProfile"
 export * from "./updateReapply"
+
+export * from "./addBanner"
+export * from "./getAllBanner"
+export * from "./deleteBanner"

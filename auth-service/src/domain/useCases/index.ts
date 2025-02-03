@@ -11,3 +11,7 @@ export * from "./IVerifyInstructorUseCase"
 export * from "./IUpdatePasswordUseCase"
 export * from "./IUpdateProfileUseCase"
 export * from "./IUpdateCvUseCase"
+
+export * from "./IAddBannerUseCase"
+export * from "./IGetAllBannerUseCase"
+export * from "./IDeleteBannerUseCase"

@@ -1,5 +1,6 @@
-import { UserEntity } from "../entities";
+import { InstructorUserResult } from "../../infrastructure/database/mongoDB/repositories";
+import { CourseFilters } from "../entities/CourseFilter";
 
 export interface IGetAllInstructorsUseCase {
-    execute(): Promise<UserEntity[] | null>
+    execute(filters:CourseFilters): Promise<any>
 }
