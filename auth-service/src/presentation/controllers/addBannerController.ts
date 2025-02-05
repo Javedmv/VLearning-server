@@ -12,7 +12,7 @@ export const addBannerController = (dependencies:IDependencies) => {
     const {useCases: {addBannerUseCase}} = dependencies;
     return async(req:Request, res:Response, next:NextFunction) => {
         try {
-            const { title, status, type, description} = req.body;
+            const { title, status, type, description , priority='low'} = req.body;
             const { banner } = req.body.files;
 
             const bannerFilename = (req.files as CustomRequest["files"])?.['files.banner']?.[0]?.filename || "No avatar uploaded";
@@ -33,7 +33,7 @@ export const addBannerController = (dependencies:IDependencies) => {
                 }
             )}
             
-            const result = await addBannerUseCase(dependencies).execute({title, status, type, imageUrl: bannerS3Path ,description});
+            const result = await addBannerUseCase(dependencies).execute({title, status, type, imageUrl: bannerS3Path ,description, priority});
             if(!result){
                 res.status(404).json({
                     success: false,

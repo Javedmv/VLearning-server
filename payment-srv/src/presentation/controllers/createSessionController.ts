@@ -37,6 +37,11 @@ export const createSessionController = (dependencies: IDependencies) => {
                 payment_method_types: ["card"],
                 mode: "payment",
                 customer_email: user.email,
+                metadata:{
+                    courseId: course?._id.toString(),
+                    userId: user?._id.toString(),
+                    instructorId: course?.instructor.toString()
+                },
                 line_items: [
                     {
                         price_data: {
@@ -50,8 +55,8 @@ export const createSessionController = (dependencies: IDependencies) => {
                         quantity: 1,
                     },
                 ],
-                success_url: `${process.env.FRONTEND_URL}/payment/success/courseId=${course._id}?userId=${userId}`,
-                cancel_url: `${process.env.FRONTEND_URL}/payment/failed/courseId=${course._id}?userId=${userId}`,
+                success_url: `${process.env.FRONTEND_URL}/payment/success/courseId=${course._id}`,
+                cancel_url: `${process.env.FRONTEND_URL}/payment/failed/courseId=${course._id}`,
             });
 
             // const response = await createPaymentSessionUseCase(dependencies).execute(session.id,courseId,userId);

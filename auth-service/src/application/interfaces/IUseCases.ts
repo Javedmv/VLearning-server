@@ -3,9 +3,11 @@ import { ICreateUserUseCase, IFindUserByEmailUseCase, IFindUserByIdUseCase, ILog
     IUpdatePasswordUseCase, IUpdateProfileUseCase,
     IUpdateCvUseCase, IAddBannerUseCase,
     IGetAllBannerUseCase,
-    IDeleteBannerUseCase} from "../../domain/useCases";
+    IDeleteBannerUseCase,
+    IToggleBannerStatusUseCase} from "../../domain/useCases";
 
 import { IDependencies } from "./IDependencies";
+import { dependencies } from '../../__boot/dependencies';
 
 export interface IUseCases {
     createUserUseCase: (dependencies: IDependencies) => ICreateUserUseCase;
@@ -24,4 +26,5 @@ export interface IUseCases {
     addBannerUseCase: (dependencies:IDependencies) => IAddBannerUseCase;
     getAllBannerUseCase: (dependencies:IDependencies) => IGetAllBannerUseCase;
     deleteBannerUseCase: (dependencies:IDependencies) => IDeleteBannerUseCase;
+    toggleBannerStatusUseCase: (dependencies:IDependencies) => IToggleBannerStatusUseCase;
 }

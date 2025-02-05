@@ -4,6 +4,7 @@ export namespace IAddBanner {
         status: boolean;
         type: 'promotional' | 'informational' | 'sale';
         imageUrl: string;
+        priority: 'high' | 'medium' | 'low';
         description?: string;
         imageFile?: Express.Multer.File;
     }
@@ -13,6 +14,7 @@ export namespace IAddBanner {
         title: string;
         status: boolean;
         type: 'promotional' | 'informational' | 'sale';
+        priority: 'high' | 'medium' | 'low';
         imageUrl: string;
         description?: string;
         createdAt?: Date;

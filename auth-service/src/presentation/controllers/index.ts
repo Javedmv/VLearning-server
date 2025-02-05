@@ -23,6 +23,7 @@ import { postInstructorReapplyController } from "./postInstructorReapplyControll
 import { addBannerController } from "./addBannerController";
 import { getAllBannerController } from "./getAllBannerController";
 import { deleteBannerController } from "./deleteBannerController";
+import { toggleBannerStatusController } from "./toggleBannerStatusController";
 
 export const controllers = (dependencies: IDependencies) =>  {
     return {
@@ -52,6 +53,7 @@ export const controllers = (dependencies: IDependencies) =>  {
 
         addBanner: addBannerController(dependencies),
         getAllBanner: getAllBannerController(dependencies),
-        deleteBanner: deleteBannerController(dependencies)
+        deleteBanner: deleteBannerController(dependencies),
+        toggleBannerStatus: toggleBannerStatusController(dependencies),
     }
 }

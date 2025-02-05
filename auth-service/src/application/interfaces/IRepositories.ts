@@ -16,7 +16,8 @@ export interface IRepositories {
     updatePassword: (email:string, password:string) => Promise<UserEntity | null>;
     updateProfile: (userId:string, data:UserEntity) => Promise<UserEntity | null>;
     updateReapply: (args: string[]) => Promise<UserEntity | null>;
-    addBanner: ({title, status, type, imageUrl ,description}:IAddBanner.Params) => Promise<any>;
+    addBanner: ({title, status, type, imageUrl ,description,priority}:IAddBanner.Params) => Promise<any>;
     getAllBanner: () => Promise<IAddBanner.Result[] | null>;
     deleteBanner: (id:string) => Promise<IAddBanner.Result>;
+    toggleBannerStatus: (id:string, status:boolean) => Promise<boolean>;
 }

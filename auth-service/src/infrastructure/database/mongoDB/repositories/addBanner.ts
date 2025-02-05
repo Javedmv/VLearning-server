@@ -1,9 +1,9 @@
 import { IAddBanner } from "../../../../domain/entities/BannerEntity";
 import { BannerModel } from "../models/BannerSchema";
 
-export const addBanner = async ({ title, status, type, imageUrl, description }: IAddBanner.Params): Promise<IAddBanner.Result | null> => {
+export const addBanner = async ({ title, status, type, imageUrl, description, priority }: IAddBanner.Params): Promise<IAddBanner.Result | null> => {
     try {
-        const bannerData: Partial<IAddBanner.Params> = { title, status, type, imageUrl };
+        const bannerData: Partial<IAddBanner.Params> = { title, status, type, imageUrl, priority };
 
         if (description) {
             bannerData.description = description;

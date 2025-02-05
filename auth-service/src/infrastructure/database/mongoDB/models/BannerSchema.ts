@@ -1,5 +1,6 @@
 import {model, Schema} from "mongoose";
 import { IAddBanner } from "../../../../domain/entities/BannerEntity";
+import { required } from "joi";
 
 const BannerSchema = new Schema({
     title: {
@@ -21,6 +22,11 @@ const BannerSchema = new Schema({
     },
     description: {
         type: String,
+    },
+    priority: {
+        type: String,
+        enum: ['high','medium','low'],
+        required: true
     }
 }, {
     timestamps: true

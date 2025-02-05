@@ -10,7 +10,7 @@ export const routes = (dependencies: IDependencies) => {
     const {signup, findUserByEmail, resendOtp, login , getUser, postUserForm, logout , adminGetAllStudents,
          adminBlockUser, adminGetAllInstructors, adminVerifyInstructor, forgotPassword ,forgotPasswordSubmit,
          updateForgotPassword, adminGetProfile, adminUpdatePassword, getUserDetails, updateUserProfile, updatePassword,
-         postApplyTeach ,postInstructorReapply, addBanner, getAllBanner ,deleteBanner} = controllers(dependencies);
+         postApplyTeach ,postInstructorReapply, addBanner, getAllBanner ,deleteBanner, toggleBannerStatus} = controllers(dependencies);
     
     const router = Router();
     
@@ -52,6 +52,7 @@ export const routes = (dependencies: IDependencies) => {
     router.route("/multipart/add-banner").post(uploadMiddleware,jwtMiddleware,verifyAdmin, addBanner);
     router.route("/all-banner").get(jwtMiddleware,verifyAdmin, getAllBanner);
     router.route("/delete-banner/:id").delete(jwtMiddleware,verifyAdmin, deleteBanner);
+    router.route("/banner/toggle-status/:id").put(jwtMiddleware, verifyAdmin, toggleBannerStatus)
 
 
     return router;
