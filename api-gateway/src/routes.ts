@@ -14,7 +14,30 @@ const createMultipartProxy = (serviceUrl: string) => {
     })
 }
 
+// const createWebhookProxy = (serviceUrl: string) => {
+//     return proxy(serviceUrl, {
+//         proxyReqPathResolver(req) {
+//             return '/webhook';
+//         },
+//         proxyReqBodyDecorator: (bodyContent, srcReq) => {
+//             // Pass through raw body for webhooks
+//             return bodyContent;
+//         },
+//         parseReqBody: false, // Don't parse the body
+//         reqBodyEncoding: null, // Keep raw buffer
+//         proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+//             proxyReqOpts.headers = {
+//                 ...srcReq.headers,
+//                 'content-type': 'application/json',
+//             };
+//             return proxyReqOpts;
+//         }
+//     });
+// };
+
 // Helper function for regular JSON/urlencoded routes
+
+
 const createRegularProxy = (serviceUrl: string) => {
     return proxy(serviceUrl, {
         proxyReqPathResolver(req) {
@@ -40,6 +63,9 @@ export const routes = (app: Application) => {
 
     // Use regular proxy for other course routes
     app.use("/course", createRegularProxy(Service.COURSE_SERVICE_URL))
+
+    // Use multipart proxy only for file upload routes
+    // app.use("/payment/webhook", createWebhookProxy(Service.PAYMENT_SERVICE_URL))
 
     app.use("/payment", createRegularProxy(Service.PAYMENT_SERVICE_URL))
     

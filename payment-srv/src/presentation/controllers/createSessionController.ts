@@ -50,14 +50,16 @@ export const createSessionController = (dependencies: IDependencies) => {
                         quantity: 1,
                     },
                 ],
-                success_url: `${process.env.FRONTEND_URL}/payment/success/courseId=${course._id}`,
-                cancel_url: `${process.env.FRONTEND_URL}/payment/failed/courseId=${course._id}`,
+                success_url: `${process.env.FRONTEND_URL}/payment/success/courseId=${course._id}?userId=${userId}`,
+                cancel_url: `${process.env.FRONTEND_URL}/payment/failed/courseId=${course._id}?userId=${userId}`,
             });
 
-            const response = await createPaymentSessionUseCase(dependencies).execute(session.id,courseId,userId);
+            // const response = await createPaymentSessionUseCase(dependencies).execute(session.id,courseId,userId);
 
             res.status(200).json({
+                success: true,
                 data: session.url, // Changed to `session.url` for a valid payment link
+                sessionId: session.id
             });
             return;
         } catch (error) {
