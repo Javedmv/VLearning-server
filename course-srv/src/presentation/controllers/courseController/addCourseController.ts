@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../../_lib/error";
-import { getUserProducer } from "../../../infrastructure/kafka/producers";
+import { getUserProducer, sendCourseDetailsProducer } from "../../../infrastructure/kafka/producers";
 
 export const addCourseController = (dependencies:IDependencies) => {
     const {useCases:{addCourseUseCase}} = dependencies;
@@ -19,6 +19,9 @@ export const addCourseController = (dependencies:IDependencies) => {
             await getUserProducer(req.user._id,"auth-srv-topic")
             
             const response = await addCourseUseCase(dependencies).execute(req.body, req?.user?._id)
+            if(response){
+                await sendCourseDetailsProducer(response,"payment-srv-topic");
+            }
             res.status(200).json({
                 success: true,
                 data: response,

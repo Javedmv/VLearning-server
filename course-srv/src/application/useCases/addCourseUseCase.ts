@@ -9,7 +9,8 @@ export const addCourseUseCase = (dependencies:IDependencies) => {
             try {
                 return await addCourse(course,instrId)
             } catch (error:any) {
-                return null;
+                // return null;
+                console.error("Error in add Course UseCase:",error.message);
                 throw new Error(error?.message || "Course add failed")
             }
         }

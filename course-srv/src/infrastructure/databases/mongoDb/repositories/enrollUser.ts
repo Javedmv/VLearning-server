@@ -14,8 +14,9 @@ export const enrollUser = async (courseId: string, userId: string): Promise<Cour
     if (!course.students) {
       course.students = [];
     }
+
     if(userId === course.instructorId){
-        console.log("both id are same");
+        console.log("Instructor is enrolling in his course,:- FROM REPOSITORY ENROLLUSER");
         return course;
     }
 

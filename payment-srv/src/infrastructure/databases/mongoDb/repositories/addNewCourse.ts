@@ -7,7 +7,6 @@ export const addNewCourse = async (data: any) => {
         // Check if a course with the same _id and title already exists
         const existingCourse = await CourseModel.findOne({
             _id,
-            "basicDetails.title": basicDetails.title,
         });
 
         if (existingCourse) {

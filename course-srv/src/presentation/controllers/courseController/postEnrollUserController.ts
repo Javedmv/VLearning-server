@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../../_lib/error";
+import enrollUserProducer from "../../../infrastructure/kafka/producers/enrollUserProducer";
 
 export const postEnrollUserController = (dependencies:IDependencies) => {
     const {useCases:{enrollUserUseCase}} = dependencies;
@@ -14,9 +15,11 @@ export const postEnrollUserController = (dependencies:IDependencies) => {
                 return;
             }
             const {courseId,userId} = req?.body;
-            // const 
+
             const result = await enrollUserUseCase(dependencies).execute(courseId,userId);
-            
+
+            await enrollUserProducer(courseId,userId,"payment-srv-topic");
+
             if(!result){
                 res.status(404).json({
                     success:false,

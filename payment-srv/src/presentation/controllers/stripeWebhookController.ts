@@ -28,7 +28,6 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
             const userId = session.metadata?.userId!;
             const instructorId = session.metadata?.instructorId!;
 
-            
             // Store session details
             const paymentData: PaymentData = {
                 paymentIntentId: session.payment_intent as string,
@@ -58,7 +57,6 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
             const courseId = paymentIntent.metadata?.courseId!;
             const userId = paymentIntent.metadata?.userId!;
             const instructorId = paymentIntent.metadata?.instructorId!;
-
             
             // Update payment status
             const paymentData = {
@@ -172,7 +170,7 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
                 errorMessage: paymentIntent.last_payment_error?.message,
                 failureCode: paymentIntent.last_payment_error?.code
             };
-    
+            
             // Add your logic here to handle payment failure
             console.log('Payment failed for course:', courseId, 'by user:', userId);
             return failureData;

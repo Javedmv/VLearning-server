@@ -17,7 +17,7 @@ export const getAllActiveBannerUseCase = (dependencies:IDependencies) => {
                         const publicBannerUrl = await getPublicUrl(process.env.S3_BUCKET_NAME!, banner?.imageUrl);
                         banner.imageUrl = publicBannerUrl;
                     }
-                }));
+                })); 
 
                 const highPriority = result.filter(banner => banner.priority === 'high');
                 const mediumPriority = result.filter(banner => banner.priority === 'medium');

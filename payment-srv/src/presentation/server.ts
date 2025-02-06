@@ -4,7 +4,6 @@ import {config} from "dotenv";
 
 config();
 
-import cors from "cors";
 import { routes } from "../infrastructure/routes/routes";
 import { dependencies } from "../__boot/dependencies";
 
