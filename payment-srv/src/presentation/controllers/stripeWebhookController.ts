@@ -2,14 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { config } from "dotenv";
 import Stripe from "stripe";
+import { savePaymentDBUseCase } from '../../application/useCases/savePaymentDBUseCase';
 
 config();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_API_KEY!);
 
-interface PaymentData {
+export interface PaymentData {
     paymentIntentId: string;
     chargeId: string;
+    checkoutSessionId: string; // Added checkout session ID
     amount: number;
     currency: string;
     status: string;
@@ -17,39 +19,50 @@ interface PaymentData {
     metadata?: any;
 }
 
+
 export const stripeWebhookController = (dependencies: IDependencies) => {
-    const { useCases: { createPaymentSessionUseCase } } = dependencies;
+    const { useCases: { savePaymentDBUseCase, enrollStudentInCourseUseCase } } = dependencies;
 
     const handleCheckoutSessionCompleted = async (session: Stripe.Checkout.Session) => {
         console.log("Processing checkout.session.completed");
+    
         try {
             // Extract relevant data
             const courseId = session.metadata?.courseId!;
             const userId = session.metadata?.userId!;
             const instructorId = session.metadata?.instructorId!;
-
+            const checkoutSessionId = session.id!;
+    
             // Store session details
             const paymentData: PaymentData = {
                 paymentIntentId: session.payment_intent as string,
-                chargeId: '', // Will be updated in charge.succeeded
+                chargeId: '', // Will update later in charge.succeeded event
+                checkoutSessionId,
                 amount: session.amount_total || 0,
                 currency: session.currency || 'inr',
-                status: session.status || 'completed',
+                status: session.payment_status || 'completed',
                 customerEmail: session.customer_email!,
                 metadata: session.metadata
             };
-
-            // Process the session
-            const response = await createPaymentSessionUseCase(dependencies)
-                .execute(session.id, courseId, userId);
-            
-            console.log('Checkout session processed:', session.id);
-            return response;
-        } catch (error) {
-            console.error('Error processing checkout session:', error);
-            throw error;
+    
+            await savePaymentDBUseCase(dependencies).execute(courseId, userId, paymentData);
+    
+            await enrollStudentInCourseUseCase(dependencies).execute(userId, courseId);
+    
+            // ✅ Send Confirmation Email (Optional)
+            // await sendPaymentConfirmationEmail(userId, courseId, session.customer_email!);
+    
+            console.log('✅ Checkout session completed successfully:', session.id);
+    
+            // Corrected: Return success response instead of res.json
+            return { success: true, paymentData };
+    
+        } catch (error:any) {
+            console.error('❌ Error processing checkout session:', error);
+            return { success: false, error: error.message };
         }
     };
+    
 
     const handlePaymentIntentSucceeded = async (paymentIntent: Stripe.PaymentIntent) => {
         console.log("Processing payment_intent.succeeded");
@@ -57,17 +70,26 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
             const courseId = paymentIntent.metadata?.courseId!;
             const userId = paymentIntent.metadata?.userId!;
             const instructorId = paymentIntent.metadata?.instructorId!;
-            
-            // Update payment status
+            const checkoutSessionId = paymentIntent.metadata?.checkoutSessionId!;
+    
+            // Fetch charge details using the payment intent
+            const charges = await stripe.charges.list({ payment_intent: paymentIntent.id });
+            const charge = charges.data.length > 0 ? charges.data[0] : null;
+            const chargeId = charge ? charge.id : null;
+    
+            // Store relevant payment data
             const paymentData = {
                 paymentIntentId: paymentIntent.id,
+                chargeId, 
+                checkoutSessionId, // Retrieved from metadata
                 status: paymentIntent.status,
                 amount: paymentIntent.amount,
                 currency: paymentIntent.currency,
+                receiptUrl: charge?.receipt_url || null,
                 metadata: paymentIntent.metadata
             };
-
-            // Add your logic here to update payment status in database
+    
+            // Add your logic here to update payment status in the database
             console.log('Payment intent succeeded:', paymentIntent.id);
             return paymentData;
         } catch (error) {
@@ -75,6 +97,7 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
             throw error;
         }
     };
+    
 
     const handlePaymentIntentCreated = async (paymentIntent: Stripe.PaymentIntent) => {
         console.log("Processing payment_intent.created");

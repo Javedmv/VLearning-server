@@ -1,2 +1,3 @@
 export * from "./IUserAndCourseDetailsUseCase"
-export * from "./ICreatePaymentSessionUseCase"
+export * from "./ISavePaymentDBUseCase"
+export * from "./IEnrollStudentInCourseUseCase"

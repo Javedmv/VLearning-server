@@ -13,7 +13,7 @@ const BannerSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ['promotional', 'informational', 'sale'],
+        enum: ['promotional', 'announcement', 'sale'],
         required: true,
     },
     imageUrl: {

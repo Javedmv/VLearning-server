@@ -2,7 +2,7 @@ export namespace IAddBanner {
     export interface Params {
         title: string;
         status: boolean;
-        type: 'promotional' | 'informational' | 'sale';
+        type: 'promotional' | 'announcement' | 'sale';
         imageUrl: string;
         priority: 'high' | 'medium' | 'low';
         description?: string;
@@ -13,7 +13,7 @@ export namespace IAddBanner {
         _id: string;
         title: string;
         status: boolean;
-        type: 'promotional' | 'informational' | 'sale';
+        type: 'promotional' | 'announcement' | 'sale';
         priority: 'high' | 'medium' | 'low';
         imageUrl: string;
         description?: string;

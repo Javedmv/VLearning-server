@@ -2,24 +2,22 @@ import { CourseModel } from "../models";
 
 export const enrollStudentUser = async (courseId: string, userId: string) => {
     try {
+        // ** FROM KAFKA OF COURSE SERVICE FOR FREE COURSES **
         // Find the course by ID
-        const course = await CourseModel.findById(courseId);
-        if (!course) {
-            console.error("Course not found");
+          const updatedCourse = await CourseModel.findByIdAndUpdate(
+            courseId,
+            { $addToSet: { enrolledStudents: userId } },
+            { new: true }
+        );
+
+        if (!updatedCourse) {
+            console.error(`Course with ID ${courseId} not found.`);
             return;
         }
-        if(!course.students){
-            course.students = [];
-        }
-        // Check if the user is already enrolled
-        if (course.students.includes(userId)) {
-            console.log("User is already enrolled in the course");
-            return;
-        }
-        // Add user to the students array
-        course.students.push(userId);
-        await course.save();
+
+        console.log(`✅ User ${userId} enrolled in course ${courseId}`);
         console.log("User enrolled successfully");
+        return;
     } catch (error: any) {
         console.error(error.message, "Error in updating enroll student user in payment service");
     }

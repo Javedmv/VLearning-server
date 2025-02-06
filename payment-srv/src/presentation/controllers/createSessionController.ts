@@ -4,7 +4,7 @@ import Stripe from "stripe";
 import { getCourseProducer, getUserProducer } from "../../infrastructure/kafka/producers";
 
 export const createSessionController = (dependencies: IDependencies) => {
-    const { useCases: { userAndCourseDetailsUseCase, createPaymentSessionUseCase } } = dependencies;
+    const { useCases: { userAndCourseDetailsUseCase } } = dependencies;
 
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
@@ -15,7 +15,7 @@ export const createSessionController = (dependencies: IDependencies) => {
                 getUserProducer(userId, "auth-srv-topic"),
                 getCourseProducer(courseId, "course-srv-topic"),
             ]);
-
+            // TODO: check here weither the userid is added to students[] check it in above producer as well as below useCase
             const { user, course } = await userAndCourseDetailsUseCase(dependencies).execute(userId, courseId);
             if (!user || !course) {
                 res.status(404).json({ message: "User or Course not found" });
@@ -37,10 +37,11 @@ export const createSessionController = (dependencies: IDependencies) => {
                 payment_method_types: ["card"],
                 mode: "payment",
                 customer_email: user.email,
-                metadata:{
+                metadata: {
                     courseId: course?._id.toString(),
                     userId: user?._id.toString(),
-                    instructorId: course?.instructor.toString()
+                    instructorId: course?.instructor.toString(),
+                    checkoutSessionId: "" // Temporary placeholder update this later
                 },
                 line_items: [
                     {
@@ -58,15 +59,28 @@ export const createSessionController = (dependencies: IDependencies) => {
                 success_url: `${process.env.FRONTEND_URL}/payment/success/courseId=${course._id}`,
                 cancel_url: `${process.env.FRONTEND_URL}/payment/failed/courseId=${course._id}`,
             });
-
-            // const response = await createPaymentSessionUseCase(dependencies).execute(session.id,courseId,userId);
-
+            
+            // **Update the session's metadata with the session ID**
+            await stripe.checkout.sessions.update(session.id, {
+                metadata: {
+                    ...session.metadata,
+                    checkoutSessionId: session.id
+                }
+            });
+            
+            // TODO: read the below line
+            // **Store session details in your DB (Optional, recommended)**
+            // await createPaymentSessionUseCase(dependencies).execute(
+            //     session.id, course._id.toString(), user._id.toString()
+            // );
+            
             res.status(200).json({
                 success: true,
-                data: session.url, // Changed to `session.url` for a valid payment link
+                data: session.url, // Payment link
                 sessionId: session.id
             });
             return;
+            
         } catch (error) {
             console.error("Error in createSessionController:", error);
             res.status(500).json({ message: "Internal Server Error", error });
