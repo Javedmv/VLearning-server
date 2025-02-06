@@ -16,7 +16,6 @@ export const toggleBannerStatusController = (dependencies: IDependencies) => {
                 })
                 return;
             }
-
             res.status(200).json({
                 success: true,
                 message: "Status updated successfully"

@@ -24,6 +24,7 @@ import { addBannerController } from "./addBannerController";
 import { getAllBannerController } from "./getAllBannerController";
 import { deleteBannerController } from "./deleteBannerController";
 import { toggleBannerStatusController } from "./toggleBannerStatusController";
+import { getAllActiveBannerController } from "./getAllActiveBannerController";
 
 export const controllers = (dependencies: IDependencies) =>  {
     return {
@@ -55,5 +56,6 @@ export const controllers = (dependencies: IDependencies) =>  {
         getAllBanner: getAllBannerController(dependencies),
         deleteBanner: deleteBannerController(dependencies),
         toggleBannerStatus: toggleBannerStatusController(dependencies),
+        getAllActiveBanner: getAllActiveBannerController(dependencies),
     }
 }

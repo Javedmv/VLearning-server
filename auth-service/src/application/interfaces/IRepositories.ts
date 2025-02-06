@@ -20,4 +20,5 @@ export interface IRepositories {
     getAllBanner: () => Promise<IAddBanner.Result[] | null>;
     deleteBanner: (id:string) => Promise<IAddBanner.Result>;
     toggleBannerStatus: (id:string, status:boolean) => Promise<boolean>;
+    getAllActiveBanner: () => Promise<IAddBanner.Result[]>
 }
