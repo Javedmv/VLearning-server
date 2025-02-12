@@ -19,28 +19,46 @@ export interface PaymentData {
     metadata?: any;
 }
 
+export interface PaymentIntent {
+    paymentIntentId: string;
+    chargeId: string;
+    checkoutSessionId: string;
+    status: string;
+    receiptUrl: string;
+}
+
+export interface PaymentFailureData {
+    paymentIntentId: string;
+    courseId: string;
+    userId: string;
+    instructorId: string;
+    status: "failed";
+    errorMessage?: string;
+    failureCode?: string;
+}
+
+  
+
 
 export const stripeWebhookController = (dependencies: IDependencies) => {
-    const { useCases: { savePaymentDBUseCase, enrollStudentInCourseUseCase } } = dependencies;
+    const { useCases: { savePaymentDBUseCase, enrollStudentInCourseUseCase, updatePaymentIntentSucceededUseCase, updatePaymentIntentFailedUseCase } } = dependencies;
 
     const handleCheckoutSessionCompleted = async (session: Stripe.Checkout.Session) => {
         console.log("Processing checkout.session.completed",session);
-    
         try {
             // Extract relevant data
             const courseId = session.metadata?.courseId!;
             const userId = session.metadata?.userId!;
             const instructorId = session.metadata?.instructorId!;
             const checkoutSessionId = session.id!;
-    
-            // Store session details
+
             const paymentData: PaymentData = {
                 paymentIntentId: session.payment_intent as string,
                 chargeId: '', // Will update later in charge.succeeded event
                 checkoutSessionId,
                 amount: session.amount_total || 0,
                 currency: session.currency || 'inr',
-                status: session.payment_status || 'paid',
+                status: session.status || 'succeeded',
                 customerEmail: session.customer_email!,
                 metadata: session.metadata
             };
@@ -53,8 +71,8 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
             // await sendPaymentConfirmationEmail(userId, courseId, session.customer_email!);
     
             console.log('✅ Checkout session completed successfully:', session.id);
-    
             // Corrected: Return success response instead of res.json
+
             return { success: true, paymentData };
     
         } catch (error:any) {
@@ -75,20 +93,22 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
             // Fetch charge details using the payment intent
             const charges = await stripe.charges.list({ payment_intent: paymentIntent.id });
             const charge = charges.data.length > 0 ? charges.data[0] : null;
-            const chargeId = charge ? charge.id : null;
+            const chargeId = charge ? charge.id : "";
+            console.log(paymentIntent,"handle charge.Succeded-------------------------------------------4")
     
             // Store relevant payment data
-            const paymentData = {
+            const paymentData:PaymentIntent = {
                 paymentIntentId: paymentIntent.id,
                 chargeId, 
                 checkoutSessionId, // Retrieved from metadata
                 status: paymentIntent.status,
-                amount: paymentIntent.amount,
-                currency: paymentIntent.currency,
-                receiptUrl: charge?.receipt_url || null,
-                metadata: paymentIntent.metadata
+                receiptUrl: charge?.receipt_url || "",
+                // amount: paymentIntent.amount,
+                // currency: paymentIntent.currency,
+                // metadata: paymentIntent.metadata
             };
     
+            await updatePaymentIntentSucceededUseCase(dependencies).execute(paymentData)
             // Add your logic here to update payment status in the database
             console.log('Payment intent succeeded:', paymentIntent.id);
             return paymentData;
@@ -100,13 +120,13 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
     
 
     const handlePaymentIntentCreated = async (paymentIntent: Stripe.PaymentIntent) => {
-        console.log("Processing payment_intent.created");
+        console.log("Processing payment_intent.created----3");
         try {
-
+            
             const courseId = paymentIntent.metadata?.courseId!;
             const userId = paymentIntent.metadata?.userId!;
             const instructorId = paymentIntent.metadata?.instructorId!;
-
+            
             // Log or store initial payment intent
             const paymentData = {
                 paymentIntentId: paymentIntent.id,
@@ -131,6 +151,7 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
             const courseId = charge.metadata?.courseId
             const userId = charge.metadata?.userId
             const instructorId = charge.metadata?.instructorId
+            console.log(charge,"handle charge.Succeded-----------------------------------------------1")
 
             // Store charge details
             const chargeData = {
@@ -154,6 +175,7 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
     const handleChargeUpdated = async (charge: Stripe.Charge) => {
         console.log("Processing charge.updated");
         try {
+            console.log(charge, "charge.updated------------------------------------------------5")
 
             const courseId = charge.metadata?.courseId
             const userId = charge.metadata?.userId
@@ -176,32 +198,38 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
     };
 
     const handlePaymentIntentFailed = async (paymentIntent: Stripe.PaymentIntent) => {
-        console.log("Processing payment_intent.payment_failed");
+        console.log("Processing payment_intent.payment_failed--------------------");
         try {
-            // Extract metadata
-            const courseId = paymentIntent.metadata?.courseId!;
-            const userId = paymentIntent.metadata?.userId!;
-            const instructorId = paymentIntent.metadata?.instructorId!;
+            const courseId = paymentIntent.metadata?.courseId;
+            const userId = paymentIntent.metadata?.userId;
+            const instructorId = paymentIntent.metadata?.instructorId;
+            const paymentIntentId = paymentIntent.id;
     
-            // Handle failed payment
-            const failureData = {
-                paymentIntentId: paymentIntent.id,
+            if (!courseId || !userId || !instructorId) {
+                console.error("❌ Missing metadata in paymentIntent.payment_failed", paymentIntent);
+                throw new Error("Missing metadata in payment failure event");
+            }
+    
+            const failureData: PaymentFailureData = {
+                paymentIntentId,
                 courseId,
                 userId,
                 instructorId,
-                status: 'failed',
-                errorMessage: paymentIntent.last_payment_error?.message,
-                failureCode: paymentIntent.last_payment_error?.code
+                status: "failed",
+                errorMessage: paymentIntent.last_payment_error?.message || "Unknown error",
+                failureCode: paymentIntent.last_payment_error?.code || "Unknown failure code",
             };
-            
-            // Add your logic here to handle payment failure
-            console.log('Payment failed for course:', courseId, 'by user:', userId);
+    
+            await updatePaymentIntentFailedUseCase(dependencies).execute(failureData);
+            console.log(`❌ Payment failed for Course: ${courseId}, User: ${userId}`);
+    
             return failureData;
         } catch (error) {
-            console.error('Error processing payment failure:', error);
+            console.error("❌ Error processing payment failure:", error);
             throw error;
         }
     };
+    
     
 
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
