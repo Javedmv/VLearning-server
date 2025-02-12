@@ -17,7 +17,7 @@ export const addNewCourse = async (data: any) => {
                     $set: {
                         instructorId: data.instructorId,
                         instructor: data.instructor,
-                        students: data.students,
+                        students: data.students ?? [],
                         basicDetails: { ...basicDetails }, // Retains `_id` within nested fields
                         courseContent: { ...courseContent }, // Retains `_id` within nested fields
                         pricing: { ...pricing }, // Retains `_id` within nested fields
@@ -30,7 +30,7 @@ export const addNewCourse = async (data: any) => {
                 },
                 { overwrite: false } // Ensures no new fields are added
             );
-            console.log(`Course updated successfully: ${existingCourse._id}`);
+            console.log(`FUCK :++ Course updated successfully in Payment from Course: ${existingCourse._id}`);
             return;
         } else {
             // Create a new course with the provided data, ensuring `_id` fields are preserved

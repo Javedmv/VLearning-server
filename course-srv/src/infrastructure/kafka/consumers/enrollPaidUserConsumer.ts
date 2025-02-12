@@ -1,6 +1,6 @@
 import { enrollPaidUser } from "../../databases/mongoDb/repositories/enrollPaidUser";
 
-export default async (userId: string, courseId: string) => {
+export default async ({userId,courseId}:{userId:string,courseId:string}) => {
     try {
         if (!userId || !courseId) {
             throw new Error("Invalid userId or courseId");

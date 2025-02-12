@@ -6,7 +6,7 @@ export const enrollStudentInCourse = async (userId: string, courseId: string): P
 
         const updatedCourse = await CourseModel.findByIdAndUpdate(
             courseId,
-            { $addToSet: { enrolledStudents: userId } },
+            { $addToSet: { students: userId } },
             { new: true }
         );
 

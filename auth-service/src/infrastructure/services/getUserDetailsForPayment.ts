@@ -6,7 +6,7 @@ import { sendUserDetailsProducer } from "../kafka/producers"
 export const getUserDetailsForPayment = async (userId:string) => {
     try {
         const userDetails = await getUser(userId)
-        console.log(userDetails,"in auth service for payment")
+        console.log(userDetails,"in auth service send to payment service -------------")
         await sendUserDetailsProducer(userDetails, PAYMENT_SERVICE_TOPIC);
 
     } catch (error:any) {

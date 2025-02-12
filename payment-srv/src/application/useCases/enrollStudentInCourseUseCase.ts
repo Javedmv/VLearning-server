@@ -10,7 +10,6 @@ export const enrollStudentInCourseUseCase = (dependencies: IDependencies) => {
                 if(response){
                     console.log("PRODUCER:- paid send to enroll in course srv")
                     await sendEnrollPaidUserProducer(userId,courseId,"course-srv-topic");
-                    // TODO:COMPLETE THIS IN COURSE SRV
                 }
                 return;
             } catch (error) {

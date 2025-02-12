@@ -18,7 +18,7 @@ export const savePaymentInDb = async (
             userId,
             courseId,
             instructorId: paymentData.metadata?.instructorId || "",
-            amount: paymentData.amount,
+            amount: paymentData.amount/100,
             currency: paymentData.currency || "inr",
             status: paymentData.status,
             customerEmail: paymentData.customerEmail,

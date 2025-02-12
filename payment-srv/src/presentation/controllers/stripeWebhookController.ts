@@ -24,7 +24,7 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
     const { useCases: { savePaymentDBUseCase, enrollStudentInCourseUseCase } } = dependencies;
 
     const handleCheckoutSessionCompleted = async (session: Stripe.Checkout.Session) => {
-        console.log("Processing checkout.session.completed");
+        console.log("Processing checkout.session.completed",session);
     
         try {
             // Extract relevant data
@@ -40,7 +40,7 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
                 checkoutSessionId,
                 amount: session.amount_total || 0,
                 currency: session.currency || 'inr',
-                status: session.payment_status || 'completed',
+                status: session.payment_status || 'paid',
                 customerEmail: session.customer_email!,
                 metadata: session.metadata
             };
@@ -49,7 +49,7 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
     
             await enrollStudentInCourseUseCase(dependencies).execute(userId, courseId);
     
-            // ✅ Send Confirmation Email (Optional)
+            console.log("✅ Send Confirmation Email (Optional)");
             // await sendPaymentConfirmationEmail(userId, courseId, session.customer_email!);
     
             console.log('✅ Checkout session completed successfully:', session.id);

@@ -12,7 +12,7 @@ const PaymentSchema = new Schema<IPayment>(
         instructorId: { type: String, required: true },
         amount: { type: Number, required: true },
         currency: { type: String, required: true, default: "inr" },
-        status: { type: String, required: true, enum: ["completed", "pending", "failed"] },
+        status: { type: String, required: true, enum: ["paid", "unpaid", "no_payment_required", "pending", "failed"] },
         customerEmail: { type: String },
         metadata: { type: Schema.Types.Mixed },
     },

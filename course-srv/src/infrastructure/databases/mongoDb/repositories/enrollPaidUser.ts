@@ -2,20 +2,30 @@ import { CourseModel } from "../models/courseSchema";
 
 export const enrollPaidUser = async (userId: string, courseId: string) => {
     try {
-        // Update the course using $addToSet to avoid duplicates
-        const course = await CourseModel.findByIdAndUpdate(
+        if (!userId || !courseId) {
+            console.error("Invalid input: userId or courseId is missing.");
+            return { success: false, message: "Invalid input parameters." };
+        }
+
+        // Update the course using $addToSet to avoid duplicate student entries
+        const updatedCourse = await CourseModel.findByIdAndUpdate(
             courseId,
-            { $addToSet: { students: userId } }, // Ensures unique enrollment
-            { new: true }
+            { $addToSet: { students: userId } },
+            { new: true } // Returns the updated document
         );
 
-        if (!course) {
+        console.log(`User ${userId} attempting to enroll in course ${courseId}`);
+
+        if (!updatedCourse) {
+            console.error(`Course with ID ${courseId} not found.`);
             return { success: false, message: "Course not found." };
         }
 
-        return { success: true, message: "User enrolled successfully." };
+        console.log(`User ${userId} successfully enrolled in course ${courseId}`);
+        return { success: true, message: "User enrolled successfully.", course: updatedCourse };
+
     } catch (error: any) {
-        console.error("Database error while enrolling user:", error);
+        console.error("Database error while enrolling user:", error.message);
         return { success: false, message: "Error enrolling user." };
     }
 };
