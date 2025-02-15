@@ -17,3 +17,5 @@ export * from "./IGetAllBannerUseCase"
 export * from "./IDeleteBannerUseCase"
 export * from "./IToggleBannerStatusUseCase"
 export * from "./IGetAllActiveBannerUseCase"
+
+export * from "./IEditBannerUseCase"

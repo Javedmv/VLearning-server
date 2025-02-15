@@ -2,6 +2,7 @@ import { UserEntity } from "../../domain/entities";
 import { IAddBanner } from "../../domain/entities/BannerEntity";
 import { CourseFilters } from "../../domain/entities/CourseFilter";
 import { InstructorUserResult } from "../../infrastructure/database/mongoDB/repositories";
+import { editBanner } from '../../infrastructure/database/mongoDB/repositories/editBanner';
 
 export interface IRepositories {
     create: (data: any) => Promise<UserEntity | null>;
@@ -21,4 +22,5 @@ export interface IRepositories {
     deleteBanner: (id:string) => Promise<IAddBanner.Result>;
     toggleBannerStatus: (id:string, status:boolean) => Promise<boolean>;
     getAllActiveBanner: () => Promise<IAddBanner.Result[]>
+    editBanner: (data:any) => Promise<string>
 }

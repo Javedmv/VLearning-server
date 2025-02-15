@@ -14,3 +14,5 @@ export * from "./enrollUserUseCase"
 export * from "./getInstructorDetailsUseCase"
 export * from "./getAllCoursesInstructorUseCase"
 export * from "./editCourseUseCase"
+
+export * from "./getMyLearningUseCase"

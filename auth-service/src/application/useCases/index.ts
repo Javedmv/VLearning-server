@@ -17,3 +17,5 @@ export * from "./getAllBannerUseCase"
 export * from "./deleteBannerUseCase"
 export * from "./toggleBannerStatusUseCase"
 export * from "./getAllActiveBannerUseCase"
+
+export * from "./editBannerUseCase"

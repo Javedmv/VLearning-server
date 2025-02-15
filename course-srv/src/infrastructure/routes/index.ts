@@ -9,7 +9,8 @@ import { courseControllers } from "../../presentation/controllers/courseControll
 export const routes = (dependencies:IDependencies) => {
     const { addCategory,getCategory,updateCategory,updateCategoryStatus ,deleteCategory,getTrueCategory } = categoryControllers(dependencies);
 
-    const { addCourse,getAllCourses,getAllInstructorCourses,getCourseDetails,postEnrollUser, getInstructorDetails, getAllCoursesInstructor, editCourse } = courseControllers(dependencies);
+    const { addCourse,getAllCourses,getAllInstructorCourses,getCourseDetails,postEnrollUser,
+         getInstructorDetails, getAllCoursesInstructor, editCourse, getMyLearning } = courseControllers(dependencies);
 
     const router = Router();
 
@@ -36,6 +37,8 @@ export const routes = (dependencies:IDependencies) => {
     router.route("/instructor-details/:id").get(getInstructorDetails);
     router.route("/all-course-insructor/:id").get(getAllCoursesInstructor);
     router.route("/edit-course/:id").put(jwtMiddleware,verifyUser,editCourse)
+    
+    router.route("/my-learning").get(jwtMiddleware,verifyUser,getMyLearning)
     
     return router;
 }

@@ -16,4 +16,6 @@ export interface IRepositories {
     getInstructorDetails:(instrId:string) => Promise<any>;
     getAllCoursesInstructor:(instructorId:string) => Promise<any>;
     editCourse: (courseId:string, updates:any,removeLessonIndex: number[]) => Promise<any>;
+
+    getAllMyLearning:(userId:string) => Promise<any>
 }

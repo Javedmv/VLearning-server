@@ -17,3 +17,5 @@ export * from "./getAllBanner"
 export * from "./deleteBanner"
 export * from "./toggleBannerStatus"
 export * from "./getAllActiveBanner"
+
+export * from "./editBanner"
