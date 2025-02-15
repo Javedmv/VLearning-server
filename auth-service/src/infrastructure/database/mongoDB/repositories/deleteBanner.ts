@@ -7,7 +7,7 @@ export const deleteBanner = async (id:string):Promise<IAddBanner.Result> => {
         if (!banner) {
             throw new Error("Banner not found");
         }
-        return banner as IAddBanner.Result;
+        return banner;
     } catch (error) {
         console.log(error);
         throw new Error("Banner not found");
