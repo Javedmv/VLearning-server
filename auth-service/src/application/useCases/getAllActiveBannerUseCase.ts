@@ -22,7 +22,6 @@ export const getAllActiveBannerUseCase = (dependencies:IDependencies) => {
                 const highPriority = result.filter(banner => banner.priority === 'high');
                 const mediumPriority = result.filter(banner => banner.priority === 'medium');
                 const lowPriority = result.filter(banner => banner.priority === 'low');
-                console.log(highPriority, mediumPriority, lowPriority)
                 return({ highPriority, mediumPriority, lowPriority });
             } catch (error) {
                 console.log(error,"GET ALL ACTIVE BANNER USECASE")

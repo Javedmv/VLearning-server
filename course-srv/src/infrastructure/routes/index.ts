@@ -37,6 +37,5 @@ export const routes = (dependencies:IDependencies) => {
     router.route("/all-course-insructor/:id").get(getAllCoursesInstructor);
     router.route("/edit-course/:id").put(jwtMiddleware,verifyUser,editCourse)
     
-
     return router;
 }

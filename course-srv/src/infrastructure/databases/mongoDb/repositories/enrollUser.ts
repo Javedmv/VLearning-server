@@ -1,4 +1,5 @@
 import { CourseEntity } from "../../../../domain/entities";
+import { EnrollmentProgressModel } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
 export const enrollUser = async (courseId: string, userId: string): Promise<CourseEntity | null> => {
@@ -9,7 +10,7 @@ export const enrollUser = async (courseId: string, userId: string): Promise<Cour
       {
         $addToSet: { students: userId }, // Prevents duplicate entries
       },
-      { new: true } // Returns the updated document
+      { new: true }
     );
 
     if (!updatedCourse) {
@@ -18,9 +19,32 @@ export const enrollUser = async (courseId: string, userId: string): Promise<Cour
     }
 
     // Prevent instructor from enrolling as a student
-    if (userId === updatedCourse.instructorId) {
-      console.log("Instructor is enrolling in his course, FROM REPOSITORY ENROLLUSER");
+    if (userId === updatedCourse.instructorId.toString()) {
+      console.log("Instructor is enrolling in their own course, FROM REPOSITORY ENROLLUSER");
     }
+
+    // ✅ Get the first lesson safely
+    const firstLesson = updatedCourse.courseContent?.lessons?.[0];
+    const firstLessonId = firstLesson?._id ? firstLesson._id.toString() : "";
+
+    // 💡 Initialize Enrollment Progress when the user enrolls
+    await EnrollmentProgressModel.findOneAndUpdate(
+      { userId, courseId }, // Search for existing progress
+      {
+        $setOnInsert: {
+          userId,
+          courseId,
+          enrolledAt: new Date(),
+          completionPercentage: 0,
+          progress: {
+            completedLessons: [],
+            currentLesson: firstLessonId, // Set first lesson as current
+            lessonProgress: {},
+          },
+        },
+      },
+      { upsert: true, new: true }
+    );
 
     return updatedCourse;
   } catch (error) {

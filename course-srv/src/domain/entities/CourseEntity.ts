@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
 export interface CourseEntity extends Document {
     instructorId:string,
@@ -19,6 +19,7 @@ export interface CourseEntity extends Document {
         duration: string;
         videoUrl: string | null; // No videoPreview
         isIntroduction: boolean;
+        _id?: ObjectId | string;
       }[];
     };
     pricing: {
