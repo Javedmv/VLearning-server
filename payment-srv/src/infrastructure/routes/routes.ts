@@ -7,10 +7,11 @@ import { paymentController } from "../../presentation/controllers";
 
 
 export const routes = (dependencies:IDependencies) => {
-    const {createSession ,stripeWebhook} = paymentController(dependencies)
+    const {createSession ,stripeWebhook, getPaymentHistory} = paymentController(dependencies)
 
     const router = Router();
 
+    router.route("/history/:id").get(getPaymentHistory)
     router.route("/webhook").post(
         express.raw({ type: "application/json" }), // Ensures raw body is parsed
         stripeWebhook

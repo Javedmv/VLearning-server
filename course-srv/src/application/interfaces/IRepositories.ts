@@ -1,5 +1,6 @@
-import { CategoryEntity, CourseEntity, UpdateCategoryEntity } from "../../domain/entities";
+import { CategoryEntity, CourseEntity, IEnrollmentProgressResult, UpdateCategoryEntity } from "../../domain/entities";
 import { CourseFilters } from "../../domain/entities/CourseFilter";
+import { LessonObject } from "../../presentation/controllers/courseController/postupdatedWatched";
 
 export interface IRepositories {
     addCategory:(category:CategoryEntity) => Promise<CategoryEntity | null>
@@ -18,4 +19,6 @@ export interface IRepositories {
     editCourse: (courseId:string, updates:any,removeLessonIndex: number[]) => Promise<any>;
 
     getAllMyLearning:(userId:string) => Promise<any>
+    courseDetailMyLearning(enrollmentId:string,userId:string): Promise<IEnrollmentProgressResult[]>
+    updateProgress(enrollmentId:string,lessonObject:LessonObject,allLessons:LessonObject[]): Promise<boolean>
 }

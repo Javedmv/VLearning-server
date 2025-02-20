@@ -16,3 +16,6 @@ export * from "./IGetAllCoursesInstructorUseCase"
 export * from "./IEditCourseUseCase"
 
 export * from "./IGetMyLearningUseCase"
+export * from "./ICourseDetailMyLearningUseCase"
+
+export * from "./IUpdateProgressUseCase"

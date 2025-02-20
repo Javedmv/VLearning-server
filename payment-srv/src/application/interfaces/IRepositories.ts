@@ -1,3 +1,4 @@
+import { IPaymentHistory } from "../../domain/useCases/IGetPaymentHistoryUseCase";
 import { PaymentData, PaymentFailureData, PaymentIntent } from "../../presentation/controllers/stripeWebhookController";
 
 export interface IRepositories {
@@ -6,4 +7,5 @@ export interface IRepositories {
     enrollStudentInCourse:(userId:string,courseId:string) => Promise<any>;
     updatePaymentIntentSucceeded:(paymentIntentData:PaymentIntent) => Promise<void>
     updatePaymentIntentFailed:(failureData:PaymentFailureData) => Promise<any>;
+    getPaymentHistory:(userId:string) => Promise<IPaymentHistory[]>;
 }

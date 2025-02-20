@@ -19,3 +19,6 @@ export * from "./getAllCoursesInstructor"
 export * from "./editCourse"
 
 export * from "./getAllMyLearning"
+export * from "./courseDetailMyLearning"
+
+export * from "./updateProgress"

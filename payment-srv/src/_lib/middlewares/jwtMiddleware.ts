@@ -19,7 +19,6 @@ declare global {
 export const jwtMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { access_token, refresh_token } = req.cookies;
-        
         if (!access_token && !refresh_token) {
             return next();
         }

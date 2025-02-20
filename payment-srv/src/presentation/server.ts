@@ -16,7 +16,6 @@ app.use((req, res, next) => {
       next();
       console.log("next executed in paymer server.ts")
     } else {
-      console.log("else executed in paymer server.ts")
       express.json()(req, res, (err) => {
         if (err) return next(err); // Ensure proper error handling
         express.urlencoded({ extended: true })(req, res, next);
@@ -25,7 +24,6 @@ app.use((req, res, next) => {
 });
 
 app.use(cookieParser());
-
 app.get("/",(req:Request, res:Response) => {
     res.status(200).json({
         message:"Payment service is ON!!!!"
