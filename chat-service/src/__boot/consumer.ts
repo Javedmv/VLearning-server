@@ -15,7 +15,6 @@ export const runConsumer = async () => {
         await consumer.run({
             eachMessage: async ({message}) => {
                 const {key, value} = message;
-                console.log(key, "in auth service from notification service")
                 
                 const subscriberMethod = String(key) as keyof IAuthSubscriber;
                 const subscriberData = JSON.parse(String(value));
@@ -23,8 +22,8 @@ export const runConsumer = async () => {
 
                 if (subscriber[subscriberMethod] && typeof subscriber[subscriberMethod] === 'function') {
                     try {
-                        // await subscriber[subscriberMethod](subscriberData);
                         // TODO: uncomment the above line and implement the subscriber method
+                        await subscriber[subscriberMethod](subscriberData);
                     } catch (error: any) {
                         console.error(`Error processing message from topic: ${error.message}`);
                         throw new Error(error?.message);

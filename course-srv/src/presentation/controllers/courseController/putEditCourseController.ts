@@ -60,6 +60,7 @@ export const putEditCourseController = (dependencies:IDependencies) => {
             
             if(result.updatedCourse){
                 await sendEditCourseDetailsProducer(result.updatedCourse,"payment-srv-topic");
+                await sendEditCourseDetailsProducer(result.updatedCourse,"chat-srv-topic");
             }
 
             res.status(200).json({

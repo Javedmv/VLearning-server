@@ -21,6 +21,7 @@ export const addCourseController = (dependencies:IDependencies) => {
             const response = await addCourseUseCase(dependencies).execute(req.body, req?.user?._id)
             if(response){
                 await sendCourseDetailsProducer(response,"payment-srv-topic");
+                await sendCourseDetailsProducer(response,"chat-srv-topic");
             }
             res.status(200).json({
                 success: true,

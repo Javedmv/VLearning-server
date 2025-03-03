@@ -1,14 +1,16 @@
+import { addCourseConsumer, editCourseConsumer } from "./consumer";
 
 export interface ISubscriber {
-    hello: () => void;
+    addCourse(data: any) : Promise<void>;
+    editCourse(data: any) : Promise<void>;
+
 }
 
-export interface IAuthSubscriber extends Pick<ISubscriber, "hello"> {}
+export interface IAuthSubscriber extends Pick<ISubscriber, "addCourse" | "editCourse"> {}
 
 export const createSubscriber = (): IAuthSubscriber => {
     return {
-        hello: () => {
-           console.log("Hello from subscriber");
-        }
+        addCourse: addCourseConsumer,
+        editCourse: editCourseConsumer,
     }
 }
