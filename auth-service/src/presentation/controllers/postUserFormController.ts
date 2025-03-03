@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 // import { userFormValidation } from "../../_lib/validation/userFromValidatiaon";
 import { uploadToS3 } from "../../_lib/s3/s3bucket";
+import { sendUserDetailsProducer } from "../../infrastructure/kafka/producers";
 
 interface CustomRequest extends Request {
     files: {
@@ -66,8 +67,7 @@ export const postUserFormController = (dependencies:IDependencies) => {
                 ...(avatarS3Path && avatarS3Path !== "" && {avatarPath: avatarS3Path}),
                 ...(cvS3Path && cvS3Path !== "" && {cvPath: cvS3Path})
             })
-            
-            
+
             if (!Object.keys(req.body).length) {
                 res.status(400).json({
                     success: false,
@@ -76,6 +76,7 @@ export const postUserFormController = (dependencies:IDependencies) => {
                 return;
             }
             if(result){
+                await sendUserDetailsProducer([result], "chat-srv-topic");
                 const {_id, email, role , username, isNewUser, isBlocked, isVerified, profession, profileDescription} = result;
                 res.status(200).json({success: true, data: {_id, email, role, username, isNewUser,isBlocked, isVerified, profession, profileDescription}});
             }

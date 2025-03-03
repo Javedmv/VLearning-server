@@ -3,6 +3,8 @@ import { User } from '../models/index';
 export const addNewUser = async (data: any) => {
     try {
         // Extract userId and validate
+        console.log(data,"in chat srv")
+        
         const userId = data[0]?._id;
 
         if (!userId) {

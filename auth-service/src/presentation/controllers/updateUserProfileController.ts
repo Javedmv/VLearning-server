@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import { IDependencies } from "../../application/interfaces/IDependencies"
+import { sendUserDetailsProducer } from "../../infrastructure/kafka/producers";
 
 export const updateUserProfileController = (dependencies:IDependencies) => {
     const {useCases:{updateProfileUseCase}} = dependencies;
@@ -10,11 +11,11 @@ export const updateUserProfileController = (dependencies:IDependencies) => {
             const result = await updateProfileUseCase(dependencies).execute(userId,data)
             console.log(result,"response in controller of update Profile")
             if(result){
+                await sendUserDetailsProducer([result], "chat-srv-topic")
                 const {_id, email, role , username, isNewUser} = result;
                 res.status(200).json({success: true, data: {_id, email, role, username, isNewUser}})
                 return;
             }
-
         } catch (error) {
             next(error)
         }
