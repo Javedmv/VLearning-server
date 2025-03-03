@@ -1,4 +1,5 @@
 import { enrollPaidUser } from "../../databases/mongoDb/repositories/enrollPaidUser";
+import enrollUserProducer from "../producers/enrollUserProducer";
 
 export default async ({userId,courseId}:{userId:string,courseId:string}) => {
     try {
@@ -6,10 +7,14 @@ export default async ({userId,courseId}:{userId:string,courseId:string}) => {
             throw new Error("Invalid userId or courseId");
         }
 
-        const result = await enrollPaidUser(userId, courseId);
+        const {success, enrollment, message} = await enrollPaidUser(userId, courseId);
 
-        if (!result.success) {
-            throw new Error(result.message);
+        if(success && enrollment){
+            await enrollUserProducer(JSON.stringify(enrollment), "chat-srv-topic");
+        }
+
+        if (!success) {
+            throw new Error(message);
         }
 
         console.log(`enrollPaidUserConsumer :-✅ User ${userId} enrolled in course ${courseId}`);

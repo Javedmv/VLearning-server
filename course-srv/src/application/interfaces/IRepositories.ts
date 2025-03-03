@@ -13,7 +13,7 @@ export interface IRepositories {
     getAllCourses: (filters:CourseFilters) => Promise<any>
     getAllInstructorCourses: (instrId:string,filters:CourseFilters) => Promise<any>
     getCourseDetails: (courseId:string) => Promise<CourseEntity | null>;
-    enrollUser: (courseId:string,userId:string) => Promise<CourseEntity | null>;
+    enrollUser: (courseId:string,userId:string) => Promise<any>;
     getInstructorDetails:(instrId:string) => Promise<any>;
     getAllCoursesInstructor:(instructorId:string) => Promise<any>;
     editCourse: (courseId:string, updates:any,removeLessonIndex: number[]) => Promise<any>;

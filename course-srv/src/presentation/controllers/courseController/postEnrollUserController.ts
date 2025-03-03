@@ -19,6 +19,7 @@ export const postEnrollUserController = (dependencies:IDependencies) => {
             const result = await enrollUserUseCase(dependencies).execute(courseId,userId);
 
             await enrollUserProducer(courseId,userId,"payment-srv-topic");
+            await enrollUserProducer(courseId,userId,"chat-srv-topic");
 
             if(!result){
                 res.status(404).json({

@@ -1,7 +1,9 @@
-import { CourseModel } from "../models";
+import { CourseModel, EnrollmentProgressModel } from "../models";
 
-export const enrollStudentUser = async (courseId: string, userId: string) => {
+export const enrollStudentUser = async (enrollmentData: any) => {
     try {
+        const { userId, courseId, firstLessonId } = enrollmentData;
+        
         if (!userId || !courseId) {
             console.error("Invalid input: userId or courseId is missing.");
             return { success: false, message: "Invalid input parameters." };
@@ -19,20 +21,33 @@ export const enrollStudentUser = async (courseId: string, userId: string) => {
             return { success: false, message: "Instructor cannot enroll in their own course." };
         }
 
-        // Use $addToSet to add userId only if it doesn't already exist
-        const updatedCourse = await CourseModel.findByIdAndUpdate(
+        // Ensure student is added to course's students list
+        await CourseModel.findByIdAndUpdate(
             courseId,
-            { $addToSet: { students: userId } }, // Ensures no duplicate entries
-            { new: true, upsert: true } // upsert ensures students array is created if missing
+            { $addToSet: { students: userId } },
+            { new: true, upsert: true }
         );
 
-        if (!updatedCourse) {
-            return { success: false, message: "Failed to enroll user." };
-        }
+        // Create or update enrollment progress
+        const enrollment = await EnrollmentProgressModel.findOneAndUpdate(
+            { userId, courseId },
+            {
+                $setOnInsert: {
+                    userId,
+                    courseId,
+                    enrolledAt: new Date(),
+                    completionPercentage: 0,
+                    progress: {
+                        completedLessons: [],
+                        currentLesson: firstLessonId, // Set first lesson as current
+                        lessonProgress: {},
+                    },
+                },
+            },
+            { upsert: true, new: true }
+        );
 
-        console.log(`User ${userId} successfully enrolled in course ${courseId}`);
-        return { success: true, message: "User enrolled successfully.", course: updatedCourse };
-
+        console.log(`User ${userId} successfully enrolled in chat ${courseId}`);
     } catch (error: any) {
         console.error("Database error while enrolling user:", error.message);
         return { success: false, message: "Error enrolling user." };

@@ -9,6 +9,7 @@ export const enrollStudentInCourseUseCase = (dependencies: IDependencies) => {
                 const response = await enrollStudentInCourse(userId,courseId)
                 if(response){
                     await sendEnrollPaidUserProducer(userId,courseId,"course-srv-topic");
+                    await sendEnrollPaidUserProducer(userId,courseId,"chat-srv-topic");
                 }
                 return;
             } catch (error) {

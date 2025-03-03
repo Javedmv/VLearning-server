@@ -27,7 +27,7 @@ export const enrollPaidUser = async (userId: string, courseId: string) => {
         const firstLessonId = firstLesson?._id ? firstLesson._id.toString() : "";
 
         // ✅ Create Enrollment Progress if not exists
-        await EnrollmentProgressModel.findOneAndUpdate(
+        const enrollment = await EnrollmentProgressModel.findOneAndUpdate(
             { userId, courseId }, // Search for existing progress
             {
                 $setOnInsert: {
@@ -45,7 +45,12 @@ export const enrollPaidUser = async (userId: string, courseId: string) => {
             { upsert: true, new: true }
         );
 
-        return { success: true, message: "User enrolled successfully.", course: updatedCourse };
+        return { 
+            success: true, 
+            message: "User enrolled successfully.", 
+            updatedCourse, 
+            enrollment 
+        };
 
     } catch (error: any) {
         console.error("Database error while enrolling user:", error.message);

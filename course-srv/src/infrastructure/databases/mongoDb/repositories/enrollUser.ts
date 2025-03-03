@@ -2,7 +2,7 @@ import { CourseEntity } from "../../../../domain/entities";
 import { EnrollmentProgressModel } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
-export const enrollUser = async (courseId: string, userId: string): Promise<CourseEntity | null> => {
+export const enrollUser = async (courseId: string, userId: string): Promise<any> => {
   try {
     // Find and update the course in one atomic operation
     const updatedCourse = await CourseModel.findByIdAndUpdate(
@@ -28,7 +28,7 @@ export const enrollUser = async (courseId: string, userId: string): Promise<Cour
     const firstLessonId = firstLesson?._id ? firstLesson._id.toString() : "";
 
     // 💡 Initialize Enrollment Progress when the user enrolls
-    await EnrollmentProgressModel.findOneAndUpdate(
+    const enrollment = await EnrollmentProgressModel.findOneAndUpdate(
       { userId, courseId }, // Search for existing progress
       {
         $setOnInsert: {
@@ -46,7 +46,7 @@ export const enrollUser = async (courseId: string, userId: string): Promise<Cour
       { upsert: true, new: true }
     );
 
-    return updatedCourse;
+    return {updatedCourse, enrollment};
   } catch (error) {
     console.error(error, "Error in enrollUser repository");
     return null;
