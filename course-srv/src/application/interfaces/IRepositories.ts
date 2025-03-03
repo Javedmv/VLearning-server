@@ -20,5 +20,5 @@ export interface IRepositories {
 
     getAllMyLearning:(userId:string) => Promise<any>
     courseDetailMyLearning(enrollmentId:string,userId:string): Promise<IEnrollmentProgressResult[]>
-    updateProgress(enrollmentId:string,lessonObject:LessonObject,allLessons:LessonObject[]): Promise<boolean>
+    updateProgress(enrollmentId:string,lessonObject:LessonObject,allLessons:LessonObject[]): Promise<any>
 }

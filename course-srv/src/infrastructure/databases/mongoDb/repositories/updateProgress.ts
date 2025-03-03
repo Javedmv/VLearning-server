@@ -26,6 +26,7 @@ export const updateProgress = async (
     // If no next lesson, update currentLesson to the first lesson
     else if (allLessons.length > 0) {
       updateQuery.$set = { "progress.currentLesson": allLessons[0]._id };
+      updateQuery.$set = { "progress.completionPercentage" : 1}
     }
 
     // Update the enrollment progress
@@ -39,7 +40,7 @@ export const updateProgress = async (
       throw new Error("Enrollment not found");
     }
 
-    return true;
+    return updatedEnrollment;
   } catch (error: any) {
     console.error("ERROR IN updateProgress REPO", error);
     throw new Error("Error in updateProgress repo");
