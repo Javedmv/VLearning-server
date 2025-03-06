@@ -1,4 +1,4 @@
-import { CourseModel } from "../models";
+import { ChatModel, CourseModel } from "../models";
 
 export const addNewCourse = async (data: any) => {
     try {
@@ -30,12 +30,22 @@ export const addNewCourse = async (data: any) => {
                 },
                 { overwrite: false } // Ensures no new fields are added
             );
-            console.log(`FUCK :++ Course updated successfully in Payment from Course: ${existingCourse._id}`);
+
             return;
         } else {
             // Create a new course with the provided data, ensuring `_id` fields are preserved
             const newCourse = new CourseModel(data);
             await newCourse.save();
+            
+            const groupName = `${newCourse?.basicDetails?.title} Chat`;
+            
+            await ChatModel.create({
+                courseId: newCourse?._id,
+                instructorId: newCourse?.instructorId,
+                groupName: groupName,
+                users: [newCourse?.instructorId],
+            });
+
             console.log(`New course created successfully: ${newCourse._id}`);
             return;
         }
