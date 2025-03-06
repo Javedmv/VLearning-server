@@ -1,3 +1,5 @@
 export * from "./courseSchema"
 export * from "./enrollmentSchema"
 export * from "./userSchema"
+export * from "./chatSchema"
+export * from "./messageSchema"

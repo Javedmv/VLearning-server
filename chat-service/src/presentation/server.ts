@@ -5,19 +5,33 @@ import cookieParser from 'cookie-parser';
 import { PORT } from "../__boot/config";
 import { routes } from "../infrastructure/routes";
 import { dependencies } from "../__boot/dependencies";
+import { createServer } from "http";
+import connectSokcetIo from "../infrastructure/socket/connection";
+import cors from 'cors';
 
 dotenv.config();
 
 const app: Application = express();
 
-
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser());
 
+const allowedOrigins = process.env.CLIENT_URL;
+const corsOptions = {
+    origin: allowedOrigins,
+    methods: ["GET,HEAD,PUT,POST,DELETE,OPTIONS"],
+    credentials : true
+}
+
+app.use(cors(corsOptions));
+
+const server = createServer(app);
+connectSokcetIo(server);
+
 app.use(routes(dependencies))
 
-app.listen(PORT,() => {
+server.listen(PORT,() => {
     console.log(`Chat server running on port: http://localhost${PORT}`);
 })
 

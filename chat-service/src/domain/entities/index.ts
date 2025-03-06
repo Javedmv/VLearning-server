@@ -1,3 +1,5 @@
 export * from "./CourseEntity"
 export * from "./EnrollmentProgress"
 export * from "./userEntity"
+export * from "./ChatEntity"
+export * from "./MessageEntity"

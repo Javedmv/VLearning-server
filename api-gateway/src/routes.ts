@@ -68,6 +68,8 @@ export const routes = (app: Application) => {
     // app.use("/payment/webhook", createWebhookProxy(Service.PAYMENT_SERVICE_URL))
 
     app.use("/payment", createRegularProxy(Service.PAYMENT_SERVICE_URL))
+
+    app.use("/chat", createRegularProxy(Service.CHAT_SERVICE_URL))
     
     app.use("*",(req:Request, res:Response) => {
         res.status(404).json({error: "route not found"})
