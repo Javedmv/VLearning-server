@@ -10,9 +10,7 @@ export const getChatGroup = async (courseId: string, userId: string): Promise<Ch
         }).populate({
             path: "users",
             select: "firstName lastName username email profile.avatar phoneNumber _id",
-        });
-        
-        console.log(chatGroup)
+        });        
         if (!chatGroup) {
             console.log("No chat group found for the given courseId and userId.");
             return null;

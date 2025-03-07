@@ -57,6 +57,7 @@ export const enrollPaidUser = async (userId: string, courseId: string) => {
                 content: "New user has been added",
                 chatId: result._id,
                 contentType: "text",
+                recieverSeen: [userId],
                 type: "newUser"
             });
         }

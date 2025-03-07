@@ -13,15 +13,17 @@ export namespace MessageEntity {
         content? : string,
         chatId :  string,
         contentType? : contents,
-        recieverSeen : boolean,
+        recieverSeen : [string],
+        type: "newUser" | "message"
     }
     export interface Result {
-        _id?:  ObjectId,
-        sender :  ObjectId,
-        content? : string,
-        chatId :  ObjectId,
-        contentType? : contents,
-        recieverSeen : boolean,
+        _id?:  ObjectId;
+        sender :  ObjectId;
+        content? : string;
+        chatId :  ObjectId;
+        contentType? : contents;
+        recieverSeen : [string];
+        type: "newUser" | "message";
         createdAt?: Date | string;
         updatedAt?: Date | string;
     }

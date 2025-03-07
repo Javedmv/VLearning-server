@@ -29,9 +29,9 @@ const messageSchema = new Schema({
         default: contents.text
     },
     recieverSeen: {
-        type: Boolean,
+        type: [String],
         required: true,
-        default: false
+        default: []
     },
     type: {
         type: String,

@@ -1,5 +1,6 @@
-import { ChatEntity } from "../../domain/entities";
+import { ChatEntity, MessageEntity } from "../../domain/entities";
 
 export interface IRepositories {
     getChatGroup: (courseId:string,userId:string) => Promise<ChatEntity.Result | null>;
+    getAllMessages: (chatId:string) => Promise<MessageEntity.Result[] | null>
 }

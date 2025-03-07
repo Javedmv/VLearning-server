@@ -59,6 +59,7 @@ export const enrollStudentUser = async (enrollmentData: any) => {
                 content: "New user has been added",
                 chatId: result._id,
                 contentType: "text",
+                recieverSeen: [userId],
                 type: "newUser"
             });
         }
