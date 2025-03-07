@@ -8,6 +8,7 @@ import { dependencies } from "../__boot/dependencies";
 import { createServer } from "http";
 import connectSokcetIo from "../infrastructure/socket/connection";
 import cors from 'cors';
+import { errorHandler } from "../_lib/error";
 
 dotenv.config();
 
@@ -30,6 +31,8 @@ const server = createServer(app);
 connectSokcetIo(server);
 
 app.use(routes(dependencies))
+
+app.use(errorHandler)
 
 server.listen(PORT,() => {
     console.log(`Chat server running on port: http://localhost${PORT}`);

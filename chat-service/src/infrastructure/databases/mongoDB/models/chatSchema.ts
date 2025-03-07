@@ -23,7 +23,8 @@ const chatSchema = new Schema({
     latestMessage: {
         type: Types.ObjectId,
         ref: "messages"
-    }
+    },
+
 }, {
     timestamps: true
 });

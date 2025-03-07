@@ -32,6 +32,11 @@ const messageSchema = new Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    type: {
+        type: String,
+        enum: ["newUser", "message"],
+        default: "message"
     }
 }, {
     timestamps: true

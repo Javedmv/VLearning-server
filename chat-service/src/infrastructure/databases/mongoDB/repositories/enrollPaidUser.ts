@@ -1,4 +1,4 @@
-import { EnrollmentProgressModel } from "../models";
+import { ChatModel, EnrollmentProgressModel, MessageModel } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
 export const enrollPaidUser = async (userId: string, courseId: string) => {
@@ -44,6 +44,22 @@ export const enrollPaidUser = async (userId: string, courseId: string) => {
             },
             { upsert: true, new: true }
         );
+
+        const result = await ChatModel.findOneAndUpdate(
+            { courseId },
+            { $addToSet: { users: userId } },
+            { new: true }
+        );
+        
+        if (result) {
+            await MessageModel.create({
+                sender: userId,
+                content: "New user has been added",
+                chatId: result._id,
+                contentType: "text",
+                type: "newUser"
+            });
+        }
 
         return { success: true, message: "User enrolled successfully.", course: updatedCourse };
 
