@@ -14,7 +14,6 @@ export const getAllInstructorChatsController = (dependencies:IDependencies) => {
                 success: true,
                 data: chats
             })
-            console.log(chats)
             return;
         } catch (error) {
             console.log("ERROR getAllInstructorChatsController",error)
