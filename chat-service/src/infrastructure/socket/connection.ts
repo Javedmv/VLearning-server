@@ -14,6 +14,7 @@ const connectSocketIo = (server: HttpServer) => {
     });
 
     const userSocketMap: {[key: string]: string} = {};
+    const activeRooms: {[key: string]: string[]} = {}; // Track users in each chat room
 
     io.on("connection", (socket) => {
         console.log("Socket connected:", socket.id);
@@ -22,28 +23,75 @@ const connectSocketIo = (server: HttpServer) => {
         if (userId !== "undefined") {
             userSocketMap[userId] = socket.id;
             console.log(`User ${userId} connected with socket ID ${socket.id}`);
+            
+            // Broadcast online users
+            io.emit("getOnlineUsers", Object.keys(userSocketMap));
         }
 
-        // Add disconnect handler
+        // Join a specific chat room
+        socket.on("join", ({ chatId, userId }) => {
+            if (!chatId) return;
+            
+            socket.join(chatId);
+            console.log(`User ${userId} joined chat room ${chatId}`);
+            
+            // Track user in room
+            if (!activeRooms[chatId]) {
+                activeRooms[chatId] = [];
+            }
+            if (!activeRooms[chatId].includes(userId)) {
+                activeRooms[chatId].push(userId);
+            }
+            
+            // Notify room about new user
+            socket.to(chatId).emit("userJoined", { 
+                message: `User ${userId} joined the chat` 
+            });
+        });
+
+        // Handle sending messages
+        socket.on("sendMessage", async (message) => {
+            console.log("Message received:", message);
+            
+            if (!message.chatId) return;
+            
+            try {
+                // Save message to database if needed
+                // const savedMessage = await MessageModel.create(message);
+                
+                // Broadcast to everyone in the chat room
+                io.to(message.chatId).emit("message", message);
+            } catch (error) {
+                console.error("Error handling message:", error);
+            }
+        });
+
+        // Handle disconnect
         socket.on("disconnect", () => {
             console.log(`Socket ${socket.id} disconnected`);
-            // Remove from userSocketMap
+            
+            // Find user ID from socket ID
+            let disconnectedUserId = null;
             for (const [key, value] of Object.entries(userSocketMap)) {
                 if (value === socket.id) {
+                    disconnectedUserId = key;
                     delete userSocketMap[key];
                     console.log(`User ${key} disconnected`);
                     break;
                 }
             }
-        });
-
-        // Add message handler
-        socket.on("sendMessage", (message) => {
-            console.log("Message received:", message);
-            // Logic to handle the message
-            const receiverSocketId = userSocketMap[message.receiver];
-            if (receiverSocketId) {
-                io.to(receiverSocketId).emit("receiveMessage", message);
+            
+            // Remove user from active rooms
+            if (disconnectedUserId) {
+                for (const roomId in activeRooms) {
+                    activeRooms[roomId] = activeRooms[roomId].filter(id => id !== disconnectedUserId);
+                    if (activeRooms[roomId].length === 0) {
+                        delete activeRooms[roomId];
+                    }
+                }
+                
+                // Broadcast updated online users
+                io.emit("getOnlineUsers", Object.keys(userSocketMap));
             }
         });
     });

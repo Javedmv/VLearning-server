@@ -4,7 +4,7 @@ import { MessageModel } from "../models";
 export const getAllMessages = async (chatId: string): Promise<MessageEntity.Result[] | null> => {
     try {
         const messages = await MessageModel.find({ chatId })
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: 1 })
         
         return messages
     } catch (error) {
