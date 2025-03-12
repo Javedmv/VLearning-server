@@ -56,13 +56,18 @@ const connectSocketIo = (server: HttpServer) => {
             if (!message.chatId) return;
             
             try {
-                // Save message to database if needed
-                // const savedMessage = await MessageModel.create(message);
+                // Save message and populate sender in one step
+                const savedMessage = await (await MessageModel.create(message)).populate("sender");
+                console.log("Saved message:", savedMessage);
                 
-                // Broadcast to everyone in the chat room
-                io.to(message.chatId).emit("message", message);
+                // Broadcast to everyone in the chat room including sender
+                io.in(message.chatId).emit("message", savedMessage);
+                
+                // Send acknowledgment back to sender
+                socket.emit("messageSent", { success: true, messageId: savedMessage._id });
             } catch (error) {
                 console.error("Error handling message:", error);
+                socket.emit("messageError", { error: "Failed to send message" });
             }
         });
 

@@ -1,4 +1,4 @@
-import { ChatModel, CourseModel, EnrollmentProgressModel, MessageModel } from "../models";
+import { ChatModel, CourseModel, EnrollmentProgressModel, MessageModel, User } from "../models";
 
 export const enrollStudentUser = async (enrollmentData: any) => {
     try {
@@ -54,9 +54,12 @@ export const enrollStudentUser = async (enrollmentData: any) => {
         );
         
         if (result) {
+            const user = await User.findById(userId);
+            const username = user?.firstName || user?.firstName || "New User";
+            
             await MessageModel.create({
                 sender: userId,
-                content: "New user has been added",
+                content: `${username} has joined the chat`,
                 chatId: result._id,
                 contentType: "text",
                 recieverSeen: [userId],
