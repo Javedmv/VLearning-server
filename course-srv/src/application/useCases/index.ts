@@ -19,3 +19,5 @@ export * from "./getMyLearningUseCase"
 export * from "./courseDetailMyLearningUseCase"
 
 export * from "./updateProgressUseCase"
+
+export * from "./getInstructorDashboardUseCase"

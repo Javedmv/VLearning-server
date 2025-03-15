@@ -4,6 +4,7 @@ import {IAddCategoryUseCase, IGetAllCategoryUseCase, IUpdateCategoryUseCase, IUp
      IEditCourseUseCase, IGetCourseDetailUseCase, IGetInstructorDetailsUseCase, getMyLearningUseCase,
      ICourseDetailMyLearningUseCase,
      IUpdateProgressUseCase,
+     IgetInstructorDashboardUseCase,
      } from "../../domain/useCases";
 
 import { IDependencies } from "./IDependencies";
@@ -28,4 +29,6 @@ export interface IUseCases {
     getMyLearningUseCase:(dependencies:IDependencies) => getMyLearningUseCase;
     courseDetailMyLearningUseCase:(dependencies:IDependencies) => ICourseDetailMyLearningUseCase;
     updateProgressUseCase:(dependencies:IDependencies) => IUpdateProgressUseCase;
+
+    getInstructorDashboardUseCase: (dependencies:IDependencies) => IgetInstructorDashboardUseCase;
 }

@@ -71,6 +71,33 @@ const connectSocketIo = (server: HttpServer) => {
             }
         });
 
+        // Handle video call signaling
+        socket.on("startVideoCall", ({ chatId, offer }) => {
+            if (!chatId) return;
+            console.log(`Video call started in chat room ${chatId}`);
+            socket.to(chatId).emit("videoCallStarted");
+            socket.to(chatId).emit("offer", { offer });
+        });
+
+        socket.on("joinVideoCall", ({ chatId }) => {
+            if (!chatId) return;
+            console.log(`User joined video call in chat room ${chatId}`);
+        });
+
+        socket.on("answer", ({ answer }) => {
+            socket.broadcast.emit("answer", { answer });
+        });
+
+        socket.on("ice-candidate", ({ candidate }) => {
+            socket.broadcast.emit("ice-candidate", { candidate });
+        });
+
+        socket.on("endVideoCall", ({ chatId }) => {
+            if (!chatId) return;
+            console.log(`Video call ended in chat room ${chatId}`);
+            io.in(chatId).emit("videoCallEnded");
+        });
+
         // Handle disconnect
         socket.on("disconnect", () => {
             console.log(`Socket ${socket.id} disconnected`);

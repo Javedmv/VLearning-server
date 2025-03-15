@@ -22,3 +22,5 @@ export * from "./getAllMyLearning"
 export * from "./courseDetailMyLearning"
 
 export * from "./updateProgress"
+
+export * from "./instructorRepository"

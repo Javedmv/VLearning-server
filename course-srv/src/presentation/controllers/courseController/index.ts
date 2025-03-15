@@ -5,6 +5,7 @@ import { getAllCoursesInstructorController } from "./getAllCoursesInstructorCont
 import { getAllInstructorCoursesContorller } from "./getAllInstructorCoursesContorller";
 import { getCourseDetailMyLearning } from "./getCourseDetailMyLearning";
 import { getCourseDetailsController } from "./getCourseDetailsController";
+import { getInstructorDashboardController } from "./getInstructorDashboardController";
 import { getInstructorDetailsController } from "./getInstructorDetailsController";
 import { getMyLearningController } from "./getMyLearningController";
 import { postEnrollUserController } from "./postEnrollUserController";
@@ -23,6 +24,7 @@ export const courseControllers = (dependencies:IDependencies) => {
         editCourse: putEditCourseController(dependencies),
         getMyLearning: getMyLearningController(dependencies),
         courseDetailsMyLearning: getCourseDetailMyLearning(dependencies),
-        updatedWatched: postupdatedWatched(dependencies)
+        updatedWatched: postupdatedWatched(dependencies),
+        getInstructorDashboard: getInstructorDashboardController(dependencies)
     }
 }

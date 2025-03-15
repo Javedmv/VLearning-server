@@ -1,6 +1,7 @@
 import { IDependencies } from "../../application/interfaces/IDependencies"
 
 import {addNewMessageController} from "./addNewMessageController"
+import { getAdminDashboardController } from "./getAdminDashboardController"
 import { getAllInstructorChatsController } from "./getAllInstructorChatsController"
 import { getAllMessagesController } from "./getAllMessagesController"
 import { getExsistingChatController } from "./getExsistingChatController"
@@ -12,6 +13,8 @@ export const chatControllers = (dependencies: IDependencies) =>  {
         getExsistingChat: getExsistingChatController(dependencies),
         getAllMessages: getAllMessagesController(dependencies),
         markAsSeen: markAsSeenController(dependencies),
-        getAllInstructorChats: getAllInstructorChatsController(dependencies)
+        getAllInstructorChats: getAllInstructorChatsController(dependencies),
+        getAdminDashboard: getAdminDashboardController(dependencies)
+
     }
 }

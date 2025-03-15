@@ -9,7 +9,7 @@ export const savePaymentInDb = async (
     try {
         console.log(courseId, userId, paymentData);
         console.log("📌 Hello from the repo of the create payment session");
-
+ 
         // Creating a new payment record
         const newPayment = new PaymentModel({
             paymentIntentId: paymentData.paymentIntentId,
@@ -18,7 +18,9 @@ export const savePaymentInDb = async (
             userId,
             courseId,
             instructorId: paymentData.metadata?.instructorId || "",
-            amount: paymentData.amount/100,
+            amount: paymentData?.amount/100,
+            instructorEarnings: (paymentData?.amount/100) * 0.6,
+            adminEarnings: (paymentData?.amount/100) * 0.4,
             currency: paymentData.currency || "inr",
             status: paymentData.status,
             customerEmail: paymentData.customerEmail,

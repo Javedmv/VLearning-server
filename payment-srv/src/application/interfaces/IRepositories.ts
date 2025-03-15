@@ -8,4 +8,6 @@ export interface IRepositories {
     updatePaymentIntentSucceeded:(paymentIntentData:PaymentIntent) => Promise<void>
     updatePaymentIntentFailed:(failureData:PaymentFailureData) => Promise<any>;
     getPaymentHistory:(userId:string) => Promise<IPaymentHistory[]>;
+    getInstructorEarnings:(userId:string) => Promise<any>;
+    getAdminEarnings:() => Promise<any>;
 }

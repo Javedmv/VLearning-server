@@ -8,6 +8,8 @@ export interface IPayment extends Document {
     courseId: string;
     instructorId: string;
     amount: number;
+    instructorEarnings?: number;
+    adminEarnings?: number;
     currency: string;
     status: "succeeded" | "complete" | "failed"; // Enforcing strict types
     receiptUrl: string;

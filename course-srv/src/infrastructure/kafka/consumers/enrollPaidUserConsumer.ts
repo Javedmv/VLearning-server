@@ -8,6 +8,7 @@ export default async ({userId,courseId}:{userId:string,courseId:string}) => {
         }
 
         const {success, enrollment, message} = await enrollPaidUser(userId, courseId);
+        
 
         if(success && enrollment){
             await enrollUserProducer(JSON.stringify(enrollment), "chat-srv-topic");

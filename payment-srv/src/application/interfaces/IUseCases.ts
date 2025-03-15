@@ -1,5 +1,6 @@
 import { IEnrollStudentInCourseUseCase, ISavePaymentDBUseCase, IupdatePaymentIntentSucceededUseCase,
-    IUserAndCourseDetailsUseCase, IupdatePaymentIntentFailedUseCase } from "../../domain/useCases";
+    IUserAndCourseDetailsUseCase, IupdatePaymentIntentFailedUseCase, 
+    IgetEarningsUseCase} from "../../domain/useCases";
 import { IGetPaymentHistoryUseCase } from "../../domain/useCases/IGetPaymentHistoryUseCase";
 import { IDependencies } from "./IDependencies";
 
@@ -10,4 +11,5 @@ export interface IUseCases {
     updatePaymentIntentSucceededUseCase:(dependencies:IDependencies) => IupdatePaymentIntentSucceededUseCase;
     updatePaymentIntentFailedUseCase:(dependencies:IDependencies) => IupdatePaymentIntentFailedUseCase;
     getPaymentHistoryUseCase:(dependencies:IDependencies) => IGetPaymentHistoryUseCase;
+    getEarningsUseCase:(dependencies:IDependencies) => IgetEarningsUseCase;
 }

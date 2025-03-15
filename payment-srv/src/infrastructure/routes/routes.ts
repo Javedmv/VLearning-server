@@ -7,7 +7,7 @@ import { paymentController } from "../../presentation/controllers";
 
 
 export const routes = (dependencies:IDependencies) => {
-    const {createSession ,stripeWebhook, getPaymentHistory} = paymentController(dependencies)
+    const {createSession ,stripeWebhook, getPaymentHistory, getInstructorEarnings} = paymentController(dependencies)
 
     const router = Router();
 
@@ -17,6 +17,7 @@ export const routes = (dependencies:IDependencies) => {
         stripeWebhook
       );
     router.route("/create-session").post(createSession);
+    router.route("/earnings").get(jwtMiddleware, getInstructorEarnings);
 
     return router;
 }
