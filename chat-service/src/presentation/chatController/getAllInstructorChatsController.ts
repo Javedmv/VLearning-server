@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../_lib/error";
+import { createResponse, StatusCode } from "../../_lib/constants";
 
 export const getAllInstructorChatsController = (dependencies:IDependencies) => {
     const {useCases:{getAllInstructorChatsUseCase}} = dependencies;
@@ -10,10 +11,9 @@ export const getAllInstructorChatsController = (dependencies:IDependencies) => {
                 return next(ErrorResponse.unauthorized(""));
             }
             const chats = await getAllInstructorChatsUseCase(dependencies).execute(req.user._id)
-            res.status(200).json({
-                success: true,
-                data: chats
-            })
+            
+            const response = createResponse(StatusCode.SUCCESS,chats)
+            res.status(StatusCode.SUCCESS).json(response)
             return;
         } catch (error) {
             console.log("ERROR getAllInstructorChatsController",error)

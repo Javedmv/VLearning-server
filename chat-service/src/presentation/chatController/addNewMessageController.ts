@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../_lib/error";
+import { createResponse, StatusCode } from "../../_lib/constants";
 
 export const addNewMessageController = (dependencies:IDependencies) => {
     const {useCases: { addNewMessageUseCase } } = dependencies
@@ -14,10 +15,9 @@ export const addNewMessageController = (dependencies:IDependencies) => {
             if(!message){
                 return next(ErrorResponse.internalError(""))
             }
-            res.status(200).json({
-                success:true,
-                data:message
-            })
+            
+            const response = createResponse(StatusCode.SUCCESS,message)
+            res.status(StatusCode.SUCCESS).json(response)
             return;
         } catch (error) {
             console.log(error)

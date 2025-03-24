@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../_lib/error";
-
+import { createResponse, StatusCode } from "../../_lib/constants";
 export const getExsistingChatController = (dependencies:IDependencies) => {
     const {useCases: {getChatGroupUseCase}} = dependencies
     return async(req:Request,res:Response,next:NextFunction) => {
@@ -12,11 +12,10 @@ export const getExsistingChatController = (dependencies:IDependencies) => {
             }
             const userId = req.user?._id
             const result = await getChatGroupUseCase(dependencies).execute(courseId,userId);
-            res.status(200).json({
-                success: true,
-                data: result,
-            })
-            return
+            
+            const response = createResponse(StatusCode.SUCCESS,result)
+            res.status(StatusCode.SUCCESS).json(response)
+            return;
         } catch (error) {
             console.log("GET CHAT ERROR CONTROLLER", error)
         }
