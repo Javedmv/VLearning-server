@@ -71,6 +71,12 @@ const connectSocketIo = (server: HttpServer) => {
             }
         });
 
+        socket.on("typing", ({ chatId, userId, username }) => {
+            if (!chatId) return;
+            console.log(`User ${username} is typing in chat room ${chatId}`);
+            socket.to(chatId).emit("userTyping", { chatId, userId, username });
+        });
+
         // Handle video call signaling
         socket.on("startVideoCall", ({ chatId, offer }) => {
             if (!chatId) return;
