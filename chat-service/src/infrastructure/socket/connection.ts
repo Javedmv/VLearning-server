@@ -15,6 +15,7 @@ const connectSocketIo = (server: HttpServer) => {
 
     const userSocketMap: {[key: string]: string} = {};
     const activeRooms: {[key: string]: string[]} = {}; // Track users in each chat room
+    const userRoles: {[key: string]: string} = {}; // Added to store user roles
 
     io.on("connection", (socket) => {
         console.log("Socket connected:", socket.id);
@@ -85,23 +86,86 @@ const connectSocketIo = (server: HttpServer) => {
             socket.to(chatId).emit("offer", { offer });
         });
 
-        socket.on("joinVideoCall", ({ chatId }) => {
+        // Handle WebRTC signaling
+        socket.on("joinVideoCall", ({ chatId, userId, username, role }) => {
             if (!chatId) return;
-            console.log(`User joined video call in chat room ${chatId}`);
+            console.log(`User ${userId} joined video call in chat ${chatId}`);
+            
+            // Add user to active rooms if not already there
+            if (!activeRooms[chatId]) {
+                activeRooms[chatId] = [];
+            }
+            if (!activeRooms[chatId].includes(userId)) {
+                activeRooms[chatId].push(userId);
+            }
+            
+            // Notify others in the room
+            socket.to(chatId).emit("userJoinedCall", { chatId, userId, username, role });
         });
 
-        socket.on("answer", ({ answer }) => {
-            socket.broadcast.emit("answer", { answer });
+        socket.on("offer", ({ chatId, toUserId, fromUserId, offer }) => {
+            console.log(`Forwarding offer from ${fromUserId} to ${toUserId}`);
+            const targetSocketId = userSocketMap[toUserId];
+            if (targetSocketId) {
+                io.to(targetSocketId).emit("offer", { chatId, fromUserId, toUserId, offer });
+            }
         });
 
-        socket.on("ice-candidate", ({ candidate }) => {
-            socket.broadcast.emit("ice-candidate", { candidate });
+        socket.on("answer", ({ chatId, toUserId, fromUserId, answer }) => {
+            console.log(`Forwarding answer from ${fromUserId} to ${toUserId}`);
+            const targetSocketId = userSocketMap[toUserId];
+            if (targetSocketId) {
+                io.to(targetSocketId).emit("answer", { chatId, fromUserId, toUserId, answer });
+            }
         });
 
-        socket.on("endVideoCall", ({ chatId }) => {
+        socket.on("ice-candidate", ({ chatId, toUserId, fromUserId, candidate }) => {
+            console.log(`Forwarding ICE candidate from ${fromUserId} to ${toUserId}`);
+            const targetSocketId = userSocketMap[toUserId];
+            if (targetSocketId) {
+                io.to(targetSocketId).emit("ice-candidate", { chatId, fromUserId, toUserId, candidate });
+            }
+        });
+
+        socket.on("endVideoCall", ({ chatId, userId, role }) => {
+            console.log(`User ${userId} (${role}) ended video call in chat ${chatId}`);
+            
+            // If an instructor ends the call, notify everyone to end
+            if (role === 'instructor') {
+                io.in(chatId).emit("videoCallEnded", { chatId, userId, role });
+            } else {
+                // If a student leaves, just notify that they left
+                socket.to(chatId).emit("userLeftCall", { chatId, userId, role });
+            }
+            
+            // Remove user from active rooms
+            if (activeRooms[chatId]) {
+                activeRooms[chatId] = activeRooms[chatId].filter(id => id !== userId);
+                if (activeRooms[chatId].length === 0) {
+                    delete activeRooms[chatId];
+                }
+            }
+        });
+
+        // Handle call initiation
+        socket.on("initiateCall", ({ chatId, callerId, callerName }) => {
             if (!chatId) return;
-            console.log(`Video call ended in chat room ${chatId}`);
-            io.in(chatId).emit("videoCallEnded");
+            // Broadcast to everyone in the chat room except the caller
+            socket.to(chatId).emit("incomingCall", { chatId, callerId, callerName });
+        });
+
+        // Handle call acceptance
+        socket.on("acceptCall", ({ chatId, accepterId }) => {
+            if (!chatId) return;
+            // Broadcast to everyone in the chat room
+            io.in(chatId).emit("callAccepted", { chatId, accepterId });
+        });
+
+        // Handle call rejection
+        socket.on("rejectCall", ({ chatId, rejecterId }) => {
+            if (!chatId) return;
+            // Broadcast to everyone in the chat room
+            io.in(chatId).emit("callRejected", { chatId, rejecterId });
         });
 
         // Handle disconnect
@@ -110,21 +174,45 @@ const connectSocketIo = (server: HttpServer) => {
             
             // Find user ID from socket ID
             let disconnectedUserId = null;
+            let userRole = null;
+            
             for (const [key, value] of Object.entries(userSocketMap)) {
                 if (value === socket.id) {
                     disconnectedUserId = key;
+                    // You would need to store user roles somewhere
+                    // This is a placeholder - implement according to your user data structure
+                    userRole = userRoles[key] || 'student';
                     delete userSocketMap[key];
                     console.log(`User ${key} disconnected`);
                     break;
                 }
             }
             
-            // Remove user from active rooms
+            // Remove user from active rooms and notify about call leaving
             if (disconnectedUserId) {
                 for (const roomId in activeRooms) {
-                    activeRooms[roomId] = activeRooms[roomId].filter(id => id !== disconnectedUserId);
-                    if (activeRooms[roomId].length === 0) {
-                        delete activeRooms[roomId];
+                    if (activeRooms[roomId].includes(disconnectedUserId)) {
+                        // Notify room that user left the call
+                        io.to(roomId).emit("userLeftCall", { 
+                            chatId: roomId, 
+                            userId: disconnectedUserId,
+                            role: userRole
+                        });
+                        
+                        // If instructor disconnected, end call for everyone
+                        if (userRole === 'instructor') {
+                            io.to(roomId).emit("videoCallEnded", { 
+                                chatId: roomId, 
+                                userId: disconnectedUserId,
+                                role: userRole
+                            });
+                        }
+                        
+                        // Remove from active room
+                        activeRooms[roomId] = activeRooms[roomId].filter(id => id !== disconnectedUserId);
+                        if (activeRooms[roomId].length === 0) {
+                            delete activeRooms[roomId];
+                        }
                     }
                 }
                 
