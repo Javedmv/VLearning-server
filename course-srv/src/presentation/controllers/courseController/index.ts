@@ -1,5 +1,6 @@
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { addCourseController } from "./addCourseController";
+import { generateCertificateController } from "./generateCertificateController";
 import { getAllCoursesController } from "./getAllCoursesController";
 import { getAllCoursesInstructorController } from "./getAllCoursesInstructorController";
 import { getAllInstructorCoursesContorller } from "./getAllInstructorCoursesContorller";
@@ -11,6 +12,7 @@ import { getMyLearningController } from "./getMyLearningController";
 import { postEnrollUserController } from "./postEnrollUserController";
 import { postupdatedWatched } from "./postupdatedWatched";
 import { putEditCourseController } from "./putEditCourseController";
+import { streamVideo } from "./streamVideo";
 
 export const courseControllers = (dependencies:IDependencies) => {
     return {
@@ -25,6 +27,8 @@ export const courseControllers = (dependencies:IDependencies) => {
         getMyLearning: getMyLearningController(dependencies),
         courseDetailsMyLearning: getCourseDetailMyLearning(dependencies),
         updatedWatched: postupdatedWatched(dependencies),
-        getInstructorDashboard: getInstructorDashboardController(dependencies)
+        getInstructorDashboard: getInstructorDashboardController(dependencies),
+        stream: streamVideo(dependencies),
+        generateCertificate: generateCertificateController(dependencies)
     }
 }

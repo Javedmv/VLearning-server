@@ -11,7 +11,7 @@ export const getCourseDetailMyLearning = (dependencies:IDependencies) => {
                 throw new Error("User not found");
             };
             const enrollments = await courseDetailMyLearningUseCase(dependencies).execute(enrollmentId, req.user._id);
-            console.log("controller-----------------------------", enrollments);
+            
             if (!enrollments) {
                 res.status(404).json({ message: "No enrollments found" });
                 return;
@@ -30,19 +30,12 @@ export const getCourseDetailMyLearning = (dependencies:IDependencies) => {
                     updatedCourse.basicDetails.thumbnail = publicThumbnailUrl;
                 }
 
+                // Don't expose video URLs directly - we'll stream them through our API
                 if (updatedCourse?.courseContent?.lessons) {
-                    updatedCourse.courseContent.lessons = await Promise.all(
-                        updatedCourse.courseContent.lessons.map(async (lesson: any) => {
-                            if (lesson.videoUrl) {
-                                const publicVideoUrl = await getPublicUrl(
-                                    process.env.S3_BUCKET_NAME!,
-                                    lesson.videoUrl
-                                );
-                                return { ...lesson, videoUrl: publicVideoUrl };
-                            }
-                            return lesson;
-                        })
-                    );
+                    updatedCourse.courseContent.lessons = updatedCourse.courseContent.lessons.map((lesson: any) => {
+                        // Keep the S3 key but don't generate public URL
+                        return { ...lesson };
+                    });
                 }
 
                 return { ...enrollment.toObject(), courseId: updatedCourse };

@@ -12,6 +12,7 @@ export const postupdatedWatched = (dependencies:IDependencies) => {
         try {
             const {enrollmentId} = req.params;
             const { lessonObject, allLessons } = req.body
+            console.log(lessonObject,allLessons,"lessonObject,allLessons")
             if(!req.user){
                 throw new Error("Unauthorized");
             }
@@ -20,8 +21,10 @@ export const postupdatedWatched = (dependencies:IDependencies) => {
                 res.status(404).json({success:false, message:"No enrollment found"});
                 return;
             }
+            console.log(result,"result")
             res.status(200).json({
                 success: true,
+                data:result
             })
             return;
         } catch (error) {

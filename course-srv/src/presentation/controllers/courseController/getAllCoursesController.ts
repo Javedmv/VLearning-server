@@ -48,8 +48,8 @@ export const getAllCoursesController = (dependencies: IDependencies) => {
                 // Update video URLs for each lesson
                 if (updatedCourse?.courseContent?.lessons) {
                     updatedCourse.courseContent.lessons = await Promise.all(
-                        updatedCourse.courseContent.lessons.map(async (lesson:Lesson) => {
-                            if (lesson.videoUrl) {
+                        updatedCourse.courseContent.lessons.map(async (lesson: Lesson, index: number) => {
+                            if (index === 0 && lesson.videoUrl) {
                                 const publicVideoUrl = await getPublicUrl(
                                     process.env.S3_BUCKET_NAME!,
                                     lesson.videoUrl
@@ -59,7 +59,10 @@ export const getAllCoursesController = (dependencies: IDependencies) => {
                                     videoUrl: publicVideoUrl
                                 };
                             }
-                            return lesson;
+                            return {
+                                ...lesson,
+                                videoUrl: ""
+                            };
                         })
                     );
                 }

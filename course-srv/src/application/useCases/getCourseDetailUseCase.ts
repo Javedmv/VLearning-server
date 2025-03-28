@@ -1,4 +1,4 @@
-import { IDependencies } from "../interfaces/IDependencies";
+ import { IDependencies } from "../interfaces/IDependencies";
 
 export const getCourseDetailUseCase = (dependencies:IDependencies) =>{
     const {repositories: {getCourseDetails}} = dependencies;

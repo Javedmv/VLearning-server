@@ -23,4 +23,5 @@ export interface IRepositories {
     updateProgress(enrollmentId:string,lessonObject:LessonObject,allLessons:LessonObject[]): Promise<any>
 
     instructorRepository: (instructorId:string) => Promise<any>
+    getEnrollment: (enrollmentId:string) => Promise<any>
 }

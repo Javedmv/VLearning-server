@@ -21,3 +21,5 @@ export * from "./ICourseDetailMyLearningUseCase"
 export * from "./IUpdateProgressUseCase"
 
 export * from "./IgetInstructorDashboardUseCase"
+
+export * from "./IgetEnrollmentUseCase"

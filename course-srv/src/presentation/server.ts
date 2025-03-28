@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import { config } from 'dotenv';
 import bodyParser from "body-parser";
+import helmet from 'helmet';
 
 
 config();
@@ -21,9 +22,17 @@ app.use(cookieParser());
 // app.use(bodyParser.text({type: '/'}));
 app.use(cors({
     origin: 'http://localhost:5173', // Your frontend URL
-    credentials: true,               // Allow credentials
-  }));
-  
+    credentials: true,
+    allowedHeaders: ['Range', 'Authorization', 'Content-Type','Accept'],
+    exposedHeaders: ['Content-Disposition','Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
+
+// Add helmet with CORP configuration
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
+
 app.get("/",(req:Request, res:Response) => {
     res.status(200).json({
         message:"course service is ON!!!!"

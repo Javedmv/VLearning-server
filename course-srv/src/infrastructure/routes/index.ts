@@ -10,7 +10,8 @@ export const routes = (dependencies:IDependencies) => {
     const { addCategory,getCategory,updateCategory,updateCategoryStatus ,deleteCategory,getTrueCategory } = categoryControllers(dependencies);
 
     const { addCourse,getAllCourses,getAllInstructorCourses,getCourseDetails,postEnrollUser,
-         getInstructorDetails, getAllCoursesInstructor, editCourse, getMyLearning,courseDetailsMyLearning, updatedWatched, getInstructorDashboard} = courseControllers(dependencies);
+         getInstructorDetails, getAllCoursesInstructor, editCourse, getMyLearning,courseDetailsMyLearning,
+         updatedWatched, getInstructorDashboard,stream ,generateCertificate} = courseControllers(dependencies);
 
     const router = Router();
 
@@ -43,6 +44,9 @@ export const routes = (dependencies:IDependencies) => {
     router.route("/progress/:enrollmentId/complete-lesson").post(jwtMiddleware,verifyUser,updatedWatched)
 
     router.route("/instructor-dashboard").get(jwtMiddleware,verifyUser,getInstructorDashboard)
+
+    router.get('/stream/:lessonId', jwtMiddleware, stream);
+    router.get('/generate-certificate/:id', jwtMiddleware, generateCertificate);
 
     return router;
 }
