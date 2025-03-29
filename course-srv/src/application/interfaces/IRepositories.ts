@@ -24,4 +24,7 @@ export interface IRepositories {
 
     instructorRepository: (instructorId:string) => Promise<any>
     getEnrollment: (enrollmentId:string) => Promise<any>
+
+    getLandingPageCourses: () => Promise<any>
+    getLandingPageInstructors: () => Promise<any>
 }

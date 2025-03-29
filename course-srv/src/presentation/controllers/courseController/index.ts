@@ -3,6 +3,7 @@ import { addCourseController } from "./addCourseController";
 import { generateCertificateController } from "./generateCertificateController";
 import { getAllCoursesController } from "./getAllCoursesController";
 import { getAllCoursesInstructorController } from "./getAllCoursesInstructorController";
+import { getAllDetailsLandingPageController } from "./getAllDetailsLandingPageController";
 import { getAllInstructorCoursesContorller } from "./getAllInstructorCoursesContorller";
 import { getCourseDetailMyLearning } from "./getCourseDetailMyLearning";
 import { getCourseDetailsController } from "./getCourseDetailsController";
@@ -29,6 +30,7 @@ export const courseControllers = (dependencies:IDependencies) => {
         updatedWatched: postupdatedWatched(dependencies),
         getInstructorDashboard: getInstructorDashboardController(dependencies),
         stream: streamVideo(dependencies),
-        generateCertificate: generateCertificateController(dependencies)
+        generateCertificate: generateCertificateController(dependencies),
+        getAllDetailsLandingPage: getAllDetailsLandingPageController(dependencies)
     }
 }

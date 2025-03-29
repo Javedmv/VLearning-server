@@ -11,7 +11,7 @@ export const routes = (dependencies:IDependencies) => {
 
     const { addCourse,getAllCourses,getAllInstructorCourses,getCourseDetails,postEnrollUser,
          getInstructorDetails, getAllCoursesInstructor, editCourse, getMyLearning,courseDetailsMyLearning,
-         updatedWatched, getInstructorDashboard,stream ,generateCertificate} = courseControllers(dependencies);
+         updatedWatched, getInstructorDashboard,stream ,generateCertificate, getAllDetailsLandingPage} = courseControllers(dependencies);
 
     const router = Router();
 
@@ -26,15 +26,15 @@ export const routes = (dependencies:IDependencies) => {
 
     //users
     router.route("/get-category-status-true").get(getTrueCategory);
-
+    
     // COURSE CONTROLLERS
     router.route("/add-course").post(jwtMiddleware,verifyUser,addCourse)
     router.route("/all-courses").get(getAllCourses)
     router.route("/all-instructor-courses/:id").get(jwtMiddleware,verifyUser,getAllInstructorCourses)
     router.route("/details/:id").get(jwtMiddleware,verifyUser,getCourseDetails)
-
+    
     router.route("/enroll-user").post(jwtMiddleware,verifyUser,postEnrollUser)
-
+    
     router.route("/instructor-details/:id").get(getInstructorDetails);
     router.route("/all-course-insructor/:id").get(getAllCoursesInstructor);
     router.route("/edit-course/:id").put(jwtMiddleware,verifyUser,editCourse)
@@ -44,9 +44,10 @@ export const routes = (dependencies:IDependencies) => {
     router.route("/progress/:enrollmentId/complete-lesson").post(jwtMiddleware,verifyUser,updatedWatched)
 
     router.route("/instructor-dashboard").get(jwtMiddleware,verifyUser,getInstructorDashboard)
-
+    
     router.get('/stream/:lessonId', jwtMiddleware, stream);
     router.get('/generate-certificate/:id', jwtMiddleware, generateCertificate);
-
+    
+    router.get('/landing-page-courses', getAllDetailsLandingPage);
     return router;
 }

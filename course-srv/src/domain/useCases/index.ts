@@ -23,3 +23,6 @@ export * from "./IUpdateProgressUseCase"
 export * from "./IgetInstructorDashboardUseCase"
 
 export * from "./IgetEnrollmentUseCase"
+
+export * from "./IgetLandingPageCoursesUseCase"
+export * from "./IgetLandingPageInstructorsUseCase"

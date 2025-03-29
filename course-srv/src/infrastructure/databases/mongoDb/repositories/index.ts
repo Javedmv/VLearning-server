@@ -26,3 +26,6 @@ export * from "./updateProgress"
 export * from "./instructorRepository"
 
 export * from "./getEnrollment"
+
+export * from "./getLandingPageCourses"
+export * from "./getLandingPageInstructors"
