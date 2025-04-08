@@ -3,6 +3,14 @@ import dotenv from "dotenv";
 import { Server as HttpServer } from 'http';
 import { MessageModel } from "../databases/mongoDB/models";
 
+// Define stream information interface
+interface StreamInfo {
+    chatId: string;
+    streamerId: string;
+    streamerName: string;
+    viewers: string[];
+}
+
 const connectSocketIo = (server: HttpServer) => {
     const io = new SocketIoServer(server, {
         path: "/socket.io/",
@@ -16,6 +24,7 @@ const connectSocketIo = (server: HttpServer) => {
     const userSocketMap: {[key: string]: string} = {};
     const activeRooms: {[key: string]: string[]} = {}; // Track users in each chat room
     const userRoles: {[key: string]: string} = {}; // Added to store user roles
+    const activeStreams: Map<string, StreamInfo> = new Map(); // Track active streams
 
     io.on("connection", (socket) => {
         console.log("Socket connected:", socket.id);
@@ -168,6 +177,115 @@ const connectSocketIo = (server: HttpServer) => {
             io.in(chatId).emit("callRejected", { chatId, rejecterId });
         });
 
+        // Initialize streaming (instructor only)
+        socket.on("initiateStream", ({ chatId, streamerId, streamerName }) => {
+            if (!chatId) return;
+            
+            console.log(`Stream initiated by ${streamerName} in chat ${chatId}`);
+            
+            // Store streaming information
+            const streamInfo: StreamInfo = {
+                chatId,
+                streamerId,
+                streamerName,
+                viewers: []
+            };
+            
+            // Store stream info
+            activeStreams.set(chatId, streamInfo);
+            
+            // Join the stream room
+            socket.join(`stream:${chatId}`);
+            
+            // Notify all users in the chat room about the stream
+            io.to(chatId).emit("streamStarted", {
+                chatId,
+                streamerId,
+                streamerName
+            });
+        });
+        
+        // Join stream as a viewer (student)
+        socket.on("joinStream", ({ chatId, userId, username }) => {
+            if (!chatId) return;
+            
+            console.log(`User ${username} joined stream in chat ${chatId}`);
+            
+            // Add to stream room
+            socket.join(`stream:${chatId}`);
+            
+            // Get the stream info and update viewers
+            const streamInfo = activeStreams.get(chatId);
+            if (streamInfo && !streamInfo.viewers.includes(userId)) {
+                streamInfo.viewers.push(userId);
+                
+                // Notify the instructor about this viewer specifically
+                // so they can establish a direct WebRTC connection
+                const instructorSocketId = userSocketMap[streamInfo.streamerId];
+                if (instructorSocketId) {
+                    io.to(instructorSocketId).emit("newStreamViewer", {
+                        chatId,
+                        viewerId: userId,
+                        viewerName: username
+                    });
+                }
+            }
+            
+            // Notify everyone in the stream about new viewer
+            io.to(`stream:${chatId}`).emit("userJoinedStream", {
+                chatId,
+                userId,
+                username
+            });
+        });
+        
+        // Leave stream as a viewer (student)
+        socket.on("leaveStream", ({ chatId, userId, username }) => {
+            if (!chatId) return;
+            
+            console.log(`User ${username} left stream in chat ${chatId}`);
+            
+            // Remove from stream room
+            socket.leave(`stream:${chatId}`);
+            
+            // Update viewers list
+            const streamInfo = activeStreams.get(chatId);
+            if (streamInfo) {
+                streamInfo.viewers = streamInfo.viewers.filter(viewerId => viewerId !== userId);
+            }
+            
+            // Notify instructor and other viewers
+            io.to(`stream:${chatId}`).emit("userLeftStream", {
+                chatId,
+                userId,
+                username
+            });
+        });
+        
+        // End stream (instructor only)
+        socket.on("endStream", ({ chatId, userId, role }) => {
+            if (!chatId || role !== 'instructor') return;
+            
+            const streamInfo = activeStreams.get(chatId);
+            const streamerName = streamInfo ? streamInfo.streamerName : 'Instructor';
+            
+            console.log(`Stream ended by ${streamerName} in chat ${chatId}`);
+            
+            // Notify all users in stream room
+            io.to(`stream:${chatId}`).emit("streamEnded", {
+                chatId,
+                userId,
+                streamerName
+            });
+            
+            // Clean up stream data
+            activeStreams.delete(chatId);
+            
+            // Clean up room - force all sockets to leave this room
+            const roomName = `stream:${chatId}`;
+            io.in(roomName).socketsLeave(roomName);
+        });
+
         // Handle disconnect
         socket.on("disconnect", () => {
             console.log(`Socket ${socket.id} disconnected`);
@@ -190,6 +308,7 @@ const connectSocketIo = (server: HttpServer) => {
             
             // Remove user from active rooms and notify about call leaving
             if (disconnectedUserId) {
+                // Clean up any active video calls this user was in
                 for (const roomId in activeRooms) {
                     if (activeRooms[roomId].includes(disconnectedUserId)) {
                         // Notify room that user left the call
@@ -213,6 +332,44 @@ const connectSocketIo = (server: HttpServer) => {
                         if (activeRooms[roomId].length === 0) {
                             delete activeRooms[roomId];
                         }
+                    }
+                }
+                
+                // Handle stream cleanup on disconnect
+                for (const [streamChatId, streamInfo] of activeStreams.entries()) {
+                    // If disconnected user is a viewer
+                    if (streamInfo.viewers.includes(disconnectedUserId)) {
+                        console.log(`Removing viewer ${disconnectedUserId} from stream ${streamChatId}`);
+                        // Remove from viewers
+                        streamInfo.viewers = streamInfo.viewers.filter(id => id !== disconnectedUserId);
+                        
+                        // Get viewer username if available
+                        const viewerName = "User"; // Placeholder - could be improved
+                        
+                        // Notify streamer about viewer leaving
+                        const streamerSocketId = userSocketMap[streamInfo.streamerId];
+                        if (streamerSocketId) {
+                            io.to(streamerSocketId).emit("viewerLeft", {
+                                userId: disconnectedUserId,
+                                username: viewerName,
+                                viewers: streamInfo.viewers,
+                                viewerNames: streamInfo.viewers.map(id => "User") // This could be improved
+                            });
+                        }
+                    } 
+                    
+                    // If disconnected user is the streamer, end the stream for everyone
+                    if (streamInfo.streamerId === disconnectedUserId) {
+                        console.log(`Streamer ${disconnectedUserId} disconnected, ending stream in ${streamChatId}`);
+                        // Notify everyone that stream ended
+                        io.to(streamChatId).emit("streamEnded", {
+                            chatId: streamChatId,
+                            streamerId: disconnectedUserId,
+                            streamerName: streamInfo.streamerName
+                        });
+                        
+                        // Clean up stream data
+                        activeStreams.delete(streamChatId);
                     }
                 }
                 

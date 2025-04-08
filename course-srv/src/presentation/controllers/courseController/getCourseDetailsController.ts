@@ -9,6 +9,7 @@ export const getCourseDetailsController = (dependencies: IDependencies) => {
     try {
       const courseId = req?.params?.id;
       const result = await getCourseDetailUseCase(dependencies).execute(courseId);
+      console.log("result", result, "for megana");
         
     //   function to update the course with url in the s3
       const updatedCourse = await updateCourse(result);
