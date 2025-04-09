@@ -16,7 +16,7 @@ const connectSocketIo = (server: HttpServer) => {
         path: "/socket.io/",
         cors: {
             origin: process.env.CLIENT_URL,
-            credentials: true  // Fixed: lowercase and plural
+            credentials: true
         },
         transports: ['polling', 'websocket']  // Support both transports
     });
@@ -87,96 +87,6 @@ const connectSocketIo = (server: HttpServer) => {
             socket.to(chatId).emit("userTyping", { chatId, userId, username });
         });
 
-        // Handle video call signaling
-        socket.on("startVideoCall", ({ chatId, offer }) => {
-            if (!chatId) return;
-            console.log(`Video call started in chat room ${chatId}`);
-            socket.to(chatId).emit("videoCallStarted");
-            socket.to(chatId).emit("offer", { offer });
-        });
-
-        // Handle WebRTC signaling
-        socket.on("joinVideoCall", ({ chatId, userId, username, role }) => {
-            if (!chatId) return;
-            console.log(`User ${userId} joined video call in chat ${chatId}`);
-            
-            // Add user to active rooms if not already there
-            if (!activeRooms[chatId]) {
-                activeRooms[chatId] = [];
-            }
-            if (!activeRooms[chatId].includes(userId)) {
-                activeRooms[chatId].push(userId);
-            }
-            
-            // Notify others in the room
-            socket.to(chatId).emit("userJoinedCall", { chatId, userId, username, role });
-        });
-
-        socket.on("offer", ({ chatId, toUserId, fromUserId, offer }) => {
-            console.log(`Forwarding offer from ${fromUserId} to ${toUserId}`);
-            const targetSocketId = userSocketMap[toUserId];
-            if (targetSocketId) {
-                io.to(targetSocketId).emit("offer", { chatId, fromUserId, toUserId, offer });
-            }
-        });
-
-        socket.on("answer", ({ chatId, toUserId, fromUserId, answer }) => {
-            console.log(`Forwarding answer from ${fromUserId} to ${toUserId}`);
-            const targetSocketId = userSocketMap[toUserId];
-            if (targetSocketId) {
-                io.to(targetSocketId).emit("answer", { chatId, fromUserId, toUserId, answer });
-            }
-        });
-
-        socket.on("ice-candidate", ({ chatId, toUserId, fromUserId, candidate }) => {
-            console.log(`Forwarding ICE candidate from ${fromUserId} to ${toUserId}`);
-            const targetSocketId = userSocketMap[toUserId];
-            if (targetSocketId) {
-                io.to(targetSocketId).emit("ice-candidate", { chatId, fromUserId, toUserId, candidate });
-            }
-        });
-
-        socket.on("endVideoCall", ({ chatId, userId, role }) => {
-            console.log(`User ${userId} (${role}) ended video call in chat ${chatId}`);
-            
-            // If an instructor ends the call, notify everyone to end
-            if (role === 'instructor') {
-                io.in(chatId).emit("videoCallEnded", { chatId, userId, role });
-            } else {
-                // If a student leaves, just notify that they left
-                socket.to(chatId).emit("userLeftCall", { chatId, userId, role });
-            }
-            
-            // Remove user from active rooms
-            if (activeRooms[chatId]) {
-                activeRooms[chatId] = activeRooms[chatId].filter(id => id !== userId);
-                if (activeRooms[chatId].length === 0) {
-                    delete activeRooms[chatId];
-                }
-            }
-        });
-
-        // Handle call initiation
-        socket.on("initiateCall", ({ chatId, callerId, callerName }) => {
-            if (!chatId) return;
-            // Broadcast to everyone in the chat room except the caller
-            socket.to(chatId).emit("incomingCall", { chatId, callerId, callerName });
-        });
-
-        // Handle call acceptance
-        socket.on("acceptCall", ({ chatId, accepterId }) => {
-            if (!chatId) return;
-            // Broadcast to everyone in the chat room
-            io.in(chatId).emit("callAccepted", { chatId, accepterId });
-        });
-
-        // Handle call rejection
-        socket.on("rejectCall", ({ chatId, rejecterId }) => {
-            if (!chatId) return;
-            // Broadcast to everyone in the chat room
-            io.in(chatId).emit("callRejected", { chatId, rejecterId });
-        });
-
         // Initialize streaming (instructor only)
         socket.on("initiateStream", ({ chatId, streamerId, streamerName }) => {
             if (!chatId) return;
@@ -219,8 +129,15 @@ const connectSocketIo = (server: HttpServer) => {
             if (streamInfo && !streamInfo.viewers.includes(userId)) {
                 streamInfo.viewers.push(userId);
                 
+                // Notify instructor and other viewers about this new viewer
+                io.to(`stream:${chatId}`).emit("userJoinedStream", {
+                    chatId,
+                    userId,
+                    username
+                });
+                
                 // Notify the instructor about this viewer specifically
-                // so they can establish a direct WebRTC connection
+                // so they can establish a direct WebRTC connection if needed
                 const instructorSocketId = userSocketMap[streamInfo.streamerId];
                 if (instructorSocketId) {
                     io.to(instructorSocketId).emit("newStreamViewer", {
@@ -229,14 +146,9 @@ const connectSocketIo = (server: HttpServer) => {
                         viewerName: username
                     });
                 }
+                
+                console.log(`Updated viewers for stream ${chatId}:`, streamInfo.viewers);
             }
-            
-            // Notify everyone in the stream about new viewer
-            io.to(`stream:${chatId}`).emit("userJoinedStream", {
-                chatId,
-                userId,
-                username
-            });
         });
         
         // Leave stream as a viewer (student)
@@ -286,6 +198,68 @@ const connectSocketIo = (server: HttpServer) => {
             io.in(roomName).socketsLeave(roomName);
         });
 
+        // Handle WebRTC signaling for streaming
+        socket.on("streamOffer", ({ chatId, to, from, offer }) => {
+            console.log(`Forwarding stream offer from ${from} to ${to}`);
+            const targetSocketId = userSocketMap[to];
+            if (targetSocketId) {
+                io.to(targetSocketId).emit("streamOffer", { chatId, from, to, offer });
+            }
+        });
+
+        socket.on("streamAnswer", ({ chatId, to, from, answer }) => {
+            console.log(`Forwarding stream answer from ${from} to ${to}`);
+            const targetSocketId = userSocketMap[to];
+            if (targetSocketId) {
+                io.to(targetSocketId).emit("streamAnswer", { chatId, from, to, answer });
+            }
+        });
+
+        socket.on("streamIceCandidate", ({ chatId, to, from, candidate }) => {
+            console.log(`Forwarding stream ICE candidate from ${from} to ${to}`);
+            const targetSocketId = userSocketMap[to];
+            if (targetSocketId) {
+                io.to(targetSocketId).emit("streamIceCandidate", { chatId, from, to, candidate });
+            }
+        });
+
+        // Handle recall students (re-notify about active stream)
+        socket.on("recallStudents", ({ chatId, streamerId, streamerName }) => {
+            if (!chatId) return;
+            
+            console.log(`Instructor ${streamerName} is recalling students to stream in chat ${chatId}`);
+            
+            const streamInfo = activeStreams.get(chatId);
+            if (!streamInfo) {
+                console.log(`No active stream found for chat ${chatId}`);
+                return;
+            }
+            
+            // Get all users in the chat room
+            const chatUsers = activeRooms[chatId] || [];
+            
+            // Get current viewers
+            const currentViewers = streamInfo.viewers || [];
+            
+            // For each user in the chat who is not already a viewer
+            chatUsers.forEach(userId => {
+                if (!currentViewers.includes(userId) && userId !== streamerId) {
+                    console.log(`Re-notifying user ${userId} about stream in chat ${chatId}`);
+                    
+                    // Get user's socket ID
+                    const userSocketId = userSocketMap[userId];
+                    if (userSocketId) {
+                        // Send stream notification to this user specifically
+                        io.to(userSocketId).emit("streamStarted", {
+                            chatId,
+                            streamerId,
+                            streamerName
+                        });
+                    }
+                }
+            });
+        });
+
         // Handle disconnect
         socket.on("disconnect", () => {
             console.log(`Socket ${socket.id} disconnected`);
@@ -297,8 +271,6 @@ const connectSocketIo = (server: HttpServer) => {
             for (const [key, value] of Object.entries(userSocketMap)) {
                 if (value === socket.id) {
                     disconnectedUserId = key;
-                    // You would need to store user roles somewhere
-                    // This is a placeholder - implement according to your user data structure
                     userRole = userRoles[key] || 'student';
                     delete userSocketMap[key];
                     console.log(`User ${key} disconnected`);
@@ -306,35 +278,7 @@ const connectSocketIo = (server: HttpServer) => {
                 }
             }
             
-            // Remove user from active rooms and notify about call leaving
             if (disconnectedUserId) {
-                // Clean up any active video calls this user was in
-                for (const roomId in activeRooms) {
-                    if (activeRooms[roomId].includes(disconnectedUserId)) {
-                        // Notify room that user left the call
-                        io.to(roomId).emit("userLeftCall", { 
-                            chatId: roomId, 
-                            userId: disconnectedUserId,
-                            role: userRole
-                        });
-                        
-                        // If instructor disconnected, end call for everyone
-                        if (userRole === 'instructor') {
-                            io.to(roomId).emit("videoCallEnded", { 
-                                chatId: roomId, 
-                                userId: disconnectedUserId,
-                                role: userRole
-                            });
-                        }
-                        
-                        // Remove from active room
-                        activeRooms[roomId] = activeRooms[roomId].filter(id => id !== disconnectedUserId);
-                        if (activeRooms[roomId].length === 0) {
-                            delete activeRooms[roomId];
-                        }
-                    }
-                }
-                
                 // Handle stream cleanup on disconnect
                 for (const [streamChatId, streamInfo] of activeStreams.entries()) {
                     // If disconnected user is a viewer
@@ -346,16 +290,12 @@ const connectSocketIo = (server: HttpServer) => {
                         // Get viewer username if available
                         const viewerName = "User"; // Placeholder - could be improved
                         
-                        // Notify streamer about viewer leaving
-                        const streamerSocketId = userSocketMap[streamInfo.streamerId];
-                        if (streamerSocketId) {
-                            io.to(streamerSocketId).emit("viewerLeft", {
-                                userId: disconnectedUserId,
-                                username: viewerName,
-                                viewers: streamInfo.viewers,
-                                viewerNames: streamInfo.viewers.map(id => "User") // This could be improved
-                            });
-                        }
+                        // Notify others about viewer leaving
+                        io.to(`stream:${streamChatId}`).emit("userLeftStream", {
+                            chatId: streamChatId,
+                            userId: disconnectedUserId,
+                            username: viewerName
+                        });
                     } 
                     
                     // If disconnected user is the streamer, end the stream for everyone
@@ -364,7 +304,7 @@ const connectSocketIo = (server: HttpServer) => {
                         // Notify everyone that stream ended
                         io.to(streamChatId).emit("streamEnded", {
                             chatId: streamChatId,
-                            streamerId: disconnectedUserId,
+                            userId: disconnectedUserId,
                             streamerName: streamInfo.streamerName
                         });
                         
