@@ -26,9 +26,11 @@ import { deleteBannerController } from "./deleteBannerController";
 import { toggleBannerStatusController } from "./toggleBannerStatusController";
 import { getAllActiveBannerController } from "./getAllActiveBannerController";
 import { editBannerController } from "./editBannerController";
+import { googleSignupController } from "./googleSignupController";
 
 export const controllers = (dependencies: IDependencies) =>  {
     return {
+        googleSignup:googleSignupController(dependencies),
         signup: signupController(dependencies),
         findUserByEmail: findByEmailContorller(dependencies),
         resendOtp: resendOtpController(dependencies),

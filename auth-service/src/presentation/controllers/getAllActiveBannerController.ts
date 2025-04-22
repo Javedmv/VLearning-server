@@ -6,7 +6,6 @@ export const getAllActiveBannerController = (dependencies:IDependencies) => {
     return async (req:Request,res:Response,next:NextFunction) => {
         try {
             const { highPriority = [], mediumPriority = [], lowPriority = [] } = await getAllActiveBannerUseCase(dependencies).execute();
-            
             res.status(200).json({
                 success:true,
                 highPriority,

@@ -42,7 +42,8 @@ const createRegularProxy = (serviceUrl: string) => {
     return proxy(serviceUrl, {
         proxyReqPathResolver(req) {
             return req.url
-        }
+        },
+        timeout:60000
     })
 }
 

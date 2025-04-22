@@ -11,9 +11,11 @@ export const routes = (dependencies: IDependencies) => {
          adminBlockUser, adminGetAllInstructors, adminVerifyInstructor, forgotPassword ,forgotPasswordSubmit,
          updateForgotPassword, adminGetProfile, adminUpdatePassword, getUserDetails, updateUserProfile, updatePassword,
          postApplyTeach ,postInstructorReapply, addBanner, getAllBanner ,deleteBanner, toggleBannerStatus, getAllActiveBanner, 
-         editBanner} = controllers(dependencies);
+         editBanner,googleSignup} = controllers(dependencies);
     
     const router = Router();
+
+    router.route("/google-login").post(googleSignup)
     
     router.route("/signup").post(signup);
     router.route("/resend-otp").post(resendOtp)
@@ -50,11 +52,11 @@ export const routes = (dependencies: IDependencies) => {
     router.route("/approve-decline/:id").put(jwtMiddleware,verifyAdmin, adminVerifyInstructor);
 
     // Banner
-    router.route("/multipart/add-banner").post(uploadMiddleware,jwtMiddleware,verifyAdmin, addBanner);
+    router.route("/get-all-active-banner").get(getAllActiveBanner)
     router.route("/all-banner").get(jwtMiddleware,verifyAdmin, getAllBanner);
+    router.route("/multipart/add-banner").post(uploadMiddleware,jwtMiddleware,verifyAdmin, addBanner);
     router.route("/delete-banner/:id").delete(jwtMiddleware,verifyAdmin, deleteBanner);
     router.route("/banner/toggle-status/:id").put(jwtMiddleware, verifyAdmin, toggleBannerStatus);
-    router.route("/get-all-active-banner").get(getAllActiveBanner)
     router.route("/multipart/edit-banner").put(uploadMiddleware,jwtMiddleware,verifyAdmin,editBanner)
 
 

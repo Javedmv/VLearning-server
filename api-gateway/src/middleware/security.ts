@@ -6,7 +6,7 @@ import { Service } from "../config";
 
 export const applySecurityMiddleware = (app:Application) => {
     app.use(helmet({
-        crossOriginResourcePolicy: { policy: "cross-origin" }
+        crossOriginResourcePolicy: { policy: "cross-origin" },
     }))
 
     app.use(cors({
