@@ -19,3 +19,5 @@ export * from "./toggleBannerStatus"
 export * from "./getAllActiveBanner"
 
 export * from "./editBanner"
+
+export * from "./createGAuthUser"

@@ -23,4 +23,5 @@ export interface IRepositories {
     toggleBannerStatus: (id:string, status:boolean) => Promise<boolean>;
     getAllActiveBanner: () => Promise<IAddBanner.Result[]>
     editBanner: (data:any) => Promise<string>
+    createGAuthUser: (data: { email: string; name: string }) => Promise<UserEntity | null>;
 }

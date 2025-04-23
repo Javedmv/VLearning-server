@@ -5,7 +5,7 @@ import { Otp } from '../models/otpSchema';
 export const create = async(data:any):Promise<UserEntity | null> => {
     try {
         const { confirmPassword,otp, ...userData } = data;
-
+        console.log(userData, "user data in create repo")
         const newUser = await User.create(userData);
         if(!newUser){
             throw new Error("user creation failed")

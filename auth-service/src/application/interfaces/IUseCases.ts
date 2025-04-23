@@ -2,7 +2,8 @@ import { ICreateUserUseCase, IFindUserByEmailUseCase, IFindUserByIdUseCase, ILog
     IFormSubmitByEmailUseCase, IGetAllStudentsUseCase, IBlockUserUseCase, IGetAllInstructorsUseCase,IVerifyInstructorUseCase,
     IUpdatePasswordUseCase, IUpdateProfileUseCase,IUpdateCvUseCase, IAddBannerUseCase,IGetAllBannerUseCase,IDeleteBannerUseCase,
     IToggleBannerStatusUseCase,IGetAllActiveBannerUseCase,
-    IEditBannerUseCase} from "../../domain/useCases";
+    IEditBannerUseCase,
+    ICreateGAuthUserUseCase} from "../../domain/useCases";
 
 import { IDependencies } from "./IDependencies";
 
@@ -26,4 +27,5 @@ export interface IUseCases {
     toggleBannerStatusUseCase: (dependencies:IDependencies) => IToggleBannerStatusUseCase;
     getAllActiveBannerUseCase: (dependencies:IDependencies) => IGetAllActiveBannerUseCase;
     editBannerUseCase: (dependencies:IDependencies) => IEditBannerUseCase;
+    createGAuthUserUseCase: (dependencies:IDependencies) => ICreateGAuthUserUseCase;
 }

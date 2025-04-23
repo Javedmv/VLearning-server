@@ -19,3 +19,5 @@ export * from "./toggleBannerStatusUseCase"
 export * from "./getAllActiveBannerUseCase"
 
 export * from "./editBannerUseCase"
+
+export * from "./createGAuthUserUseCase"
