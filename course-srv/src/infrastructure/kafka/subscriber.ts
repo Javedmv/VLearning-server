@@ -1,7 +1,8 @@
+import { TOBE } from "../../_lib/common/Tobe";
 import { addUserConsumer, getCourseDetailsFromPaymentConsumer, enrollPaidUserConsumer } from "./consumers";
 
 export interface ISubscriber {
-    addUser(data:any): Promise<void>;
+    addUser(data:TOBE): Promise<void>;
     getCourseDetailsFromPayment(courseId:string):Promise<void>;
     enrollPaidUser({userId,courseId}:{userId:string,courseId:string}):Promise<void>;
 }

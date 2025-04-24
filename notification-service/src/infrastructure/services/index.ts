@@ -13,7 +13,12 @@ export const sendVerificationMail = async (email:string) => {
             email,
             otp
         })
-    } catch (error:any) {
-        console.log(error)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log(error);
+        } else {
+            console.log("An unknown error occurred:", error);
+        }
     }
+    
 }

@@ -16,9 +16,14 @@ export default async (courseId:string , userId:string, topic?:string) => {
         }
 
         await producer.send(messages);
-    } catch (error:any) {
-        console.error('kafka producer error in enroll user Producer',error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('kafka producer error in enroll user Producer', error.message);
+        } else {
+            console.error('kafka producer error in enroll user Producer: An unknown error occurred');
+        }
     } finally {
         await producer.disconnect();
     }
+    
 }

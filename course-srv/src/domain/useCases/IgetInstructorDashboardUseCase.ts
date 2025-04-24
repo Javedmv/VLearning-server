@@ -1,3 +1,5 @@
+import { TOBE } from "../../_lib/common/Tobe";
+
 export interface IgetInstructorDashboardUseCase {
-    execute(instructorId: string) : Promise<any>;
+    execute(instructorId: string) : Promise<TOBE>;
 }

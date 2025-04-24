@@ -6,9 +6,14 @@ export const getAllCoursesInstructorUseCase = (dependencies:IDependencies) => {
         execute: async (instructorId:string) => {
             try {
                 return await getAllCoursesInstructor(instructorId);
-            } catch (error:any) {
-                throw new Error(error?.message || "getAllCoursesInstructorUseCase Error")
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    throw new Error(error.message || "getAllCoursesInstructorUseCase Error");
+                } else {
+                    throw new Error("getAllCoursesInstructorUseCase failed due to an unknown error");
+                }
             }
+            
         }
     }
 }

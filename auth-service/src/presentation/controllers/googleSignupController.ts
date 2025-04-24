@@ -63,9 +63,14 @@ export const googleSignupController = (dependencies: IDependencies) => {
                 });
             }
 
-        } catch (error: any) {
-            console.error(error, "ERROR IN GET USER DETAILS CONTROLLER");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error(error, "ERROR IN GET USER DETAILS CONTROLLER:", error.message);
+            } else {
+                console.error("Unknown error in GET USER DETAILS CONTROLLER:", error);
+            }
             next(error);
         }
+        
     };
 };

@@ -19,8 +19,14 @@ export const updatePaymentIntentSucceeded = async (paymentIntentData:PaymentInte
             { new: true }
         );
         console.log("✅ updatePaymentIntentSucceededuse REPO")
-    } catch (error: any) {
-        console.log("Error :-updatePaymentIntentSucceededRepo",error)
-        throw new Error(error?.message || "updatePaymentIntentSucceededuseRepo Error")
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log("Error :-updatePaymentIntentSucceededRepo", error);
+            throw new Error(error.message || "updatePaymentIntentSucceededRepo Error");
+        } else {
+            console.log("Unknown error occurred in updatePaymentIntentSucceededRepo");
+            throw new Error("updatePaymentIntentSucceededRepo Error");
+        }
     }
+    
 }

@@ -110,14 +110,25 @@ export const generateCertificateController = (dependencies: IDependencies) => {
       }
 
       doc.end();
-    } catch (error: any) {
-      console.error("Certificate generation error:", error.stack); // Log full stack trace
-      if (!res.headersSent) {
-        res.status(500).json({
-          success: false,
-          message: error.message || "Internal server error while generating certificate",
-        });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+          console.error("Certificate generation error:", error.stack); // Log full stack trace
+          if (!res.headersSent) {
+              res.status(500).json({
+                  success: false,
+                  message: error.message || "Internal server error while generating certificate",
+              });
+          }
+      } else {
+          console.error("Certificate generation error: An unknown error occurred");
+          if (!res.headersSent) {
+              res.status(500).json({
+                  success: false,
+                  message: "Internal server error while generating certificate",
+              });
+          }
       }
-    }
+  }
+  
   };
 };

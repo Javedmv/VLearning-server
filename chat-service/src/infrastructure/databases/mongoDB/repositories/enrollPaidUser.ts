@@ -1,3 +1,4 @@
+import { ITOBE } from "../../../../_lib/constants";
 import { ChatModel, EnrollmentProgressModel, MessageModel, User } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
@@ -23,7 +24,7 @@ export const enrollPaidUser = async (userId: string, courseId: string) => {
         console.log(`User ${userId} successfully enrolled in course ${courseId}`);
 
         // ✅ Get the first lesson ID safely
-        const firstLesson : any = updatedCourse.courseContent?.lessons?.[0];
+        const firstLesson : ITOBE = updatedCourse.courseContent?.lessons?.[0];
         const firstLessonId = firstLesson?._id ? firstLesson._id.toString() : "";
 
         // ✅ Create Enrollment Progress if not exists
@@ -68,8 +69,10 @@ export const enrollPaidUser = async (userId: string, courseId: string) => {
 
         return { success: true, message: "User enrolled successfully.", course: updatedCourse };
 
-    } catch (error: any) {
-        console.error("Database error while enrolling user:", error.message);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Unknown database error";
+        console.error("Database error while enrolling user:", errorMessage);
         return { success: false, message: "Error enrolling user." };
     }
+    
 };

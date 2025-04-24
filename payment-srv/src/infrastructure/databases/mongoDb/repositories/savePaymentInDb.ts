@@ -1,3 +1,4 @@
+import { PTobe } from "../../../../_lib/constants/Tobe";
 import { PaymentData } from "../../../../presentation/controllers/stripeWebhookController";
 import { PaymentModel } from "../models";
 
@@ -5,7 +6,7 @@ export const savePaymentInDb = async (
     courseId: string,
     userId: string,
     paymentData: PaymentData
-): Promise<any> => {
+): Promise<PTobe> => {
     try {
         console.log(courseId, userId, paymentData);
         console.log("📌 Hello from the repo of the create payment session");
@@ -32,8 +33,13 @@ export const savePaymentInDb = async (
         console.log("✅ Payment saved successfully:", savedPayment);
 
         return savedPayment;
-    } catch (error: any) {
-        console.error("❌ Error saving payment:", error.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("❌ Error saving payment:", error.message);
+        } else {
+            console.error("❌ Unknown error occurred while saving payment.");
+        }
         throw new Error("Error saving payment to database");
     }
+    
 };

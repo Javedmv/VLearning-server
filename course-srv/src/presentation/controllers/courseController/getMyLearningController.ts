@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
 import { ErrorResponse } from "../../../_lib/error";
+import { TOBE } from "../../../_lib/common/Tobe";
 
 export const getMyLearningController = (dependencies:IDependencies) => {
     const {useCases:{ getMyLearningUseCase }} = dependencies;
@@ -19,7 +20,7 @@ export const getMyLearningController = (dependencies:IDependencies) => {
                 return;
             }
 
-            const updatedEnrollments = await Promise.all(enrollments.map(async (enrollment: any) => {
+            const updatedEnrollments = await Promise.all(enrollments.map(async (enrollment: TOBE) => {
                 if (!enrollment.courseId) return enrollment; // Skip if no course found
                 
                 const updatedCourse = enrollment.courseId.toObject();
@@ -34,7 +35,7 @@ export const getMyLearningController = (dependencies:IDependencies) => {
 
                 if (updatedCourse?.courseContent?.lessons) {
                     updatedCourse.courseContent.lessons = await Promise.all(
-                        updatedCourse.courseContent.lessons.map(async (lesson: any) => {
+                        updatedCourse.courseContent.lessons.map(async (lesson: TOBE) => {
                             if (lesson.videoUrl) {
                                 const publicVideoUrl = await getPublicUrl(
                                     process.env.S3_BUCKET_NAME!,

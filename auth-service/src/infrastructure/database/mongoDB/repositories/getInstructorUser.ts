@@ -1,3 +1,4 @@
+import { TOBE } from "../../../../_lib/utils/Tobe";
 import { UserEntity } from "../../../../domain/entities";
 import { CourseFilters } from "../../../../domain/entities/CourseFilter";
 import { User } from "../models";
@@ -7,7 +8,7 @@ export interface InstructorUserResult {
     totalInstructor: number;
 }
 
-export const getInstructorUser = async(filters: CourseFilters): Promise<any> => {
+export const getInstructorUser = async(filters: CourseFilters): Promise<TOBE> => {
     try {
         console.log(filters, "filters in repository");
         const totalInstructor = await User.find({ role: "instructor" }).countDocuments();
@@ -19,7 +20,12 @@ export const getInstructorUser = async(filters: CourseFilters): Promise<any> => 
         .limit(filters?.limit)   
 
         return { instructorUser, totalInstructor };
-    } catch (error: any) {
-        throw new Error(error?.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
     }
+    
 }

@@ -7,9 +7,14 @@ export const getActiveCategoryUseCase = (dependencies:IDependencies) => {
         execute: async () => {
             try {
                 return await getActiveCategory()
-            } catch (error:any) {
-                throw new Error(error?.message || "category fetch failed")
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    throw new Error(error.message || "Category fetch failed");
+                } else {
+                    throw new Error("Category fetch failed due to an unknown error");
+                }
             }
+            
         }
     }
 }

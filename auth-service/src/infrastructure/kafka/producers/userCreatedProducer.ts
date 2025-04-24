@@ -30,9 +30,14 @@ export default async(data: UserEntity,topic?: string) => {
         // ]
         // await producer.sendBatch({ topicMessages: messages });
 
-    } catch (error:any) {
-        console.error('kafka produce error:',error?.message)
-    } finally{
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('kafka produce error:', error.message);
+        } else {
+            console.error('kafka produce error:', error);
+        }
+    } finally {
         await producer.disconnect();
     }
+    
 }

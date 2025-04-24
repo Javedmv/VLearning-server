@@ -1,8 +1,9 @@
+import { TOBE } from "../../../../_lib/utils/Tobe";
 import { UserEntity } from "../../../../domain/entities";
 import { CourseFilters } from "../../../../domain/entities/CourseFilter";
 import { User } from "../models";
 
-export const getStudentUser = async(filters:CourseFilters):Promise<any> => {
+export const getStudentUser = async(filters:CourseFilters):Promise<TOBE> => {
     try {
         console.log(filters,"in repository")
 
@@ -15,7 +16,12 @@ export const getStudentUser = async(filters:CourseFilters):Promise<any> => {
         .limit(filters?.limit)
 
         return {studentUser, totalStudents};
-    } catch (error:any) {
-        throw new Error(error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
     }
+    
 }

@@ -1,3 +1,4 @@
+import { TOBE } from "../../../../_lib/utils/Tobe";
 import { UserEntity } from "../../../../domain/entities";
 import { User } from "../models";
 
@@ -9,7 +10,7 @@ export const updateProfile = async (userId: string, data: UserEntity): Promise<U
       throw new Error("User not found");
     }
 
-    const updatedData: any = {
+    const updatedData: TOBE = {
       ...(data.firstName && { firstName: data.firstName }),
       ...(data.lastName && { lastName: data.lastName }),
       ...(data.phoneNumber && { phoneNumber: data.phoneNumber }),
@@ -51,7 +52,12 @@ export const updateProfile = async (userId: string, data: UserEntity): Promise<U
     );
 
     return result;
-  } catch (error: any) {
-    throw new Error(error?.message);
-  }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+        throw new Error(error.message);
+    } else {
+        throw new Error("An unexpected error occurred");
+    }
+}
+
 };

@@ -1,7 +1,8 @@
+import { ITOBE } from "../../../../_lib/constants";
 import { EnrollmentProgressModel } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
-export const updateEnrollmentData = async (enrollmentData: any) => {
+export const updateEnrollmentData = async (enrollmentData: ITOBE) => {
     try {
         const { userId, courseId, completionPercentage, progress } = enrollmentData;
 
@@ -28,8 +29,13 @@ export const updateEnrollmentData = async (enrollmentData: any) => {
 
         return { success: true, message: "Enrollment data updated successfully.", updatedEnrollment };
 
-    } catch (error: any) {
-        console.error("Database error while updating enrollment:", error.message);
-        return { success: false, message: "Error updating enrollment data." };
-    }
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Database error while updating enrollment:", error.message);
+            return { success: false, message: "Error updating enrollment data." };
+        } else {
+            console.error("Unknown error while updating enrollment:", error);
+            return { success: false, message: "An unknown error occurred while updating enrollment data." };
+        }
+    }    
 };

@@ -6,6 +6,7 @@ import { signupValidation } from '../../_lib/validation';
 import { hashPassword } from '../../_lib/bcrypt';
 import { generateAccessToken,generateRefreshToken } from '../../_lib/jwt';
 import { NOTIFICATION_SERVICE_TOPIC } from '../../_lib/common';
+import { TOBE } from '../../_lib/utils/Tobe';
 
 export const signupController = (dependencies: IDependencies) => {
     
@@ -24,14 +25,19 @@ export const signupController = (dependencies: IDependencies) => {
             //checking user email is taken or not
             if(!otp){
                 try {
-                    const userExist: any = await findUserByEmailUseCase(dependencies).execute(email)
+                    const userExist: TOBE = await findUserByEmailUseCase(dependencies).execute(email)
                     if(userExist){
                         return next(ErrorResponse.conflict("Email is already registed try another email"));
                     }
-                } catch (error:any) {
-                    console.log(error,"Error USER ALREDY EXISTS");
-                    next(error)
+                  } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        console.error("Error USER ALREADY EXISTS:", error.message);
+                    } else {
+                        console.error("Unknown error USER ALREADY EXISTS");
+                    }
+                    next(error);
                 }
+                
             }
     
             // if no user sent otp to user using nodemailer
@@ -44,10 +50,15 @@ export const signupController = (dependencies: IDependencies) => {
                       message: "otp sent successfully",
                     })
                     return;
-                  } catch (error: any) {
-                    console.log(error, "Something Went Wrong in OTP section");
-                    return next(ErrorResponse.badRequest("Something went wrong in otp"))
-                  }
+                  } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        console.error("Something Went Wrong in OTP section:", error.message);
+                    } else {
+                        console.error("Unknown error in OTP section");
+                    }
+                    return next(ErrorResponse.badRequest("Something went wrong in OTP"));
+                }
+                
             }
     
             // verifyotp    
@@ -65,10 +76,15 @@ export const signupController = (dependencies: IDependencies) => {
                           });
                           return;
                     }
-                } catch (error:any) {
-                    console.log(error, "Something went wrong in verifyOtp");
-                    return next(ErrorResponse.badRequest("Otp invalid"))
+                  } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        console.error("Something went wrong in verifyOtp:", error.message);
+                    } else {
+                        console.error("Unknown error in verifyOtp");
+                    }
+                    return next(ErrorResponse.badRequest("OTP invalid"));
                 }
+                
             }
     
             // create new user if otp is present
@@ -126,9 +142,14 @@ export const signupController = (dependencies: IDependencies) => {
                     data: {_id, email, role, username, isNewUser},
                     message: "User created!",
                   });
-                } catch (error: any) {
-                  console.log(error, "<<Something went wrong in user signup>>");
-                }
+                } catch (error: unknown) {
+                  if (error instanceof Error) {
+                      console.error("<<Something went wrong in user signup>>", error.message);
+                  } else {
+                      console.error("<<Something went wrong in user signup>> Unknown error");
+                  }
+              }
+              
             }
         } catch (error) {
             console.error(error, "Something went wrong in user signup");

@@ -20,9 +20,14 @@ export const adminBlockUserController = (dependencies:IDependencies) => {
                 message: `User Has Been ${studentUsers?.isBlocked? "Unblocked" : "Blocked"} Successfully.`
             })
 
-        } catch (error) {
-            console.log(error, "error in ADMIN BLOCK UNBLOCK STUDENT CONTROLLER")
-            next(error)
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log("error in ADMIN BLOCK UNBLOCK STUDENT CONTROLLER:", error.message);
+            } else {
+                console.log("Unknown error in ADMIN BLOCK UNBLOCK STUDENT CONTROLLER:", error);
+            }
+            next(error);
         }
+        
     }
 }

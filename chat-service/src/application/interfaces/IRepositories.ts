@@ -1,3 +1,4 @@
+import { ITOBE } from "../../_lib/constants";
 import { ChatEntity, MessageEntity } from "../../domain/entities";
 
 export interface IRepositories {
@@ -6,7 +7,7 @@ export interface IRepositories {
     addNewMessage:(body:MessageEntity.Params) => Promise<MessageEntity.Result | null>;
     getAllInstructorChats:(instructorId: string) => Promise<ChatEntity.Result[] | null>;
 
-    adminGetAllDashboardData: () => Promise<any>;
-    adminGetPopularCourses: () => Promise<any>;
-    adminGetEnrollmentData: () => Promise<any>;
+    adminGetAllDashboardData: () => Promise<ITOBE>;
+    adminGetPopularCourses: () => Promise<ITOBE>;
+    adminGetEnrollmentData: () => Promise<ITOBE>;
 }

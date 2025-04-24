@@ -1,7 +1,8 @@
+import { TOBE } from "../../../../_lib/utils/Tobe";
 import { UserEntity } from "../../../../domain/entities";
 import { User } from "../models";
 
-export const addUserForm = async (data:any): Promise<UserEntity | null> => {
+export const addUserForm = async (data:TOBE): Promise<UserEntity | null> => {
     try {
         const { 
             email, 

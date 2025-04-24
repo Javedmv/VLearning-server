@@ -24,20 +24,28 @@ export const runConsumer = async () => {
                 if (subscriber[subscriberMethod] && typeof subscriber[subscriberMethod] === 'function') {
                     try {
                         await subscriber[subscriberMethod](subscriberData);
-                    } catch (error: any) {
-                        console.error(`Error processing message from topic: ${error.message}`);
-                        throw new Error(error?.message);
+                    } catch (error: unknown) {
+                        if (error instanceof Error) {
+                            console.error(`Error processing message from topic: ${error.message}`);
+                            throw new Error(error.message);
+                        } else {
+                            console.error("An unknown error occurred while processing the message.");
+                            throw new Error("Unknown error processing message");
+                        }
                     }
+                    
                 } else {
                     console.error(`Method ${subscriberMethod} does not exist on subscriber`);
                 }
             }
         });
-
-
-    } catch (error:any) {
-        throw new Error("Kafka Consume Error : " + error?.message);
-    }
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error("Kafka Consume Error: " + error.message);
+        } else {
+            throw new Error("Kafka Consume Error: Unknown error occurred");
+        }
+    }    
 }
 
 

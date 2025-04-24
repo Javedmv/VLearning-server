@@ -60,9 +60,13 @@ export const loginController = (dependencies: IDependencies) => {
                 return next(ErrorResponse.unauthorized("Account with email does not exits"))
             }
             
-        } catch (error:any) {
-            console.log(error)
-            next(error)
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log(error);
+            } else {
+                console.log("Unknown error:", error);
+            }
+            next(error);
         }
     }
 }

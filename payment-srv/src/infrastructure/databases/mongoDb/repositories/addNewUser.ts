@@ -1,6 +1,7 @@
+import { PTobe } from '../../../../_lib/constants/Tobe';
 import { User } from '../models/index';
 
-export const addNewUser = async (data: any) => {
+export const addNewUser = async (data: PTobe) => {
     try {
         // Extract userId and validate
         const userId = data[0]?._id;
@@ -14,7 +15,7 @@ export const addNewUser = async (data: any) => {
 
         if (existingUser) {
             // Prepare fields to update
-            const updateData: any = {};
+            const updateData: PTobe = {};
 
             if (data[0].username) updateData.username = data[0].username;
             if (data[0].firstName) updateData.firstName = data[0].firstName;
@@ -57,7 +58,7 @@ export const addNewUser = async (data: any) => {
             return;
         } else {
             // Handle new user creation (same as before)
-            const newUserData: any = { _id: data[0]._id };
+            const newUserData: PTobe = { _id: data[0]._id };
 
             if (data[0].username) newUserData.username = data[0].username;
             if (data[0].firstName) newUserData.firstName = data[0].firstName;
@@ -99,7 +100,12 @@ export const addNewUser = async (data: any) => {
             console.log(`New user with _id ${userId} created.`);
             return;
         }
-    } catch (error: any) {
-        console.error("ERROR IN addNewUser REPOSITORY:", error.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("ERROR IN addNewUser REPOSITORY:", error.message);
+        } else {
+            console.error("ERROR IN addNewUser REPOSITORY: Unknown error occurred.");
+        }
     }
+    
 };

@@ -1,20 +1,21 @@
+import { TOBE } from "../../../../_lib/common/Tobe";
 import { EnrollmentProgressModel } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
 interface CourseDocument {
-    _id: any;
-    basicDetails: any;
-    instructor: any;  // or more specific type if available
+    _id: TOBE;
+    basicDetails: TOBE;
+    instructor: TOBE;  // or more specific type if available
   }
   
   interface UserDocument {
-    _id: any;
+    _id: TOBE;
     username: string;
   }
   
   interface EnrollmentDocument {
-    courseId: CourseDocument | any;  // can be populated object or ObjectId
-    userId: UserDocument | any;      // can be populated object or ObjectId
+    courseId: CourseDocument | TOBE;  // can be populated object or ObjectId
+    userId: UserDocument | TOBE;      // can be populated object or ObjectId
   }
 
 export const instructorRepository = async (instructorId:string) => {

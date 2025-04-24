@@ -7,7 +7,12 @@ export const getAllBanner = async () => {
             return Promise.resolve(null);
         }
         return banner;
-    } catch (error:any) {
-        throw new Error(error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
     }
+    
 }

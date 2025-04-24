@@ -1,8 +1,9 @@
 import { Lesson } from "../../presentation/controllers/courseController/getAllCoursesController";
 import { getPublicUrl } from "../s3/s3bucket";
+import { TOBE } from "./Tobe";
 
 
-export const updateCourse = async (course: any) => {
+export const updateCourse = async (course: TOBE) => {
     const updatedCourse = course.toObject();
 
     // Update thumbnail URL

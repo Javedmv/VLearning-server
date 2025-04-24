@@ -1,7 +1,8 @@
+import { TOBE } from "../../../../_lib/common/Tobe";
 import { CategoryModel, EnrollmentProgressModel, User } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
-export const getAllMyLearning = async (userId: string): Promise<any> => {
+export const getAllMyLearning = async (userId: string): Promise<TOBE> => {
     try {
         const enrollments = await EnrollmentProgressModel.find({ userId })
             .populate({

@@ -3,6 +3,7 @@ import { IDependencies } from "../../../application/interfaces/IDependencies"
 import { removeFilesFromS3 } from "../../../_lib/s3/s3bucket";
 import { CourseContent } from '../../../domain/entities/CourseEdit';
 import { sendEditCourseDetailsProducer } from "../../../infrastructure/kafka/producers";
+import { TOBE } from "../../../_lib/common/Tobe";
 
 export const putEditCourseController = (dependencies:IDependencies) => {
     const {useCases:{ editCourseUseCase }} = dependencies;
@@ -31,7 +32,7 @@ export const putEditCourseController = (dependencies:IDependencies) => {
                 delete basicDetails.thumbnailPreview;
             }
 
-            courseContent.lessons.forEach((lesson:any,index:number) => {
+            courseContent.lessons.forEach((lesson:TOBE,index:number) => {
 
                 if(lesson.videoPreview){
                     delete lesson.videoPreview

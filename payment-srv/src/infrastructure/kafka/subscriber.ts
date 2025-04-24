@@ -1,10 +1,11 @@
+import { PTobe } from "../../_lib/constants/Tobe";
 import { addUserConsumer, addCourseConsumer, editCourseConsumer, enrollStudentUserConsumer } from "./consumers";
 
 export interface ISubscriber {
-    addUser(data:any): Promise<void>;
-    addCourse(data: any) : Promise<void>;
-    editCourse(data: any) : Promise<void>;
-    enrollStudentUser(data: any) : Promise<void>;
+    addUser(data:PTobe): Promise<void>;
+    addCourse(data: PTobe) : Promise<void>;
+    editCourse(data: PTobe) : Promise<void>;
+    enrollStudentUser(data: PTobe) : Promise<void>;
 }
 
 

@@ -33,8 +33,13 @@ export const enrollStudentUser = async (courseId: string, userId: string) => {
         console.log(`User ${userId} successfully enrolled in course ${courseId}`);
         return { success: true, message: "User enrolled successfully.", course: updatedCourse };
 
-    } catch (error: any) {
-        console.error("Database error while enrolling user:", error.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Database error while enrolling user:", error.message);
+        } else {
+            console.error("Unknown error occurred while enrolling user.");
+        }
         return { success: false, message: "Error enrolling user." };
     }
+    
 };

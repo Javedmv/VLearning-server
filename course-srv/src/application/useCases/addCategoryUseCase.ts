@@ -8,9 +8,14 @@ export const addCategoryUseCase = (dependencies:IDependencies)=> {
         execute: async(category:CategoryEntity) => {
             try {
                 return await addCategory(category);
-            } catch (error:any) {
-                throw new Error(error?.message || "user creation failed")
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    throw new Error(error.message || "User creation failed");
+                } else {
+                    throw new Error("User creation failed due to an unknown error");
+                }
             }
+            
         }
     }
 }

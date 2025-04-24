@@ -7,7 +7,6 @@ export const getInstructorEarnings = async (userId:string) => {
             .populate({path: "courseId", model: "Courses", select: "basicDetails students"})
             .populate({path: "userId", model: "users", select: "username email"});
 
-            console.log(instructor,"in repo of get instructor earnings")
         return instructor;
     } catch (error) {
         console.log("Error getting instructor earnings",error);

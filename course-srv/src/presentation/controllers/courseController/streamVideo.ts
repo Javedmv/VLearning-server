@@ -3,6 +3,7 @@ import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 import { promises } from "dns";
+import { TOBE } from "../../../_lib/common/Tobe";
 
 export const streamVideo = (dependencies: IDependencies) => {
     const { repositories: { courseDetailMyLearning } } = dependencies;
@@ -26,11 +27,11 @@ export const streamVideo = (dependencies: IDependencies) => {
             }
             
             const enrollment = enrollments[0];
-            const course:any = enrollment.courseId;
+            const course:TOBE = enrollment.courseId;
             
             // Find the lesson in the course
             const lesson = course.courseContent.lessons.find(
-                (l: any) => l._id.toString() === lessonId
+                (l: TOBE) => l._id.toString() === lessonId
             );
             
             if (!lesson) {
@@ -57,7 +58,7 @@ export const streamVideo = (dependencies: IDependencies) => {
             
             // Handle range requests for video seeking
             const range = req.headers.range;
-            let params: any = {
+            let params: TOBE = {
                 Bucket: process.env.S3_BUCKET_NAME!,
                 Key: videoKey
             };

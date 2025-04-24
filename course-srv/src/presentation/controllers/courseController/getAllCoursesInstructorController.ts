@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
 import { Lesson } from "./getAllCoursesController";
+import { TOBE } from "../../../_lib/common/Tobe";
 
 export const getAllCoursesInstructorController = (dependencies:IDependencies) => {
     const {useCases:{getAllCoursesInstructorUseCase}} = dependencies;
@@ -17,7 +18,7 @@ export const getAllCoursesInstructorController = (dependencies:IDependencies) =>
             }
             const courses = await getAllCoursesInstructorUseCase(dependencies).execute(instrctId);
 
-            const updatedCourses = await Promise.all(courses.map(async (course:any) => {
+            const updatedCourses = await Promise.all(courses.map(async (course:TOBE) => {
                 const updatedCourse = course.toObject();
                 
                 // Update thumbnail URL

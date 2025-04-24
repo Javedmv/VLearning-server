@@ -17,7 +17,7 @@ const PaymentSchema = new Schema<IPayment & Document>(
         customerEmail: { type: String },
         receiptUrl: { type: String, default: "" },
         errorMessage: { type: String, default: null }, // Stores error message in case of failure
-        failureCode: { type: String, default: null }, // Stores Stripe failure code if any
+        failureCode: { type: String, default: null }, // Stores Stripe failure code if
         metadata: { type: Schema.Types.Mixed },
     },
     { timestamps: true }

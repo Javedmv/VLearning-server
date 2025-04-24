@@ -75,10 +75,16 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
 
             return { success: true, paymentData };
     
-        } catch (error:any) {
-            console.error('❌ Error processing checkout session:', error);
-            return { success: false, error: error.message };
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error('❌ Error processing checkout session:', error);
+                return { success: false, error: error.message };
+            } else {
+                console.error('❌ Unknown error processing checkout session');
+                return { success: false, error: 'An unknown error occurred' };
+            }
         }
+        
     };
     
 
@@ -277,12 +283,21 @@ export const stripeWebhookController = (dependencies: IDependencies) => {
                 id: event.id,
                 response 
             });
-        } catch (error: any) {
-            console.error('Webhook error:', error.message);
-            res.status(400).json({ 
-                error: 'Webhook Error',
-                message: error.message 
-            });
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error('Webhook error:', error.message);
+                res.status(400).json({
+                    error: 'Webhook Error',
+                    message: error.message
+                });
+            } else {
+                console.error('Webhook error: Unknown error occurred');
+                res.status(400).json({
+                    error: 'Webhook Error',
+                    message: 'An unknown error occurred.'
+                });
+            }
         }
+        
     };
 };

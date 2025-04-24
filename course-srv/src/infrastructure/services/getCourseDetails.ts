@@ -7,7 +7,12 @@ export const sendCourseDetails = async (courseId:string) => {
         const courseDetails = await getOneCourse(courseId);
         console.log(courseDetails,"in the courseService send to payment service ------------------");
         await sendCourseDetailsProducer(courseDetails,"payment-srv-topic")
-    } catch (error:any) {
-        console.log("ERROR IN GET COURSE DEATILS SERVICES : ",error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log("ERROR IN GET COURSE DETAILS SERVICES : ", error.message);
+        } else {
+            console.log("ERROR IN GET COURSE DETAILS SERVICES : An unknown error occurred");
+        }
     }
+    
 }

@@ -52,8 +52,14 @@ export const enrollPaidUser = async (userId: string, courseId: string) => {
             enrollment 
         };
 
-    } catch (error: any) {
-        console.error("Database error while enrolling user:", error.message);
-        return { success: false, message: "Error enrolling user." };
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Database error while enrolling user:", error.message);
+            return { success: false, message: "Error enrolling user." };
+        } else {
+            console.error("Database error while enrolling user: An unknown error occurred");
+            return { success: false, message: "Error enrolling user." };
+        }
     }
+    
 };

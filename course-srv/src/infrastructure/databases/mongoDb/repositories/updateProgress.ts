@@ -1,3 +1,4 @@
+import { TOBE } from "../../../../_lib/common/Tobe";
 import { LessonObject } from "../../../../presentation/controllers/courseController/postupdatedWatched";
 import { EnrollmentProgressModel } from "../models";
 
@@ -15,7 +16,7 @@ export const updateProgress = async (
     const nextLesson = allLessons[currentLessonIndex + 1];
 
     // Update progress: always add the current lesson to completedLessons
-    const updateQuery: any = {
+    const updateQuery: TOBE = {
       $addToSet: { "progress.completedLessons": lessonObject._id }
     };
 
@@ -41,8 +42,13 @@ export const updateProgress = async (
     }
 
     return updatedEnrollment;
-  } catch (error: any) {
-    console.error("ERROR IN updateProgress REPO", error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+        console.error("ERROR IN updateProgress REPO", error);
+    } else {
+        console.error("ERROR IN updateProgress REPO: An unknown error occurred");
+    }
     throw new Error("Error in updateProgress repo");
-  }
+}
+
 };

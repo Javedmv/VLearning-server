@@ -1,7 +1,8 @@
 import { CourseModel } from "../models/courseSchema";
 import { CategoryModel } from "../models";
+import { TOBE } from "../../../../_lib/common/Tobe";
 
-export const editCourse = async (courseId: string, updates: any,removeLessonIndex: number[]) => {
+export const editCourse = async (courseId: string, updates: TOBE,removeLessonIndex: number[]) => {
     try {
         const existingCourse = await CourseModel.findById(courseId);
         if (!existingCourse) {
@@ -34,7 +35,7 @@ export const editCourse = async (courseId: string, updates: any,removeLessonInde
                 whatWillLearn: updates.basicDetails?.whatWillLearn ?? existingCourse.basicDetails.whatWillLearn,
             },
             courseContent: {
-                lessons: updates.courseContent?.lessons?.map((lesson: any, index: number) => ({
+                lessons: updates.courseContent?.lessons?.map((lesson: TOBE, index: number) => ({
                     ...lesson,
                     videoUrl: lesson?.videoUrl ?? existingCourse.courseContent.lessons?.[index]?.videoUrl ?? "",
                 }))

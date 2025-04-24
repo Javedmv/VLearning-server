@@ -1,12 +1,13 @@
+import { TOBE } from "../../../../_lib/common/Tobe";
 import { CourseEntity } from "../../../../domain/entities";
 import { CourseFilters } from "../../../../domain/entities/CourseFilter";
 import { CourseModel } from "../models/courseSchema";
 
-export const getAllCourses = async (filters: CourseFilters): Promise<any> => {
+export const getAllCourses = async (filters: CourseFilters): Promise<TOBE> => {
     try {
         const { search, sortBy, categories, page, limit } = filters;
 
-        const query: any = {};
+        const query: TOBE = {};
 
         // Search
         if (search) {

@@ -16,7 +16,12 @@ export const updateOTP = async (data: {email:string,otp:string} ): Promise<IOtp 
         console.log(updateUser)
         return updateUser;
 
-    } catch (error:any) {
-        throw new Error(error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
     }
+    
 }

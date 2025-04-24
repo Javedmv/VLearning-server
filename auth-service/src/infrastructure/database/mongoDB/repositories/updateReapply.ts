@@ -1,3 +1,4 @@
+import { TOBE } from "../../../../_lib/utils/Tobe";
 import { UserEntity } from "../../../../domain/entities";
 import { User } from "../models";
 import { Types } from "mongoose";
@@ -9,7 +10,7 @@ export const updateReapply = async (args: string[]): Promise<UserEntity | null> 
         }
 
         // Construct updatedData object conditionally
-        const updatedData: any = {
+        const updatedData: TOBE = {
             isVerified: "requested",
             role: "instructor"
         };
@@ -27,8 +28,12 @@ export const updateReapply = async (args: string[]): Promise<UserEntity | null> 
         }
         
         return result;
-    } catch (error: any) {
-        console.error("Error updating user: ", error);
-        throw new Error(error?.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
     }
+    
 };

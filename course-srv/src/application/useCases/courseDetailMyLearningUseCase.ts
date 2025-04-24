@@ -11,10 +11,15 @@ export const courseDetailMyLearningUseCase = (dependencies:IDependencies) => {
                 //     throw new Error("User not authorized");
                 // }
                 return enrollment as IEnrollmentProgressResult[];
-            } catch (error) {
-                console.log("ERROR COURSE DETAIL MY LEARNING USE CASE", error);
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    console.log("ERROR COURSE DETAIL MY LEARNING USE CASE:", error.message);
+                } else {
+                    console.log("ERROR COURSE DETAIL MY LEARNING USE CASE: Unknown error", error);
+                }
                 throw new Error("Error in get courseDetailMyLearning use case");
             }
+            
         }
     }
 }

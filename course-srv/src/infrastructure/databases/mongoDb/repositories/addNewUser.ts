@@ -1,6 +1,7 @@
+import { TOBE } from '../../../../_lib/common/Tobe';
 import { User } from '../models/index';
 
-export const addNewUser = async (data: any) => {
+export const addNewUser = async (data: TOBE) => {
     try {
         console.log(data, "whole data");
 
@@ -16,7 +17,7 @@ export const addNewUser = async (data: any) => {
 
         if (existingUser) {
             // Prepare fields to update
-            const updateData: any = {};
+            const updateData: TOBE = {};
 
             if (data[0].username) updateData.username = data[0].username;
             if (data[0].firstName) updateData.firstName = data[0].firstName;
@@ -58,7 +59,7 @@ export const addNewUser = async (data: any) => {
             console.log(`User with _id ${userId} updated.`);
         } else {
             // Handle new user creation (same as before)
-            const newUserData: any = { _id: data[0]._id };
+            const newUserData: TOBE = { _id: data[0]._id };
 
             if (data[0].username) newUserData.username = data[0].username;
             if (data[0].firstName) newUserData.firstName = data[0].firstName;
@@ -99,7 +100,12 @@ export const addNewUser = async (data: any) => {
             await newUser.save();
             console.log(`New user with _id ${userId} created.`);
         }
-    } catch (error: any) {
-        console.error("ERROR IN addNewUser REPOSITORY:", error.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("ERROR IN addNewUser REPOSITORY:", error.message);
+        } else {
+            console.error("ERROR IN addNewUser REPOSITORY: An unknown error occurred");
+        }
     }
+    
 };

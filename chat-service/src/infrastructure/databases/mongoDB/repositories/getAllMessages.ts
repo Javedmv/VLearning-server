@@ -6,7 +6,6 @@ export const getAllMessages = async (chatId: string): Promise<MessageEntity.Resu
         const messages = await MessageModel.find({ chatId })
             .populate('sender', 'username _id firstName lastName profile.avatar')
             .sort({ createdAt: 1 })
-        console.log(messages,"messages in getAllMessages repository")
         
         return messages
     } catch (error) {

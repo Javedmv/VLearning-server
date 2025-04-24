@@ -25,8 +25,13 @@ export const updatePaymentIntentFailed = async (failureData: PaymentFailureData)
         }
 
         return updatedPayment;
-    } catch (error: any) {
-        console.error("❌ Error updating failed payment intent:", error);
-        throw new Error(error?.message || "updatePaymentIntentFailed REPO Error");
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("❌ Error updating failed payment intent:", error.message);
+        } else {
+            console.error("❌ Unknown error occurred while updating failed payment intent.");
+        }
+        throw new Error(error instanceof Error ? error.message : "updatePaymentIntentFailed REPO Error");
     }
+    
 };

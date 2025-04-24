@@ -8,7 +8,12 @@ export const findById = async(id:string): Promise<UserEntity | null> => {
             throw new Error("User does not exist!!");
         }
         return existingUser;
-    } catch (error:any) {
-        throw new Error(error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
     }
+    
 }

@@ -47,8 +47,9 @@ export const postInstructorReapplyController = (dependencies:IDependencies) => {
             }
             res.status(404).json({success: false, message:"Sorry, failed to reapply please try again."})
             return;
-        } catch (error:any) {
+        } catch (error: unknown) {
             next(error);
         }
+        
     }
 }

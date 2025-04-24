@@ -1,3 +1,5 @@
+import { TOBE } from "../../_lib/common/Tobe";
+
 export interface IEditCourseUseCase {
-    execute(courseId:string, updates:any, removeLessonIndex:number[]): Promise<any>;
+    execute(courseId:string, updates:TOBE, removeLessonIndex:number[]): Promise<TOBE>;
 }

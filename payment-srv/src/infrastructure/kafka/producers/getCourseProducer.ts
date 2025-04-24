@@ -16,9 +16,14 @@ export default async(courseId:string, topic?:string) => {
         }
         await producer.send(message);
         
-    } catch (error: any) {
-        console.error('kafka produce error:',error?.message);
-    }finally {
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('Kafka produce error:', error.message);
+        } else {
+            console.error('Unknown error occurred while producing Kafka message');
+        }
+    } finally {
         await producer.disconnect();
     }
+    
 }

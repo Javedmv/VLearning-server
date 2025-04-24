@@ -9,7 +9,12 @@ export const getUserDetailsForPayment = async (userId:string) => {
         console.log(userDetails,"in auth service send to payment service -------------")
         await sendUserDetailsProducer(userDetails, PAYMENT_SERVICE_TOPIC);
 
-    } catch (error:any) {
-        console.log(error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.log(error.message);
+        } else {
+            console.log("Unknown error:", error);
+        }
     }
+    
 }

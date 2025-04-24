@@ -1,6 +1,7 @@
+import { TOBE } from "../../../../_lib/utils/Tobe";
 import { BannerModel } from "../models/BannerSchema";
 
-export const editBanner = async (data: any): Promise<string> => {
+export const editBanner = async (data: TOBE): Promise<string> => {
     try {
         console.log(data, "inside the edit banner repo");
 
@@ -21,7 +22,7 @@ export const editBanner = async (data: any): Promise<string> => {
         }
 
         // Prepare update fields (only update imageUrl if provided)
-        const updateFields: any = {
+        const updateFields: TOBE = {
             title: title ?? existingBanner.title,
             status: status ?? existingBanner.status,
             type: type ?? existingBanner.type,

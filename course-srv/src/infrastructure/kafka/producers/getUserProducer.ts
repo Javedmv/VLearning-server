@@ -18,9 +18,14 @@ export default async(userId:string,topic?:string) => {
 
         await producer.send(messages);
 
-    } catch (error:any) {
-        console.error('kafka produce error:',error?.message)
-    } finally{
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('kafka produce error:', error.message);
+        } else {
+            console.error('kafka produce error: An unknown error occurred');
+        }
+    } finally {
         await producer.disconnect();
     }
+    
 }

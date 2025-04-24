@@ -1,8 +1,9 @@
+import { TOBE } from "../../../../_lib/common/Tobe";
 import { CourseEntity } from "../../../../domain/entities";
 import { CourseFilters } from "../../../../domain/entities/CourseFilter";
 import { CourseModel } from "../models/courseSchema";
 
-export const getAllInstructorCourses = async(instrId:string,filters:CourseFilters):Promise<any> => {
+export const getAllInstructorCourses = async(instrId:string,filters:CourseFilters):Promise<TOBE> => {
     try {
         const totalCourses = await CourseModel.find({instructorId:instrId}).countDocuments();
 

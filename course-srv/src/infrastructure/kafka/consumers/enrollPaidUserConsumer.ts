@@ -20,8 +20,13 @@ export default async ({userId,courseId}:{userId:string,courseId:string}) => {
 
         console.log(`enrollPaidUserConsumer :-✅ User ${userId} enrolled in course ${courseId}`);
         // return { success: true, message: "User enrolled successfully." };
-    } catch (error: any) {
-        console.error("Error enrollPaidUserConsumer :", error);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Error enrollPaidUserConsumer :", error.message);
+        } else {
+            console.error("Error enrollPaidUserConsumer: An unknown error occurred");
+        }
         // return { success: false, message: error.message || "Error enrolling user." };
     }
+    
 };

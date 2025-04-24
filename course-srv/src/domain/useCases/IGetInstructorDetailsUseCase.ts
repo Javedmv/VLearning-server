@@ -1,3 +1,5 @@
+import { TOBE } from "../../_lib/common/Tobe";
+
 export interface IGetInstructorDetailsUseCase {
-    execute(instrId:string): Promise<any>
+    execute(instrId:string): Promise<TOBE>
 }

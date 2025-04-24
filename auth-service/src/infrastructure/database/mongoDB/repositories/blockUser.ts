@@ -12,7 +12,11 @@ export const blockUser = async(id:string, block:string):Promise<UserEntity | nul
         }
 
         return student;
-    } catch (error:any) {
-        throw new Error(error?.message)
-    }
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error("An unknown error occurred");
+        }
+    }    
 }

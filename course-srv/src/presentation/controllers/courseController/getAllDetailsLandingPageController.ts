@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
+import { TOBE } from "../../../_lib/common/Tobe";
 
 
 export const getAllDetailsLandingPageController = (dependencies: IDependencies) => {
@@ -10,10 +11,8 @@ export const getAllDetailsLandingPageController = (dependencies: IDependencies) 
             const courses = await getLandingPageCoursesUseCase(dependencies).execute();
             const instructors = await getLandingPageInstructorsUseCase(dependencies).execute();
 
-            console.log(instructors,"instructors in landing page controller")
-
             // Process courses to get thumbnails from S3
-            const coursesWithThumbnails = await Promise.all(courses.map(async (course:any) => {
+            const coursesWithThumbnails = await Promise.all(courses.map(async (course:TOBE) => {
                 // Create a new object with the _doc properties spread at the top level
                 const courseData = {
                     ...course._doc || course,
@@ -42,7 +41,7 @@ export const getAllDetailsLandingPageController = (dependencies: IDependencies) 
             }));
 
             // Process instructors to get profile images from S3
-            const instructorsWithProfileImages = await Promise.all(instructors.map(async (instructor:any) => {
+            const instructorsWithProfileImages = await Promise.all(instructors.map(async (instructor:TOBE) => {
                 // Create a new object with the _doc properties spread at the top level
                 const instructorData = {
                     ...instructor._doc,

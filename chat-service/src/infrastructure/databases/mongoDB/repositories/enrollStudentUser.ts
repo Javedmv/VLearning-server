@@ -1,11 +1,11 @@
+import { ITOBE } from "../../../../_lib/constants";
 import { ChatModel, CourseModel, EnrollmentProgressModel, MessageModel, User } from "../models";
 
-export const enrollStudentUser = async (enrollmentData: any) => {
+export const enrollStudentUser = async (enrollmentData: ITOBE) => {
     try {
         const { userId, courseId, firstLessonId } = enrollmentData;
         
         if (!userId || !courseId) {
-            console.error("Invalid input: userId or courseId is missing.");
             return { success: false, message: "Invalid input parameters." };
         }
 
@@ -17,7 +17,6 @@ export const enrollStudentUser = async (enrollmentData: any) => {
         }
 
         if (userId === course.instructorId) {
-            console.log("Instructor is attempting to enroll in their own course.");
             return { success: false, message: "Instructor cannot enroll in their own course." };
         }
 
@@ -69,8 +68,10 @@ export const enrollStudentUser = async (enrollmentData: any) => {
         
 
         console.log(`User ${userId} successfully enrolled in chat ${courseId}`);
-    } catch (error: any) {
-        console.error("Database error while enrolling user:", error.message);
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Unknown error occurred";
+        console.error("Database error while enrolling user:", message);
         return { success: false, message: "Error enrolling user." };
     }
+    
 };

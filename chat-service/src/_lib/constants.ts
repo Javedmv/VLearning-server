@@ -29,3 +29,5 @@ export const createResponse = <T>(
     message: message || Messages.SUCCESS,
     data,
 });
+
+export type ITOBE = any;

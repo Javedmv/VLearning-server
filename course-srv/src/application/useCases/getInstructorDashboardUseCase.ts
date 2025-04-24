@@ -10,9 +10,14 @@ export const getInstructorDashboardUseCase = (dependencies: IDependencies) => {
                 throw new Error("Instructor not found");
             }
             return instructor;
-        } catch (error) {
-            throw new Error("Error fetching instructor dashboard");
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                throw new Error(error.message || "Error fetching instructor dashboard");
+            } else {
+                throw new Error("Error fetching instructor dashboard due to an unknown error");
+            }
         }
+        
     }
 }   
 }

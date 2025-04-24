@@ -36,9 +36,14 @@ export const updatePasswordController = (dependencies:IDependencies) => {
                 message: "Password Updated Successfully."
             })
             return;
-        } catch (error:any) {
-            console.log(error)
-            next(error)
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log(error);
+            } else {
+                console.log("An unknown error occurred:", error);
+            }
+            next(error);
         }
+        
     }
 }

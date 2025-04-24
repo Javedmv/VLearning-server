@@ -1,6 +1,7 @@
 import { producer } from ".."
+import { TOBE } from "../../../_lib/common/Tobe";
 
-export default async (course:any,topic?:string) => {
+export default async (course:TOBE,topic?:string) => {
     try {
         const targetTopic = topic || "default topic"
         await producer.connect();
@@ -17,9 +18,14 @@ export default async (course:any,topic?:string) => {
 
         await producer.send(messages);
 
-    } catch (error:any) {
-        console.error('kafka producer error in send course details',error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error('kafka producer error in send course details', error.message);
+        } else {
+            console.error('kafka producer error in send course details: An unknown error occurred');
+        }
     } finally {
         await producer.disconnect();
     }
+    
 }

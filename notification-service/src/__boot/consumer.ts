@@ -35,16 +35,27 @@ export const runConsumer = async () => {
                 try {
                     const subscriberData = JSON.parse(String(value));
                     await subscriber[subscriberMethod](subscriberData);
-                } catch (error: any) {
-                    console.error(
-                      `Error processing message with key ${key}: ${error.message}`
-                    );
+                } catch (error: unknown) {
+                    if (error instanceof Error) {
+                        console.error(
+                            `Error processing message with key ${key}: ${error.message}`
+                        );
+                    } else {
+                        console.error(
+                            `Error processing message with key ${key}: An unknown error occurred`
+                        );
+                    }
                 }
+                
             }
         })
-    } catch (error:any) {
-        console.error("Kafka Consume Error -> Notification : ", error.message);
-    }
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Kafka Consume Error -> Notification : ", error.message);
+        } else {
+            console.error("Kafka Consume Error -> Notification : An unknown error occurred");
+        }
+    }    
 }
 
 function convertKeyToMethodName(key: string): keyof INotificationSubscriber {

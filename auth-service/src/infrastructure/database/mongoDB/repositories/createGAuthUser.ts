@@ -27,7 +27,12 @@ export const createGAuthUser = async (data: { email: string; name: string }) => 
 
         const newUser = await User.create(user);
         return newUser as UserEntity;
-    } catch (error: any) {
-        throw new Error(error?.message || "Google Auth user creation failed");
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message || "Google Auth user creation failed");
+        } else {
+            throw new Error("Google Auth user creation failed");
+        }
     }
+    
 }

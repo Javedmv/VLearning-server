@@ -10,8 +10,6 @@ const errorHandler = (err:any, req:Request, res:Response, next:NextFunction) => 
         })
         return;
     }
-    console.log(err);
-    
     res.status(400).json({
         success:false,
         status: err?.status || 400,

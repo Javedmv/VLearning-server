@@ -7,8 +7,14 @@ export const adminGetAllDashboardData = async () => {
         const studentCount = await User.countDocuments({role: "student"});
 
         return {courseCount,instructorCount,studentCount};
-    } catch (error:any) {
-        console.error("Error in adminGetAllCourses repository",error.message);
-        throw new Error("Error getting all courses");
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Error in adminGetAllCourses repository:", error.message);
+            throw new Error("Error getting all courses");
+        } else {
+            console.error("Unknown error in adminGetAllCourses repository:", error);
+            throw new Error("Unexpected error getting all courses");
+        }
     }
+    
 }   

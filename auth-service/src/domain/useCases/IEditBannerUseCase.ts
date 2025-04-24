@@ -1,5 +1,6 @@
+import { TOBE } from "../../_lib/utils/Tobe";
 import { IAddBanner } from "../entities/BannerEntity";
 
 export interface IEditBannerUseCase {
-    execute(data: any):Promise<string | null>
+    execute(data: TOBE):Promise<string | null>
 }

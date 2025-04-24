@@ -16,7 +16,7 @@ declare global{
     }
 }
 
-export const jwtMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const jwtMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         // console.log(req.body)
         // console.log("Full cookies:", req.cookies);

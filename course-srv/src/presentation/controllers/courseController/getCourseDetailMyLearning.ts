@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
+import { TOBE } from "../../../_lib/common/Tobe";
 
 export const getCourseDetailMyLearning = (dependencies:IDependencies) => {
     const {useCases: {courseDetailMyLearningUseCase}} = dependencies;
@@ -17,7 +18,7 @@ export const getCourseDetailMyLearning = (dependencies:IDependencies) => {
                 return;
             }
 
-            const updatedEnrollments = await Promise.all(enrollments.map(async (enrollment: any) => {
+            const updatedEnrollments = await Promise.all(enrollments.map(async (enrollment: TOBE) => {
                 if (!enrollment.courseId) return enrollment; // Skip if no course found
                 
                 const updatedCourse = enrollment.courseId.toObject();
@@ -32,7 +33,7 @@ export const getCourseDetailMyLearning = (dependencies:IDependencies) => {
 
                 // Don't expose video URLs directly - we'll stream them through our API
                 if (updatedCourse?.courseContent?.lessons) {
-                    updatedCourse.courseContent.lessons = updatedCourse.courseContent.lessons.map((lesson: any) => {
+                    updatedCourse.courseContent.lessons = updatedCourse.courseContent.lessons.map((lesson: TOBE) => {
                         // Keep the S3 key but don't generate public URL
                         return { ...lesson };
                     });

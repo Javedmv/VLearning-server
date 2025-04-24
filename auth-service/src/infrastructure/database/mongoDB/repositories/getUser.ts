@@ -5,9 +5,14 @@ const getUser = async(userId: string)=> {
     try {
         const studentUser = await User.find({ _id: userId })
         return studentUser;
-    } catch (error:any) {
-        throw new Error(error?.message)
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        } else {
+            throw new Error("An unexpected error occurred");
+        }
     }
+    
 }
 
 export default getUser;

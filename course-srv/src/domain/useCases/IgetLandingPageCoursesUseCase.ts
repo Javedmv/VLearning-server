@@ -1,3 +1,5 @@
+import { TOBE } from "../../_lib/common/Tobe";
+
 export interface IgetLandingPageCoursesUseCase {
-    execute: () => Promise<any>
+    execute: () => Promise<TOBE>
 }

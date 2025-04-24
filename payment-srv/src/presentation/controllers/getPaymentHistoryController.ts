@@ -1,9 +1,9 @@
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 
 export const getPaymentHistoryController = (dependencies:IDependencies) => {
     const {useCases:{getPaymentHistoryUseCase}} = dependencies;
-    return async (req:any, res:any, next:NextFunction) => {
+    return async (req:Request, res:Response, next:NextFunction) => {
         try {
             const userId = req.params.id;
             console.log(userId,"in controller");

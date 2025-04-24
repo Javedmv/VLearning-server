@@ -6,9 +6,14 @@ export const updateCategoryStatusUseCase = (dependencies:IDependencies) => {
         execute: async (catId:string,status:Boolean) => {
             try {
                 return await updateCategoryStatus(catId,status)
-            } catch (error:any) {
-                throw new Error(error?.message || "category status update failed")
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    throw new Error(error.message || "Category status update failed");
+                } else {
+                    throw new Error("Category status update failed due to an unknown error");
+                }
             }
+            
         }
     }
 }

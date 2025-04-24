@@ -1,7 +1,8 @@
+import { TOBE } from "../../../../_lib/common/Tobe";
 import { EnrollmentProgressModel } from "../models";
 import mongoose from "mongoose";
 // Define the return type more specifically if possible
-export const getEnrollment = async (enrollmentId: string): Promise<any> => {
+export const getEnrollment = async (enrollmentId: string): Promise<TOBE> => {
     try {
         // Validate the enrollmentId format before querying
         if (!enrollmentId || !mongoose.Types.ObjectId.isValid(enrollmentId)) {
@@ -25,7 +26,12 @@ export const getEnrollment = async (enrollmentId: string): Promise<any> => {
         }
 
         return enrollment;
-    } catch (error: any) {
-        throw new Error(error?.message || "Failed to fetch enrollment");
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            throw new Error(error.message || "Failed to fetch enrollment");
+        } else {
+            throw new Error("Failed to fetch enrollment due to an unknown error");
+        }
     }
+    
 };

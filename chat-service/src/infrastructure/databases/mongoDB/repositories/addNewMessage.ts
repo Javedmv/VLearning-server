@@ -4,8 +4,6 @@ import { MessageModel } from "../models";
 
 export const addNewMessage = async (body: MessageEntity.Params): Promise<MessageEntity.Result | null> => {
     try {
-        console.log(body, "in the repo");
-
         const chatId = new mongoose.Types.ObjectId(body.chatId);
         const sender = new mongoose.Types.ObjectId(body.sender);
 

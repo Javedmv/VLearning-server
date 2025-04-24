@@ -1,6 +1,7 @@
+import { PTobe } from "../../../../_lib/constants/Tobe";
 import { User, CourseModel } from "../models"; // Assuming these are your Mongoose models
 
-export const userAndCourseDetails = async (userId: string, courseId: string): Promise<any> => {
+export const userAndCourseDetails = async (userId: string, courseId: string): Promise<PTobe> => {
     try {
         // Fetch user details
         const user = await User.findById(userId);
@@ -19,7 +20,12 @@ export const userAndCourseDetails = async (userId: string, courseId: string): Pr
             user,
             course,
         };
-    } catch (error: any) {
-        console.error(error.message, "Error in fetching user and course details");
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error(error.message, "Error in fetching user and course details");
+        } else {
+            console.error("Unknown error occurred while fetching user and course details");
+        }
     }
+    
 };

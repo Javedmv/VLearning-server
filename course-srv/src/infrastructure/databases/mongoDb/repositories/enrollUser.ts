@@ -1,8 +1,9 @@
+import { TOBE } from "../../../../_lib/common/Tobe";
 import { CourseEntity } from "../../../../domain/entities";
 import { EnrollmentProgressModel } from "../models";
 import { CourseModel } from "../models/courseSchema";
 
-export const enrollUser = async (courseId: string, userId: string): Promise<any> => {
+export const enrollUser = async (courseId: string, userId: string): Promise<TOBE> => {
   try {
     // Find and update the course in one atomic operation
     const updatedCourse = await CourseModel.findByIdAndUpdate(

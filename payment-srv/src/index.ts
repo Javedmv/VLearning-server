@@ -20,7 +20,7 @@ import { runConsumer, stopConsumer } from './__boot/consumer';
         console.error(`Error during initialization: ${error.message}`);
         process.exit(1);
     }
-     // Handle graceful shutdown signals
+     // Handle graceful shutdown signals anytime
     process.on("SIGTERM", async () => {
         console.log("SIGTERM received. Shutting down...");
         await cleanupAndExit();
@@ -31,7 +31,7 @@ import { runConsumer, stopConsumer } from './__boot/consumer';
         await cleanupAndExit();
     });
 
-    // Cleanup function to stop consumer and exit process
+    // Cleanup function to stop consumer and exit any process
     const cleanupAndExit = async () => {
         try {
             console.log("Stopping Kafka consumer...");

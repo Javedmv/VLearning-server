@@ -1,6 +1,7 @@
+import { ITOBE } from "../../../../_lib/constants";
 import { ChatModel, CourseModel } from "../models";
 
-export const addNewCourse = async (data: any) => {
+export const addNewCourse = async (data: ITOBE) => {
     try {
         const { _id, basicDetails, courseContent, pricing, metadata } = data;
 
@@ -49,7 +50,12 @@ export const addNewCourse = async (data: any) => {
             console.log(`New course created successfully: ${newCourse._id}`);
             return;
         }
-    } catch (error: any) {
-        console.error("ERROR IN addNewCourse REPOSITORY:", error.message);
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("ERROR IN addNewCourse REPOSITORY:", error.message);
+        } else {
+            console.error("ERROR IN addNewCourse REPOSITORY: Unknown error", error);
+        }
     }
+    
 };

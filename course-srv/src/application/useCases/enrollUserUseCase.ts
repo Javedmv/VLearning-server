@@ -9,9 +9,14 @@ export const enrollUserUseCase = (dependencies:IDependencies) => {
                 const {updatedCourse, enrollment} =  await enrollUser(courseId,userId);
                 await enrollUserProducer(enrollment,"chat-srv-topic");
                 return updatedCourse;
-            } catch (error:any) {
-                throw new Error(error?.message || "Enroll User failed")
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    throw new Error(error.message || "Enroll User failed");
+                } else {
+                    throw new Error("Enroll User failed due to an unknown error");
+                }
             }
+            
         }
     }
 }

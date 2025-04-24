@@ -6,8 +6,13 @@ export const verifyOtp = async(email: string, otp: string): Promise<boolean> => 
         console.log(verified,"otp verified response");
         if(!verified)return false;
         return true;
-    } catch (error) {
-        console.error(error, "something went wrong")
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Something went wrong:", error.message);
+        } else {
+            console.error("Something went wrong:", error);
+        }
         return false;
     }
+    
 }

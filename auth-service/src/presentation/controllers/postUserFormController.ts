@@ -80,8 +80,9 @@ export const postUserFormController = (dependencies:IDependencies) => {
                 const {_id, email, role , username, isNewUser, isBlocked, isVerified, profession, profileDescription} = result;
                 res.status(200).json({success: true, data: {_id, email, role, username, isNewUser,isBlocked, isVerified, profession, profileDescription}});
             }
-        } catch (error) {
+        } catch (error: unknown) {
             next(error);
         }
+        
     }
 }

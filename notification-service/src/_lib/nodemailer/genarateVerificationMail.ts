@@ -19,8 +19,13 @@ export const generateVerificationMail = async (email: string, title: string, bod
 
         console.log("Message sent: %s", info.messageId);
         console.log("Response: %s", info.response);
-    } catch (error:any) {
-        console.error("Failed to send email:", error?.message); 
-        throw error;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("Failed to send email:", error.message); 
+        } else {
+            console.error("Failed to send email: An unknown error occurred");
+        }
+        throw error; // Rethrow the error
     }
+    
 }

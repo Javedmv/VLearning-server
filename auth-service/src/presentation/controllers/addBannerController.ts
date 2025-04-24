@@ -46,8 +46,13 @@ export const addBannerController = (dependencies:IDependencies) => {
                 message: "Banner added successfully",
             })
             return;
-        } catch (error) {
-            console.log(error)
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.log("Error:", error.message);
+            } else {
+                console.log("Banner adding error:", error);
+            }
         }
+        
     }
 }

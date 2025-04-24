@@ -1,3 +1,4 @@
+import { TOBE } from "../../_lib/common/Tobe";
 import { CategoryEntity, CourseEntity, IEnrollmentProgressResult, UpdateCategoryEntity } from "../../domain/entities";
 import { CourseFilters } from "../../domain/entities/CourseFilter";
 import { LessonObject } from "../../presentation/controllers/courseController/postupdatedWatched";
@@ -10,21 +11,21 @@ export interface IRepositories {
     deleteCategory: (catId:string) => Promise<CategoryEntity | null>
     getActiveCategory: () => Promise<CategoryEntity[] | null>
     addCourse: (course:CourseEntity,instrId:string) => Promise<CourseEntity | null>
-    getAllCourses: (filters:CourseFilters) => Promise<any>
-    getAllInstructorCourses: (instrId:string,filters:CourseFilters) => Promise<any>
+    getAllCourses: (filters:CourseFilters) => Promise<TOBE>
+    getAllInstructorCourses: (instrId:string,filters:CourseFilters) => Promise<TOBE>
     getCourseDetails: (courseId:string) => Promise<CourseEntity | null>;
-    enrollUser: (courseId:string,userId:string) => Promise<any>;
-    getInstructorDetails:(instrId:string) => Promise<any>;
-    getAllCoursesInstructor:(instructorId:string) => Promise<any>;
-    editCourse: (courseId:string, updates:any,removeLessonIndex: number[]) => Promise<any>;
+    enrollUser: (courseId:string,userId:string) => Promise<TOBE>;
+    getInstructorDetails:(instrId:string) => Promise<TOBE>;
+    getAllCoursesInstructor:(instructorId:string) => Promise<TOBE>;
+    editCourse: (courseId:string, updates:TOBE,removeLessonIndex: number[]) => Promise<TOBE>;
 
-    getAllMyLearning:(userId:string) => Promise<any>
+    getAllMyLearning:(userId:string) => Promise<TOBE>
     courseDetailMyLearning(enrollmentId:string,userId:string): Promise<IEnrollmentProgressResult[]>
-    updateProgress(enrollmentId:string,lessonObject:LessonObject,allLessons:LessonObject[]): Promise<any>
+    updateProgress(enrollmentId:string,lessonObject:LessonObject,allLessons:LessonObject[]): Promise<TOBE>
 
-    instructorRepository: (instructorId:string) => Promise<any>
-    getEnrollment: (enrollmentId:string) => Promise<any>
+    instructorRepository: (instructorId:string) => Promise<TOBE>
+    getEnrollment: (enrollmentId:string) => Promise<TOBE>
 
-    getLandingPageCourses: () => Promise<any>
-    getLandingPageInstructors: () => Promise<any>
+    getLandingPageCourses: () => Promise<TOBE>
+    getLandingPageInstructors: () => Promise<TOBE>
 }

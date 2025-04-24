@@ -24,9 +24,14 @@ export const getUserDetailsController = (dependencies:IDependencies) => {
                 data: user,
             })
             return;
-        } catch (error:any) {
-            console.error(error, "ERROR IN GET USER DETAILS CONTROLLER")
-            next(error)
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                console.error(error, "ERROR IN GET USER DETAILS CONTROLLER:", error.message);
+            } else {
+                console.error("Unknown error in GET USER DETAILS CONTROLLER:", error);
+            }
+            next(error);
         }
+        
     }
 }
