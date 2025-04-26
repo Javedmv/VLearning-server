@@ -15,7 +15,8 @@ export const routes = (dependencies: IDependencies) => {
         getAdminDashboard,
         startStream,
         getStreamDetails,
-        stopStream
+        stopStream,
+        getChatStatus
     } = chatControllers(dependencies);
      
     const router = Router();
@@ -29,6 +30,7 @@ export const routes = (dependencies: IDependencies) => {
     router.route("/streaming/start").post(jwtMiddleware, startStream);
     router.route("/streaming/details/:chatId").get(jwtMiddleware, getStreamDetails);
     router.route("/streaming/stop/:chatId").post(jwtMiddleware, stopStream);
+    router.route("/chats/:chatId/status").get(jwtMiddleware, getChatStatus);
 
     router.route("/admin-dashboard").get(jwtMiddleware,verifyAdmin, getAdminDashboard);
     return router;

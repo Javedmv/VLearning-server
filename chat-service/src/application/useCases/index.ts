@@ -5,7 +5,7 @@ export * from "./getAllInstructorChatsUseCase"
 export * from "./startStreamUseCase"
 export * from "./getStreamDetailsUseCase"
 export * from "./stopStreamUseCase"
-
+export * from "./getChatStatusUseCase"
 export * from "./adminGetAllDashboardDataUseCase"
 export * from "./adminGetPopularCoursesUseCase"
 export * from "./adminGetEnrollmentDataUseCase"

@@ -3,7 +3,8 @@ import { IgetChatGroupUseCase, IgetAllMessagesUseCase, IaddNewMessageUseCase, Ig
     IadminGetPopularCoursesUseCase, IadminGetEnrollmentDataUseCase,
     IStartStreamUseCase,
     IGetStreamDetailsUseCase,
-    IStopStreamUseCase
+    IStopStreamUseCase,
+    IgetChatStatusUseCase
 } from '../../domain/useCases';
 import { IDependencies } from './IDependencies';
 
@@ -20,4 +21,5 @@ export interface IUseCases {
     startStreamUseCase: (dependencies: Pick<IDependencies, 'repositories' | 'socketService'>) => IStartStreamUseCase
     getStreamDetailsUseCase: (dependencies: Pick<IDependencies, 'repositories'>) => IGetStreamDetailsUseCase
     stopStreamUseCase: (dependencies: Pick<IDependencies, 'repositories' | 'socketService'>) => IStopStreamUseCase
+    getChatStatusUseCase: (dependencies:IDependencies) => IgetChatStatusUseCase
 }

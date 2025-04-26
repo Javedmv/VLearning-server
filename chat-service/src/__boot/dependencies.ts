@@ -13,7 +13,8 @@ import {
     getAllInstructorChatsUseCase,
     adminGetAllDashboardDataUseCase,
     adminGetPopularCoursesUseCase,
-    adminGetEnrollmentDataUseCase
+    adminGetEnrollmentDataUseCase,
+    getChatStatusUseCase
 } from "../application/useCases"; 
 
 // Import the IUseCases interface to ensure type safety
@@ -32,7 +33,8 @@ const useCases: IUseCases = {
     getAllInstructorChatsUseCase: getAllInstructorChatsUseCase,
     adminGetAllDashboardDataUseCase: adminGetAllDashboardDataUseCase,
     adminGetPopularCoursesUseCase: adminGetPopularCoursesUseCase,
-    adminGetEnrollmentDataUseCase: adminGetEnrollmentDataUseCase
+    adminGetEnrollmentDataUseCase: adminGetEnrollmentDataUseCase,
+    getChatStatusUseCase: getChatStatusUseCase
 };
 
 export const dependencies: Pick<IDependencies, 'repositories' | 'useCases'> = { // Assuming IDependencies might have more later (like socketService)

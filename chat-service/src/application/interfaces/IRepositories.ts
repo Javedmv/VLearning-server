@@ -13,4 +13,5 @@ export interface IRepositories {
     adminGetAllDashboardData: () => Promise<ITOBE>;
     adminGetPopularCourses: () => Promise<ITOBE>;
     adminGetEnrollmentData: () => Promise<ITOBE>;
+    getChatStatus: (chatId: string) => Promise<ChatEntity.Result | null>;
 }

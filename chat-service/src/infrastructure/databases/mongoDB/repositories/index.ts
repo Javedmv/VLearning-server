@@ -5,7 +5,7 @@ export * from "./getAllInstructorChats"
 export * from "./updateChatStreamDetails"
 export * from "./getChatById"
 export * from "./clearChatStreamDetails"
-
+export * from "./getChatStatus"
 export * from "./adminGetAllDashboardData"
 export * from "./adminGetPopularCourses"
 export * from "./adminGetEnrollmentData"

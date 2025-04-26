@@ -5,7 +5,7 @@ export * from "./IgetAllInstructorChatsUseCase"
 export * from './IStartStreamUseCase'
 export * from './IGetStreamDetailsUseCase'
 export * from './IStopStreamUseCase'
-
+export * from "./IgetChatStatusUseCase"
 export * from "./IadminGetAllDashboardDataUseCase"
 export * from "./IadminGetPopularCoursesUseCase"
 export * from "./IadminGetEnrollmentDataUseCase"

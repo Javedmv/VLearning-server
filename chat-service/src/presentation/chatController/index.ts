@@ -9,7 +9,7 @@ import { markAsSeenController } from "./markAsSeenControllor"
 import { startStreamController } from "./startStreamController"
 import { getStreamDetailsController } from "./getStreamDetailsController"
 import { stopStreamController } from "./stopStreamController"
-
+import { getChatStatusController } from "./getChatStatusController"
 export const chatControllers = (dependencies: IDependencies) =>  {
     return {
         addNewMessage: addNewMessageController(dependencies),
@@ -20,6 +20,7 @@ export const chatControllers = (dependencies: IDependencies) =>  {
         getAdminDashboard: getAdminDashboardController(dependencies),
         startStream: startStreamController(dependencies),
         getStreamDetails: getStreamDetailsController(dependencies),
-        stopStream: stopStreamController(dependencies)
+        stopStream: stopStreamController(dependencies),
+        getChatStatus: getChatStatusController(dependencies)
     }
 }
