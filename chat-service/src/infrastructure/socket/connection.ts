@@ -104,10 +104,13 @@ const connectSocketIo = (server: HttpServer) => {
 
         // Join a specific chat room
         socket.on("join", ({ chatId, userId }) => {
-            if (!chatId) return;
+            if (!chatId || !userId) {
+                console.error(`[Socket ${socket.id}] Invalid join request:`, { chatId, userId });
+                return;
+            }
             
             socket.join(chatId);
-            console.log(`User ${userId} joined chat room ${chatId}`);
+            console.log(`[Socket ${socket.id}] User ${userId} joined chat room ${chatId}`);
             
             // Track user in room
             if (!activeRooms[chatId]) {
@@ -119,8 +122,13 @@ const connectSocketIo = (server: HttpServer) => {
             
             // Notify room about new user
             socket.to(chatId).emit("userJoined", { 
+                userId: userId, // Send userId along
                 message: `User ${userId} joined the chat` 
             });
+
+            // Log current members of the room after joining
+            const roomMembers = io.sockets.adapter.rooms.get(chatId);
+            console.log(`[Socket ${socket.id}] Members in room ${chatId} after join:`, roomMembers ? Array.from(roomMembers) : 'None');
         });
 
         // Handle sending messages
@@ -326,62 +334,33 @@ const connectSocketIo = (server: HttpServer) => {
 
         // Handle disconnect
         socket.on("disconnect", () => {
-            console.log(`Socket ${socket.id} disconnected`);
-            
-            // Find user ID from socket ID
-            let disconnectedUserId = null;
-            let userRole = null;
-            
-            for (const [key, value] of Object.entries(userSocketMap)) {
-                if (value === socket.id) {
-                    disconnectedUserId = key;
-                    userRole = userRoles[key] || 'student';
-                    delete userSocketMap[key];
-                    console.log(`User ${key} disconnected`);
+            console.log("Socket disconnected:", socket.id);
+            // Remove user from map and update online users
+            for (const [userId, socketId] of Object.entries(userSocketMap)) {
+                if (socketId === socket.id) {
+                    delete userSocketMap[userId];
+                    console.log(`User ${userId} disconnected`);
                     break;
                 }
             }
-            
-            if (disconnectedUserId) {
-                // Handle stream cleanup on disconnect
-                for (const [streamChatId, streamInfo] of activeStreams.entries()) {
-                    // If disconnected user is a viewer
-                    if (streamInfo.viewers.includes(disconnectedUserId)) {
-                        console.log(`Removing viewer ${disconnectedUserId} from stream ${streamChatId}`);
-                        // Remove from viewers
-                        streamInfo.viewers = streamInfo.viewers.filter(id => id !== disconnectedUserId);
-                        
-                        // Get viewer username if available
-                        const viewerName = "User"; // Placeholder - could be improved
-                        
-                        // Notify others about viewer leaving
-                        io.to(`stream:${streamChatId}`).emit("userLeftStream", {
-                            chatId: streamChatId,
-                            userId: disconnectedUserId,
-                            username: viewerName
-                        });
-                    } 
-                    
-                    // If disconnected user is the streamer, end the stream for everyone
-                    if (streamInfo.streamerId === disconnectedUserId) {
-                        console.log(`Streamer ${disconnectedUserId} disconnected, ending stream in ${streamChatId}`);
-                        // Notify everyone that stream ended
-                        io.to(streamChatId).emit("streamEnded", {
-                            chatId: streamChatId,
-                            userId: disconnectedUserId,
-                            streamerName: streamInfo.streamerName
-                        });
-                        
-                        // Clean up stream data
-                        activeStreams.delete(streamChatId);
-                    }
+            io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+            // Clean up from active rooms
+            Object.keys(activeRooms).forEach(roomId => {
+                const index = activeRooms[roomId].indexOf(userId);
+                if (index !== -1) {
+                    activeRooms[roomId].splice(index, 1);
+                    // Optionally notify the room that the user left
+                    io.to(roomId).emit("userLeft", { userId, reason: "disconnect" });
                 }
-                
-                // Broadcast updated online users
-                io.emit("getOnlineUsers", Object.keys(userSocketMap));
-            }
+            });
+
+             // Clean up roles
+             delete userRoles[userId];
         });
     });
+
+    return io; // Return the initialized io instance
 };
 
 export default connectSocketIo;

@@ -2,6 +2,9 @@ export * from "./IgetChatGroupUseCase"
 export * from "./IgetAllMessagesUseCase"
 export * from "./IaddNewMessageUseCase"
 export * from "./IgetAllInstructorChatsUseCase"
+export * from './IStartStreamUseCase'
+export * from './IGetStreamDetailsUseCase'
+export * from './IStopStreamUseCase'
 
 export * from "./IadminGetAllDashboardDataUseCase"
 export * from "./IadminGetPopularCoursesUseCase"

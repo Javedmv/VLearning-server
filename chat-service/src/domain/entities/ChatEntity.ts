@@ -7,6 +7,10 @@ export namespace ChatEntity {
         instructorId:string;
         users: [ string ];
         latestMessage: string;
+        wherebyMeetingId?: string;
+        wherebyRoomUrl?: string;
+        wherebyHostRoomUrl?: string;
+        isStreamActive?: boolean;
     }
     export interface Result {
         _id: ObjectId;
@@ -15,6 +19,10 @@ export namespace ChatEntity {
         instructorId: ObjectId;
         users: [ObjectId];
         latestMessage: ObjectId;
+        wherebyMeetingId?: string;
+        wherebyRoomUrl?: string;
+        wherebyHostRoomUrl?: string;
+        isStreamActive?: boolean;
         createdAt?: Date | string;
         updatedAt?: Date | string;
     }

@@ -6,6 +6,9 @@ import { getAllInstructorChatsController } from "./getAllInstructorChatsControll
 import { getAllMessagesController } from "./getAllMessagesController"
 import { getExsistingChatController } from "./getExsistingChatController"
 import { markAsSeenController } from "./markAsSeenControllor"
+import { startStreamController } from "./startStreamController"
+import { getStreamDetailsController } from "./getStreamDetailsController"
+import { stopStreamController } from "./stopStreamController"
 
 export const chatControllers = (dependencies: IDependencies) =>  {
     return {
@@ -14,7 +17,9 @@ export const chatControllers = (dependencies: IDependencies) =>  {
         getAllMessages: getAllMessagesController(dependencies),
         markAsSeen: markAsSeenController(dependencies),
         getAllInstructorChats: getAllInstructorChatsController(dependencies),
-        getAdminDashboard: getAdminDashboardController(dependencies)
-
+        getAdminDashboard: getAdminDashboardController(dependencies),
+        startStream: startStreamController(dependencies),
+        getStreamDetails: getStreamDetailsController(dependencies),
+        stopStream: stopStreamController(dependencies)
     }
 }

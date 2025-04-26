@@ -24,7 +24,23 @@ const chatSchema = new Schema({
         type: Types.ObjectId,
         ref: "messages"
     },
-
+    wherebyMeetingId: {
+        type: String,
+        required: false,
+    },
+    wherebyRoomUrl: {
+        type: String,
+        required: false,
+    },
+    wherebyHostRoomUrl: {
+        type: String,
+        required: false,
+    },
+    isStreamActive: {
+        type: Boolean,
+        required: false,
+        default: false,
+    }
 }, {
     timestamps: true
 });

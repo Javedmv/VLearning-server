@@ -7,6 +7,7 @@ import { routes } from "../infrastructure/routes";
 import { dependencies } from "../__boot/dependencies";
 import { createServer } from "http";
 import connectSokcetIo from "../infrastructure/socket/connection";
+import { SocketService } from "../infrastructure/socket/SocketService";
 import cors from 'cors';
 import { errorHandler } from "../_lib/error";
 
@@ -28,9 +29,17 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 const server = createServer(app);
-connectSokcetIo(server);
 
-app.use(routes(dependencies))
+const io = connectSokcetIo(server);
+
+const socketService = new SocketService(io);
+
+const fullDependencies = {
+    ...dependencies,
+    socketService: socketService
+};
+
+app.use(routes(fullDependencies));
 
 app.use(errorHandler)
 
