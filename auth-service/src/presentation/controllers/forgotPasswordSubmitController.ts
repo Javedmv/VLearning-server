@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const forgotPasswordSubmitController = (dependencies:IDependencies) => {
     const {useCases: {verifyOtpUseCase}} = dependencies;
@@ -11,19 +12,25 @@ export const forgotPasswordSubmitController = (dependencies:IDependencies) => {
             const isOtpVerified = await verifyOtpUseCase(dependencies).execute(email,otp);
 
             if(isOtpVerified){
-                    res.status(200).json({
+                res.status(StatusCode.SUCCESS).json({
+                    ...createResponse(
+                        StatusCode.SUCCESS,
+                        undefined,
+                        "OTP Verified Successfully."
+                    ),
                     user: email,
-                    success: true,
-                    message: "OTP Verifed Successfully."
-                })
+                });
                 return;
             }
 
-            res.status(401).json({
-            user: email,
-            success: false,
-            message: "OTP is Invalid try another",
-            })
+            res.status(StatusCode.UNAUTHORIZED).json({
+                ...createResponse(
+                    StatusCode.UNAUTHORIZED,
+                    undefined,
+                    "OTP is invalid, try another"
+                ),
+                user: email,
+            });
             return;
         } catch (error) {
             next(error)

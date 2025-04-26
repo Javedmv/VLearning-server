@@ -3,6 +3,7 @@ import { IDependencies } from "../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../_lib/common/error";
 import { generateAccessToken, generateRefreshToken } from "../../_lib/jwt";
 import { UserEntity } from "../../domain/entities";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const googleSignupController = (dependencies: IDependencies) => {
     const { useCases: { createGAuthUserUseCase } } = dependencies;
@@ -50,17 +51,23 @@ export const googleSignupController = (dependencies: IDependencies) => {
             });
             
             if (isNewUser) {
-                res.status(200).json({
-                    success: true,
-                    data: { _id, email, role, username, isNewUser },
-                    message: "User created!",
-                });
+                res.status(StatusCode.SUCCESS).json(
+                    createResponse(
+                        StatusCode.SUCCESS,
+                        { _id, email, role, username, isNewUser }, // Pass user data as part of the response
+                        "User created!"
+                    )
+                );
+                return;
             } else {
-                res.status(200).json({
-                    success: true,
-                    data: { _id, email, role, username, isNewUser, isBlocked, isVerified, profession, profileDescription },
-                    message: "Login Successful!"
-                });
+                res.status(StatusCode.SUCCESS).json(
+                    createResponse(
+                        StatusCode.SUCCESS,
+                        { _id, email, role, username, isNewUser, isBlocked, isVerified, profession, profileDescription }, // Pass user data as part of the response
+                        "Login Successful!"
+                    )
+                );
+                return;
             }
 
         } catch (error: unknown) {

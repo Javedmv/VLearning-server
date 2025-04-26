@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../../_lib/error";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const deleteCategoryController = (dependencies: IDependencies) => {
     const { useCases: { deleteCategoryUseCase } } = dependencies;
@@ -19,11 +20,13 @@ export const deleteCategoryController = (dependencies: IDependencies) => {
                 return next(ErrorResponse.notFound("Category not found."));
             }
 
-            res.status(200).json({
-                success: true,
-                message: "Category deleted successfully",
-                data: deletedCategory
-            });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    deletedCategory, 
+                    "Category deleted successfully" 
+                )
+            );
             return
 
         } catch (error) {

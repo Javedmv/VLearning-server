@@ -4,6 +4,7 @@ import { ErrorResponse } from "../../_lib/common/error";
 import { userCreatedProducer } from "../../infrastructure/kafka/producers";
 import {NOTIFICATION_SERVICE_TOPIC} from '../../_lib/common/messages/topics'
 import { TOBE } from "../../_lib/utils/Tobe";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 
 export const resendOtpController = (dependencies:IDependencies) => {
@@ -24,10 +25,13 @@ export const resendOtpController = (dependencies:IDependencies) => {
             }
 
             await userCreatedProducer(userCredentials.email,NOTIFICATION_SERVICE_TOPIC);
-            res.status(200).json({
-                success: true,
-                message: "otp sent successfully",
-              });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    undefined, // No data to return
+                    "OTP sent successfully" // Custom message
+                )
+            );
             return;
             
         } catch (error: unknown) {

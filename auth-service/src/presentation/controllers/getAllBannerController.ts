@@ -1,25 +1,32 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../_lib/s3/s3bucket";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const getAllBannerController = (dependencies: IDependencies) => {
     const { useCases: { getAllBannerUseCase } } = dependencies;
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             if(!req.user){
-                res.status(401).json({
-                    success: false,
-                    message: "Unauthorized",
-                });
+                res.status(StatusCode.UNAUTHORIZED).json(
+                    createResponse(
+                        StatusCode.UNAUTHORIZED,
+                        undefined,
+                        "Unauthorized"
+                    )
+                );
                 return;
             }
             const result = await getAllBannerUseCase(dependencies).execute();
 
             if (!result || result.length === 0) {
-                res.status(404).json({
-                    success: false,
-                    message: "No banner found",
-                });
+                res.status(StatusCode.NOT_FOUND).json(
+                    createResponse(
+                        StatusCode.NOT_FOUND,
+                        undefined,
+                        "No banner found"
+                    )
+                );
                 return;
             }
             await Promise.all(result.map(async (banner) => {
@@ -28,11 +35,13 @@ export const getAllBannerController = (dependencies: IDependencies) => {
                     banner.imageUrl = publicBannerUrl;
                 }
             }));
-            res.status(200).json({
-                success: true,
-                message: "Banner fetched successfully",
-                data: result
-            });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    result,
+                    "Banner fetched successfully"
+                )
+            );
             return;
         } catch (error) {
             res.status(500).json({

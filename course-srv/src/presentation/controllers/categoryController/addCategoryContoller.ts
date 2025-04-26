@@ -2,6 +2,7 @@ import { NextFunction, Response, Request, response } from "express"
 import { IDependencies } from "../../../application/interfaces/IDependencies"
 import { ErrorResponse } from "../../../_lib/error";
 import { uploadToS3 } from "../../../_lib/s3/s3bucket";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const addCategoryController = (dependencies:IDependencies) => {
     const {useCases:{addCategoryUseCase}} = dependencies;
@@ -42,12 +43,14 @@ export const addCategoryController = (dependencies:IDependencies) => {
             if(!response){
                 return next(ErrorResponse.badRequest("Failed to add the category"));
             }
-            // console.log(response,"response in conroller")
-            res.status(200).json({
-                success:true,
-                data: response,
-                message: `category added successfully`
-            })
+           
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    response,
+                    "Category added successfully" 
+                )
+            );
             return;
         } catch (error) {
             console.log(error)

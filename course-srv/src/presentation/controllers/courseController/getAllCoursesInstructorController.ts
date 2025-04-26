@@ -3,6 +3,7 @@ import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
 import { Lesson } from "./getAllCoursesController";
 import { TOBE } from "../../../_lib/common/Tobe";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const getAllCoursesInstructorController = (dependencies:IDependencies) => {
     const {useCases:{getAllCoursesInstructorUseCase}} = dependencies;
@@ -52,10 +53,12 @@ export const getAllCoursesInstructorController = (dependencies:IDependencies) =>
                 return updatedCourse;
             }));
 
-            res.status(200).json({
-                success:true,
-                data:updatedCourses,
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    updatedCourses
+                )
+            );
             return
         } catch (error) {
             console.log(error);

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const adminGetProfileController = (dependencies:IDependencies) => {
     const {useCases: {findUserByEmailUseCase}} = dependencies;
@@ -20,11 +21,14 @@ export const adminGetProfileController = (dependencies:IDependencies) => {
                     avatar: adminUser?.profile?.avatar
                 }
             }
-            res.status(200).json({
-                success: true,
-                data,
-                message:"Successfully fetched admin profile"
-            })
+            
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    data,
+                    "Successfully fetched admin profile"
+                )
+            );
         } catch (error) {
             console.log(error, "ERROR IN ADMIN GET PROFILE CONTROLLER")
             next(error)

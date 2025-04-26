@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
 import { TOBE } from "../../../_lib/common/Tobe";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 
 export const getAllDetailsLandingPageController = (dependencies: IDependencies) => {
@@ -61,14 +62,16 @@ export const getAllDetailsLandingPageController = (dependencies: IDependencies) 
                 return instructorData;
             }));
 
-            res.status(200).json({
-                success: true,
-                message: "Landing page details fetched successfully",
-                data: {
-                    courses: coursesWithThumbnails,
-                    instructors: instructorsWithProfileImages
-                }
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    {
+                        courses: coursesWithThumbnails,
+                        instructors: instructorsWithProfileImages
+                    },
+                    "Landing page details fetched successfully" // Custom message
+                )
+            );
             return;
         } catch (error) {
             next(error);

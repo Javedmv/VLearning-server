@@ -3,6 +3,7 @@ import { IDependencies } from "../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../_lib/common/error";
 import { compare } from "bcrypt";
 import { hashPassword } from "../../_lib/bcrypt";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const updatePasswordController = (dependencies:IDependencies) => {
     const {useCases: {updatePasswordUseCase,findUserByIdUseCase}}= dependencies;
@@ -27,14 +28,23 @@ export const updatePasswordController = (dependencies:IDependencies) => {
             const result = await updatePasswordUseCase(dependencies).execute(req.user?.email!, hashedPassword);
 
             if(!result){
-                res.status(400).json({success: false,message:"Please try again, Some error occured."})
+                res.status(StatusCode.BAD_REQUEST).json(
+                    createResponse(
+                        StatusCode.BAD_REQUEST,
+                        undefined, // No data to return
+                        "Please try again, Some error occurred." // Custom message
+                    )
+                );
                 return;
             }
 
-            res.status(200).json({
-                success: true,
-                message: "Password Updated Successfully."
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    undefined,
+                    "Password Updated Successfully."
+                )
+            );
             return;
         } catch (error: unknown) {
             if (error instanceof Error) {

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../../_lib/error";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const updateCategoryStatusController = (dependencies:IDependencies) => {
     const {useCases: {updateCategoryStatusUseCase}} = dependencies;
@@ -17,10 +18,13 @@ export const updateCategoryStatusController = (dependencies:IDependencies) => {
             if(!updatedStatus){
                 return next(ErrorResponse.badRequest("failed to update status,please try again."))
             }
-            res.status(200).json({
-                status:true,
-                message: "Category status updated successfully"
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    undefined, 
+                    "Category status updated successfully"
+                )
+            );
             return;
         } catch (error) {
             console.log(error)

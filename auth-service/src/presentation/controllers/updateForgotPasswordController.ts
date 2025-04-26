@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { hashPassword } from "../../_lib/bcrypt";
 import { ErrorResponse } from "../../_lib/common/error";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const updateForgotPasswordController = (dependencies:IDependencies) => {
     const {useCases:{ updatePasswordUseCase }} = dependencies;
@@ -13,11 +14,13 @@ export const updateForgotPasswordController = (dependencies:IDependencies) => {
             if(!response){
                 return next(ErrorResponse.internalError("some thing went wrong, please try again"))
             }
-            res.status(200).json({
-                success: true,
-                data: response.email,
-                message: "Password Update Successfully."
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    response.email, 
+                    "Password Update Successfully."
+                )
+            );
 
         } catch (error) {
             next(error)

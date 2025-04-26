@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { uploadToS3 } from "../../_lib/s3/s3bucket";
 import { ErrorResponse } from "../../_lib/common/error";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 interface CustomRequest extends Request {
     files: {
@@ -48,7 +49,14 @@ export const postApplyTeachController = (dependencies: IDependencies) => {
 
             if(result){
                 const {_id, email, role , username, isNewUser, isBlocked, isVerified, profession, profileDescription} = result;
-                res.status(200).json({success: true, data: {_id, email, role, username, isNewUser,isBlocked, isVerified, profession, profileDescription},message:"Reapply done successfully."});
+                res.status(StatusCode.SUCCESS).json(
+                    createResponse(
+                        StatusCode.SUCCESS,
+                        { _id, email, role, username, isNewUser, isBlocked, isVerified, profession, profileDescription }, // Pass user data as part of the response
+                        "Reapply done successfully." // Custom message
+                    )
+                );
+                return;
             }
         } catch (error) {
             next(error);

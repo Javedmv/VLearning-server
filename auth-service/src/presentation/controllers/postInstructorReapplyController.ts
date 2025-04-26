@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { uploadToS3 } from "../../_lib/s3/s3bucket";
 import { ErrorResponse } from "../../_lib/common/error";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 interface CustomRequest extends Request {
     files: {
@@ -45,7 +46,14 @@ export const postInstructorReapplyController = (dependencies:IDependencies) => {
                 res.status(200).json({success: true, data: {_id, email, role, username, isNewUser,isBlocked, isVerified, profession, profileDescription},message:"Reapply Completed successfully."});
                 return
             }
-            res.status(404).json({success: false, message:"Sorry, failed to reapply please try again."})
+
+            res.status(StatusCode.NOT_FOUND).json(
+                createResponse(
+                    StatusCode.NOT_FOUND,
+                    undefined, // No data to return
+                    "Sorry, failed to reapply. Please try again."
+                )
+            );
             return;
         } catch (error: unknown) {
             next(error);

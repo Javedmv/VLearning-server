@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const logoutController = (dependencies:IDependencies) => {
     return async (req:Request, res:Response, next:NextFunction) => {
@@ -18,7 +19,13 @@ export const logoutController = (dependencies:IDependencies) => {
                 sameSite: "none",
             });
 
-            res.status(204).json({success:true, message:"Logout Successfully."});
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    undefined,
+                    "Logout Successful"
+                )
+            );
         } catch (error) {
             next(error)
         }

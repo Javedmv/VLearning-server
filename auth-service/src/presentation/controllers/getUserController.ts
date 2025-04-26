@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../_lib/common/error";
 import jwt ,{VerifyErrors , JwtPayload} from 'jsonwebtoken';
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const getUserController = (dependencies:IDependencies) => {
     const {useCases: { findUserByIdUseCase} } = dependencies;
@@ -18,11 +19,13 @@ export const getUserController = (dependencies:IDependencies) => {
                 return(next(ErrorResponse.notFound("User not found!")));
             }
             const  {_id,email,role,username, isNewUser,isBlocked, isVerified, profession, profileDescription} = result;
-            res.status(200).json({
-                success: true,
-                data:  {_id,email,role,username,isNewUser,isBlocked, isVerified , profession, profileDescription},
-                message: "User Exist!!"
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    { _id, email, role, username, isNewUser, isBlocked, isVerified, profession, profileDescription },
+                    "User exists!"
+                )
+            );
             return;
         } catch (error) {
             next(error)

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const getInstructorDetailsController = (dependencies:IDependencies) => {
     const {useCases: {getInstructorDetailsUseCase}} = dependencies;
@@ -10,10 +11,13 @@ export const getInstructorDetailsController = (dependencies:IDependencies) => {
             const instructorDetails = await getInstructorDetailsUseCase(dependencies).execute(id);
 
             if(!instructorDetails){
-                res.status(404).json({
-                    success:false,
-                    message: "Instructor not found!!",
-                })
+                res.status(StatusCode.NOT_FOUND).json(
+                    createResponse(
+                        StatusCode.NOT_FOUND,
+                        undefined, 
+                        "Instructor not found!!" 
+                    )
+                );
                 return;
             }
 
@@ -22,11 +26,13 @@ export const getInstructorDetailsController = (dependencies:IDependencies) => {
                 instructorDetails.profile.avatar = updatedInstructor;
             }
 
-            res.status(200).json({
-                success:true,
-                data:instructorDetails,
-                message:"Insturctor details fetched successfully."
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    instructorDetails,
+                    "Instructor details fetched successfully."
+                )
+            );
             return;
         } catch (error) {
             console.error("Error in getCourseDetailsController:", error);

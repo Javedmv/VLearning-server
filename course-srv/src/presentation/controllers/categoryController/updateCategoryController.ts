@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { uploadToS3 } from "../../../_lib/s3/s3bucket";
 import { ErrorResponse } from "../../../_lib/error";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const updateCategoryController = (dependencies: IDependencies) => {
     const {useCases: {updateCategoryUseCase}} = dependencies;
@@ -59,17 +60,23 @@ export const updateCategoryController = (dependencies: IDependencies) => {
                 return next(ErrorResponse.badRequest("Something went wrong, please try again."))
             }
 
-            res.status(200).json({
-                success: true,
-                message: "Category updated successfully",
-            });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    undefined,
+                    "Category updated successfully" 
+                )
+            );
             return;
         } catch (error) {
             console.error('Update category error:', error);
-            res.status(500).json({
-                success: false,
-                message: "Failed to update category"
-            });
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(
+                createResponse(
+                    StatusCode.INTERNAL_SERVER_ERROR,
+                    undefined, 
+                    "Failed to update category" 
+                )
+            );
             return
         }
     };

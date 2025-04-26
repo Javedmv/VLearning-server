@@ -1,3 +1,4 @@
+import { createResponse, StatusCode } from "../../_lib/common";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { Request, Response, NextFunction } from 'express';
 
@@ -11,11 +12,13 @@ export const adminVerifyInstructorController = (dependencies:IDependencies) => {
             
             const instructorUser = await verifyInstructorUseCase(dependencies).execute(userId, isVerified);
 
-            res.status(200).json({
-                success:true,
-                data: instructorUser,
-                message: `User Has Been ${instructorUser?.isVerified} as an Instructor.`
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    instructorUser,
+                    `User has been ${instructorUser?.isVerified ? "verified" : "not verified"} as an instructor.`
+                )
+            );
         } catch (error) {
             console.log(error, "error in ADMIN VERIFY INSTRUCTOR CONTROLLER")
             next(error)

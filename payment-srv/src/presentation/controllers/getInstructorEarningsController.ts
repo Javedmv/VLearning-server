@@ -1,12 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
+import { createResponse, StatusCode } from "../../_lib/constants/constants";
 
 export const getInstructorEarningsController = (dependencies: IDependencies) => {
     const {useCases: {getEarningsUseCase}} = dependencies;
     return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             if(!req.user){
-                res.status(401).json({ success: false, message: "Unauthorized" });
+                res.status(StatusCode.UNAUTHORIZED).json(
+                    createResponse(
+                        StatusCode.UNAUTHORIZED,
+                        undefined,
+                        "Unauthorized"
+                    )
+                );
                 return;
             }
             // role is either instructor or admin.
@@ -15,7 +22,13 @@ export const getInstructorEarningsController = (dependencies: IDependencies) => 
             const cleanRole = role ? (role as string).replace(/"/g, '') : '';
             const earnings = await getEarningsUseCase(dependencies).execute(req.user._id, cleanRole);
 
-            res.status(200).json({ success: true, data: earnings, message: "Earnings fetched successfully" });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    earnings,
+                    "Earnings fetched successfully"
+                )
+            );
             return;
         } catch (error) {
             next(error);

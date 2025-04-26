@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const adminBlockUserController = (dependencies:IDependencies) => {
     const { useCases: {blockUserUseCase} } = dependencies;
@@ -14,11 +15,13 @@ export const adminBlockUserController = (dependencies:IDependencies) => {
             const studentUsers = await blockUserUseCase(dependencies).execute(userId,isBlocked);
 
 
-            res.status(200).json({
-                success:true,
-                data: studentUsers,
-                message: `User Has Been ${studentUsers?.isBlocked? "Unblocked" : "Blocked"} Successfully.`
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    studentUsers,
+                    `User has been ${studentUsers?.isBlocked ? "unblocked" : "blocked"} successfully.`
+                )
+            );
 
         } catch (error: unknown) {
             if (error instanceof Error) {

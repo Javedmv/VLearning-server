@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
 import { TOBE } from "../../../_lib/common/Tobe";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const getCourseDetailMyLearning = (dependencies:IDependencies) => {
     const {useCases: {courseDetailMyLearningUseCase}} = dependencies;
@@ -42,11 +43,13 @@ export const getCourseDetailMyLearning = (dependencies:IDependencies) => {
                 return { ...enrollment.toObject(), courseId: updatedCourse };
             }));
 
-            res.status(200).json({
-                success: true,
-                data: updatedEnrollments,
-                message: "Course details fetched"
-            });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    updatedEnrollments, 
+                    "Course details fetched"
+                )
+            );
             return;
         } catch (error) {
             next(error);

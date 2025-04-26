@@ -4,20 +4,26 @@ import { removeFilesFromS3 } from "../../../_lib/s3/s3bucket";
 import { CourseContent } from '../../../domain/entities/CourseEdit';
 import { sendEditCourseDetailsProducer } from "../../../infrastructure/kafka/producers";
 import { TOBE } from "../../../_lib/common/Tobe";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const putEditCourseController = (dependencies:IDependencies) => {
     const {useCases:{ editCourseUseCase }} = dependencies;
     return async (req:Request,res:Response, next:NextFunction) => {
         try {
             if (!req.user) {
-                res.status(401).json({ success: false, message: "Authentication required: No User Provided" });
+                res.status(StatusCode.UNAUTHORIZED).json(
+                    createResponse(
+                        StatusCode.UNAUTHORIZED,
+                        undefined,
+                        "Authentication required: No User Provided"
+                    )
+                );
                 return;
             }
             const removeLessonIndex: number[] = []
             const {basicDetails, pricing, metadata, _id} = req.body.course;
             const courseContent = req.body.course.courseContent as CourseContent
             if(typeof courseContent.lessons[0].videoUrl == "object"){
-                console.log("fuck retured")
                 return;
             }
             const courseId = req.params.id;
@@ -48,10 +54,13 @@ export const putEditCourseController = (dependencies:IDependencies) => {
             courseContent,pricing,metadata,_id},removeLessonIndex);
 
             if(!result){
-                res.status(404).json({
-                    success:false,
-                    message:"Failed to edit the course"
-                })
+                res.status(StatusCode.NOT_FOUND).json(
+                    createResponse(
+                        StatusCode.NOT_FOUND,
+                        undefined,
+                        "Failed to edit the course"
+                    )
+                );
                 return;
             }
 
@@ -64,11 +73,13 @@ export const putEditCourseController = (dependencies:IDependencies) => {
                 await sendEditCourseDetailsProducer(result.updatedCourse,"chat-srv-topic");
             }
 
-            res.status(200).json({
-                success:true,
-                message:"Course edited successfully",
-                data:result.updatedCourse
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    result.updatedCourse,
+                    "Course edited successfully"
+                )
+            );
             return;
         } catch (error) {
             console.log("ERROR in the putEditCourseController",error)

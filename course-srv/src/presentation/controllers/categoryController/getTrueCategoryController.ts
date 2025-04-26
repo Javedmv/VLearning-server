@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const getTrueCategoryController = (dependencies:IDependencies) => {
     const {useCases: {getActiveCategoryUseCase}} = dependencies;
@@ -20,11 +21,13 @@ export const getTrueCategoryController = (dependencies:IDependencies) => {
             //         }
             //     }
             // }
-            res.status(200).json({
-                success: true,
-                data: categories,
-                message: `Categories retrieved successfully`
-            });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    categories, 
+                    "Categories retrieved successfully" 
+                )
+            );
             return;
         } catch (error) {
             next(error)

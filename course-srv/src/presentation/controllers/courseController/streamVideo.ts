@@ -4,6 +4,7 @@ import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 import { promises } from "dns";
 import { TOBE } from "../../../_lib/common/Tobe";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const streamVideo = (dependencies: IDependencies) => {
     const { repositories: { courseDetailMyLearning } } = dependencies;
@@ -103,7 +104,13 @@ export const streamVideo = (dependencies: IDependencies) => {
                 
             } catch (error) {
                 console.error("Error streaming video:", error);
-                res.status(500).json({ message: "Error streaming video" });
+                res.status(StatusCode.INTERNAL_SERVER_ERROR).json(
+                    createResponse(
+                        StatusCode.INTERNAL_SERVER_ERROR,
+                        undefined,
+                        "Error streaming video"
+                    )
+                );
                 return
             }
             

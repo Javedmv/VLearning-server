@@ -4,6 +4,7 @@ import { compare } from 'bcrypt';
 import { ErrorResponse } from "../../_lib/common/error";
 import { hash } from 'bcrypt';
 import { hashPassword } from '../../_lib/bcrypt/hashPassword';
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const adminUpdatePasswordController = (dependencies:IDependencies) => {
     const {useCases: {findUserByIdUseCase, updatePasswordUseCase}} = dependencies;
@@ -32,11 +33,13 @@ export const adminUpdatePasswordController = (dependencies:IDependencies) => {
                 return;
             }
             
-            res.status(200).json({
-                success: true,
-                message: "Password Updated Successfully."
-            })
-            return;
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    undefined,
+                    "Password updated successfully."
+                )
+            );
         } catch (error) {
             console.log(error, "ERROR IN ADMIN UPDATE PASSWORD CONTROLLER")
             next(error)

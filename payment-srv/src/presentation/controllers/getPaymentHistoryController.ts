@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
+import { createResponse, StatusCode } from "../../_lib/constants/constants";
 
 export const getPaymentHistoryController = (dependencies:IDependencies) => {
     const {useCases:{getPaymentHistoryUseCase}} = dependencies;
@@ -10,10 +11,12 @@ export const getPaymentHistoryController = (dependencies:IDependencies) => {
             const paymentHistory = await getPaymentHistoryUseCase(dependencies).execute(userId);
             console.log(paymentHistory);
 
-            res.status(200).json({
-                success:true,
-                data: paymentHistory,
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    paymentHistory
+                )
+            );
             return;
         } catch (error) {
             console.error("ERROR IN GET PAYMENT HISTORY CONTROLLER",error)

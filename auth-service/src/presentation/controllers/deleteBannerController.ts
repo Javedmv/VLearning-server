@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { removeFilesFromS3 } from "../../_lib/s3/s3bucket";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const deleteBannerController = (dependencies:IDependencies) => {
     const {useCases: {deleteBannerUseCase}} = dependencies;
@@ -19,10 +20,13 @@ export const deleteBannerController = (dependencies:IDependencies) => {
                 })
                 return
             }
-            res.status(200).json({
-                success: true,
-                message: `${result?.title || "Banner"} deleted successfully`,
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    undefined,
+                    `${result?.title || "Banner"} deleted successfully`
+                )
+            );
             return;
         } catch (error) {
             console.log(error)

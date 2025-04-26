@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { uploadToS3 } from "../../_lib/s3/s3bucket";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 interface CustomRequest extends Request {
     files: {
@@ -41,10 +42,9 @@ export const addBannerController = (dependencies:IDependencies) => {
                 })
                 return
             }
-            res.status(201).json({
-                success: true,
-                message: "Banner added successfully",
-            })
+
+            const response = createResponse(StatusCode.SUCCESS, result);
+            res.status(StatusCode.SUCCESS).json(response)
             return;
         } catch (error: unknown) {
             if (error instanceof Error) {
@@ -53,6 +53,5 @@ export const addBannerController = (dependencies:IDependencies) => {
                 console.log("Banner adding error:", error);
             }
         }
-        
     }
 }

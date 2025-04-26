@@ -5,7 +5,7 @@ import { userCreatedProducer } from '../../infrastructure/kafka/producers';
 import { signupValidation } from '../../_lib/validation';
 import { hashPassword } from '../../_lib/bcrypt';
 import { generateAccessToken,generateRefreshToken } from '../../_lib/jwt';
-import { NOTIFICATION_SERVICE_TOPIC } from '../../_lib/common';
+import { createResponse, NOTIFICATION_SERVICE_TOPIC, StatusCode } from '../../_lib/common';
 import { TOBE } from '../../_lib/utils/Tobe';
 
 export const signupController = (dependencies: IDependencies) => {
@@ -137,11 +137,14 @@ export const signupController = (dependencies: IDependencies) => {
                     sameSite:"none",
                   });
           
-                  res.status(200).json({
-                    success: true,
-                    data: {_id, email, role, username, isNewUser},
-                    message: "User created!",
-                  });
+                  res.status(StatusCode.SUCCESS).json(
+                    createResponse(
+                        StatusCode.SUCCESS,
+                        { _id, email, role, username, isNewUser }, // Pass user data as part of the response
+                        "User created!" // Custom message
+                    )
+                  );
+                  return
                 } catch (error: unknown) {
                   if (error instanceof Error) {
                       console.error("<<Something went wrong in user signup>>", error.message);

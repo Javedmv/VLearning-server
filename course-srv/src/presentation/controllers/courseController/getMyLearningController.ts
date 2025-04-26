@@ -3,6 +3,7 @@ import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
 import { ErrorResponse } from "../../../_lib/error";
 import { TOBE } from "../../../_lib/common/Tobe";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const getMyLearningController = (dependencies:IDependencies) => {
     const {useCases:{ getMyLearningUseCase }} = dependencies;
@@ -16,7 +17,13 @@ export const getMyLearningController = (dependencies:IDependencies) => {
             let enrollments = await getMyLearningUseCase(dependencies).execute(userId);
 
             if (!enrollments) {
-                res.status(404).json({ message: "No enrollments found" });
+                res.status(StatusCode.NOT_FOUND).json(
+                    createResponse(
+                        StatusCode.NOT_FOUND,
+                        undefined,
+                        "No enrollments found"
+                    )
+                );
                 return;
             }
 
@@ -51,10 +58,12 @@ export const getMyLearningController = (dependencies:IDependencies) => {
                 return { ...enrollment.toObject(), courseId: updatedCourse };
             }));
             
-            res.status(200).json({
-                success: true,
-                data: updatedEnrollments
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    updatedEnrollments
+                )
+            );
             return
         } catch (error) {
             console.error("Error in getMyLearningController:", error);

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { Lesson } from './getAllCoursesController';
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export interface LessonObject extends Lesson {
     _id: string;
@@ -12,20 +13,26 @@ export const postupdatedWatched = (dependencies:IDependencies) => {
         try {
             const {enrollmentId} = req.params;
             const { lessonObject, allLessons } = req.body
-            console.log(lessonObject,allLessons,"lessonObject,allLessons")
             if(!req.user){
                 throw new Error("Unauthorized");
             }
             const result = await updateProgressUseCase(dependencies).execute(enrollmentId,lessonObject,allLessons);
             if(!result){
-                res.status(404).json({success:false, message:"No enrollment found"});
+                res.status(StatusCode.NOT_FOUND).json(
+                    createResponse(
+                        StatusCode.NOT_FOUND,
+                        undefined,
+                        "No enrollment found"
+                    )
+                );
                 return;
             }
-            console.log(result,"result")
-            res.status(200).json({
-                success: true,
-                data:result
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    result
+                )
+            );
             return;
         } catch (error) {
             next(error);

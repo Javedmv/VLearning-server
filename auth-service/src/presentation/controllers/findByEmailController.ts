@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 export const findByEmailContorller = (dependencies:IDependencies) => {
     const { useCases: { findUserByEmailUseCase} } = dependencies;
@@ -11,11 +12,13 @@ export const findByEmailContorller = (dependencies:IDependencies) => {
             if(!result){
                 throw new Error("User not found")
             }
-            res.status(200).json({
-                success: true,
-                data: result,
-                message: "User exist!"
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    result,
+                    "User exists!"
+                )
+            );
         } catch (error) {
             next(error);
         }

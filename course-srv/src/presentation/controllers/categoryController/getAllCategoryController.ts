@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { CategoryEntity } from "../../../domain/entities";
 import { getPublicUrl } from "../../../_lib/s3/s3bucket";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const getAllCategoryController = (dependencies: IDependencies) => {
     const { useCases: { getAllCategoryUseCase } } = dependencies;
@@ -24,11 +25,13 @@ export const getAllCategoryController = (dependencies: IDependencies) => {
                 }
             }
 
-            res.status(200).json({
-                success: true,
-                data: categories,
-                message: `Categories retrieved successfully`
-            });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    categories, 
+                    "Categories retrieved successfully" 
+                )
+            );
             return;
         } catch (error) {
             next(error);

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import { removeFilesFromS3, uploadToS3 } from "../../_lib/s3/s3bucket";
+import { createResponse, StatusCode } from "../../_lib/common";
 
 interface CustomRequest extends Request {
     files: {
@@ -62,10 +63,13 @@ export const editBannerController = (dependencies:IDependencies) => {
                 await removeFilesFromS3(result);
             }
 
-            res.status(200).json({
-                success:true,
-                message:"Banner Updated Successfully."
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    undefined, // No data to return
+                    "Banner updated successfully."
+                )
+            );
             return;
         } catch (error) {
             next(error);

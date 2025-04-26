@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import PDFDocument from "pdfkit";
 import fetch from "node-fetch";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 
 export const generateCertificateController = (dependencies: IDependencies) => {
@@ -80,13 +81,11 @@ export const generateCertificateController = (dependencies: IDependencies) => {
         .rect(20, 20, doc.page.width - 40, doc.page.height - 40)
         .stroke();
 
-      // Handle the thumbnail image
       const thumbnail = enrollment.courseId.basicDetails.thumbnail;
       if (thumbnail) {
         try {
           let imageBuffer: Buffer;
 
-          // Check if thumbnail is a URL
           if (typeof thumbnail === "string" && thumbnail.startsWith("http")) {
             const imageResponse = await fetch(thumbnail);
             if (!imageResponse.ok) {
@@ -94,7 +93,6 @@ export const generateCertificateController = (dependencies: IDependencies) => {
             }
             imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
           } else if (Buffer.isBuffer(thumbnail)) {
-            // If it's already a Buffer, use it directly
             imageBuffer = thumbnail;
           } else {
             console.warn("Thumbnail is not a valid URL or Buffer, skipping image");
@@ -105,27 +103,32 @@ export const generateCertificateController = (dependencies: IDependencies) => {
           doc.image(imageBuffer, 50, 50, { width: 100 });
         } catch (imageError) {
           console.error("Error adding image to PDF:", imageError);
-          // Continue without the image instead of failing
         }
       }
 
       doc.end();
     } catch (error: unknown) {
       if (error instanceof Error) {
-          console.error("Certificate generation error:", error.stack); // Log full stack trace
+          console.error("Certificate generation error:", error.stack);
           if (!res.headersSent) {
-              res.status(500).json({
-                  success: false,
-                  message: error.message || "Internal server error while generating certificate",
-              });
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(
+              createResponse(
+                  StatusCode.INTERNAL_SERVER_ERROR,
+                  undefined,
+                  error.message || "Internal server error while generating certificate" // Custom error message
+              )
+            );
           }
       } else {
           console.error("Certificate generation error: An unknown error occurred");
           if (!res.headersSent) {
-              res.status(500).json({
-                  success: false,
-                  message: "Internal server error while generating certificate",
-              });
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(
+              createResponse(
+                  StatusCode.INTERNAL_SERVER_ERROR,
+                  undefined,
+                  "Internal server error while generating certificate" // Custom error message
+              )
+            );
           }
       }
   }

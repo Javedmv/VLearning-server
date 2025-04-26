@@ -20,11 +20,30 @@ const connectSocketIo = (server: HttpServer) => {
         },
         transports: ['polling', 'websocket']  // Support both transports
     });
+    
 
     const userSocketMap: {[key: string]: string} = {};
     const activeRooms: {[key: string]: string[]} = {}; // Track users in each chat room
     const userRoles: {[key: string]: string} = {}; // Added to store user roles
     const activeStreams: Map<string, StreamInfo> = new Map(); // Track active streams
+
+    const findUserSocket = (userId: string) => {
+        const socketId = userSocketMap[userId];
+        if (!socketId) {
+          console.log(`No socket found for user ${userId}`);
+          return null;
+        }
+        
+        const socket = io.sockets.sockets.get(socketId);
+        if (!socket) {
+          console.log(`Socket ID ${socketId} exists in map but not in active connections`);
+          // Clean up stale mapping
+          delete userSocketMap[userId];
+          return null;
+        }
+        
+        return socket;
+      };
 
     io.on("connection", (socket) => {
         console.log("Socket connected:", socket.id);
@@ -37,6 +56,51 @@ const connectSocketIo = (server: HttpServer) => {
             // Broadcast online users
             io.emit("getOnlineUsers", Object.keys(userSocketMap));
         }
+
+        socket.on("forceLogout", (data) => {
+            console.log(`Force logout for user: ${data.userId}, reason: ${data.reason}`);
+            const userSocket = findUserSocket(data.userId);
+            
+            if (userSocket) {
+                // Forward the force logout event to the targeted user
+                userSocket.emit("forceLogout", { reason: data.reason });
+                
+                // Clean up any active sessions for this user
+                Object.keys(activeRooms).forEach(roomId => {
+                    if (activeRooms[roomId].includes(data.userId)) {
+                        // Remove user from room
+                        activeRooms[roomId] = activeRooms[roomId].filter(id => id !== data.userId);
+                        
+                        // Notify others in the room that user has left
+                        io.to(roomId).emit("userLeft", { userId: data.userId, reason: "blocked" });
+                    }
+                });
+                
+                // Handle any active streams this user might be part of
+                if (activeStreams.has(data.userId)) {
+                    // If user is streaming, end their stream
+                    const streamInfo = activeStreams.get(data.userId);
+                    if (streamInfo) {
+                        io.to(streamInfo.chatId).emit("streamEnded", {
+                            chatId: streamInfo.chatId,
+                            userId: data.userId,
+                            streamerName: "User",
+                            reason: "Account blocked"
+                        });
+                    }
+                    activeStreams.delete(data.userId);
+                }
+                
+                // Force disconnect this socket
+                userSocket.disconnect(true);
+                
+                // Clean up user mappings
+                delete userSocketMap[data.userId];
+                delete userRoles[data.userId];
+            } else {
+                console.log(`No active socket found for user ${data.userId}`);
+            }
+        });
 
         // Join a specific chat room
         socket.on("join", ({ chatId, userId }) => {

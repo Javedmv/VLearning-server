@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../../application/interfaces/IDependencies";
 import { ErrorResponse } from "../../../_lib/error";
 import enrollUserProducer from "../../../infrastructure/kafka/producers/enrollUserProducer";
+import { createResponse, StatusCode } from "../../../_lib/constants";
 
 export const postEnrollUserController = (dependencies:IDependencies) => {
     const {useCases:{enrollUserUseCase}} = dependencies;
@@ -11,7 +12,13 @@ export const postEnrollUserController = (dependencies:IDependencies) => {
                 return next(ErrorResponse.badRequest("Sorry, something went wrong please try again."))
             }
             if (!req.user) {
-                res.status(401).json({ success: false, message: "Authentication required: No User Provided" });
+                res.status(StatusCode.UNAUTHORIZED).json(
+                    createResponse(
+                        StatusCode.UNAUTHORIZED,
+                        undefined,
+                        "Authentication required: No User Provided"
+                    )
+                );
                 return;
             }
             const {courseId,userId} = req?.body;
@@ -22,18 +29,23 @@ export const postEnrollUserController = (dependencies:IDependencies) => {
             await enrollUserProducer(courseId,userId,"chat-srv-topic");
 
             if(!result){
-                res.status(404).json({
-                    success:false,
-                    message: "Something went wrong, please try again."
-                })
+                res.status(StatusCode.NOT_FOUND).json(
+                    createResponse(
+                        StatusCode.NOT_FOUND,
+                        undefined,
+                        "Something went wrong, please try again."
+                    )
+                );
                 return;
             }
 
-            res.status(200).json({
-                success:true,
-                data: result._id,
-                message: "Student enroll completed successfully."
-            })
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    result._id,
+                    "Student enroll completed successfully."
+                )
+            );
             return;
 
         } catch (error) {

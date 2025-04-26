@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
 import Stripe from "stripe";
 import { getCourseProducer, getUserProducer } from "../../infrastructure/kafka/producers";
+import { createResponse, StatusCode } from "../../_lib/constants/constants";
 
 export const createSessionController = (dependencies: IDependencies) => {
     const { useCases: { userAndCourseDetailsUseCase } } = dependencies;
@@ -18,13 +19,25 @@ export const createSessionController = (dependencies: IDependencies) => {
             // TODO: check here weither the userid is added to students[] check it in above producer as well as below useCase
             const { user, course } = await userAndCourseDetailsUseCase(dependencies).execute(userId, courseId);
             if (!user || !course) {
-                res.status(404).json({ message: "User or Course not found" });
+                res.status(StatusCode.NOT_FOUND).json(
+                    createResponse(
+                        StatusCode.NOT_FOUND,
+                        undefined,
+                        "User or Course not found"
+                    )
+                );
                 return;
             }
 
             if (typeof course?.pricing?.amount !== "number" || course?.pricing?.amount <= 0) {
                 console.error("Invalid course price:", course?.pricing?.amount);
-                res.status(400).json({ message: "Invalid course price" });
+                res.status(StatusCode.BAD_REQUEST).json(
+                    createResponse(
+                        StatusCode.BAD_REQUEST,
+                        undefined,
+                        "Invalid course price"
+                    )
+                );
                 return;
             }
 
@@ -74,16 +87,25 @@ export const createSessionController = (dependencies: IDependencies) => {
             //     session.id, course._id.toString(), user._id.toString()
             // );
             
-            res.status(200).json({
-                success: true,
-                data: session.url, // Payment link
-                sessionId: session.id
-            });
+            res.status(StatusCode.SUCCESS).json(
+                createResponse(
+                    StatusCode.SUCCESS,
+                    { url: session.url, sessionId: session.id },
+                    "Payment link generated successfully"
+                )
+            );
             return;
             
         } catch (error) {
             console.error("Error in createSessionController:", error);
-            res.status(500).json({ message: "Internal Server Error", error });
+
+            res.status(StatusCode.INTERNAL_SERVER_ERROR).json(
+                createResponse(
+                    StatusCode.INTERNAL_SERVER_ERROR,
+                    { error }, // Including the error in the data
+                    "Internal Server Error"
+                )
+            );
         }
     };
 };
