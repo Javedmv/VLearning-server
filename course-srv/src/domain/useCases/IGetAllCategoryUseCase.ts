@@ -1,5 +1,6 @@
 import { CategoryEntity } from "../entities";
+import { CourseFilters } from "../entities/CourseFilter";
 
 export interface IGetAllCategoryUseCase {
-    execute(): Promise<CategoryEntity[] | null>
+    execute(filters:CourseFilters):Promise<{categorys: CategoryEntity[];totalCategories: number;} | null>
 }

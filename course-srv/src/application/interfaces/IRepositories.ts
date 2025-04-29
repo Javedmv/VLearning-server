@@ -5,7 +5,7 @@ import { LessonObject } from "../../presentation/controllers/courseController/po
 
 export interface IRepositories {
     addCategory:(category:CategoryEntity) => Promise<CategoryEntity | null>
-    getAllCategory: () => Promise<CategoryEntity[] | null>
+    getAllCategory: (filters:CourseFilters) => Promise<{categorys: CategoryEntity[];totalCategories: number;} | null>
     updateCategory: (catId:string, category:UpdateCategoryEntity) => Promise<CategoryEntity | null>;
     updateCategoryStatus: (catId:string, status:Boolean) => Promise<Boolean | null>;
     deleteCategory: (catId:string) => Promise<CategoryEntity | null>
