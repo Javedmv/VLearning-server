@@ -36,3 +36,11 @@ export interface CourseEntity extends Document {
 }
 
 export default CourseEntity;
+
+export interface CourseFilters {
+  search?: string;
+  sortBy?: string;
+  categories?: string;
+  page: number;
+  limit: number;
+}

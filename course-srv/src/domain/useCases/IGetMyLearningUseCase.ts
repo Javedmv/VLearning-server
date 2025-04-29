@@ -1,6 +1,6 @@
 import { TOBE } from "../../_lib/common/Tobe";
-import { CourseEntity } from "../entities";
+import { CourseFilters } from "../entities/CourseFilter";
 
 export interface getMyLearningUseCase {
-    execute(userId:string) : Promise<TOBE>
+    execute(userId:string,filters:CourseFilters) : Promise<TOBE>
 }

@@ -4,6 +4,7 @@ import { getPublicUrl } from "../../../_lib/s3/s3bucket";
 import { ErrorResponse } from "../../../_lib/error";
 import { TOBE } from "../../../_lib/common/Tobe";
 import { createResponse, StatusCode } from "../../../_lib/constants";
+import { CourseFilters } from "../../../domain/entities/CourseFilter";
 
 export const getMyLearningController = (dependencies:IDependencies) => {
     const {useCases:{ getMyLearningUseCase }} = dependencies;
@@ -12,9 +13,15 @@ export const getMyLearningController = (dependencies:IDependencies) => {
             if(!req.user){
                 throw ErrorResponse.unauthorized("User not found.")
             }
-            const userId = req.user._id;
+            const userId = req?.user?._id;
 
-            let enrollments = await getMyLearningUseCase(dependencies).execute(userId);
+            const {page, limit} = req?.query;
+            const filters:CourseFilters = {
+                page: parseInt(page as string, 10) || 1,
+                limit: parseInt(limit as string, 10) || 6,
+            }
+
+            let {enrollments, total} = await getMyLearningUseCase(dependencies).execute(userId,filters);
 
             if (!enrollments) {
                 res.status(StatusCode.NOT_FOUND).json(
@@ -57,11 +64,18 @@ export const getMyLearningController = (dependencies:IDependencies) => {
 
                 return { ...enrollment.toObject(), courseId: updatedCourse };
             }));
+            const totalPages = Math.ceil(total / filters.limit);
+            const meta = {
+                page: filters.page,
+                limit: filters.limit,
+                total,
+                totalPages
+            }
             
             res.status(StatusCode.SUCCESS).json(
                 createResponse(
                     StatusCode.SUCCESS,
-                    updatedEnrollments
+                    {updatedEnrollments, meta},
                 )
             );
             return

@@ -11,7 +11,7 @@ export const routes = (dependencies:IDependencies) => {
 
     const router = Router();
 
-    router.route("/history/:id").get(getPaymentHistory)
+    router.route("/history").get(jwtMiddleware,getPaymentHistory)
     router.route("/webhook").post(
         express.raw({ type: "application/json" }), // Ensures raw body is parsed
         stripeWebhook

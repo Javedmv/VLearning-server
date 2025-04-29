@@ -10,7 +10,6 @@ export interface InstructorUserResult {
 
 export const getInstructorUser = async(filters: CourseFilters): Promise<TOBE> => {
     try {
-        console.log(filters, "filters in repository");
         const totalInstructor = await User.find({ role: "instructor" }).countDocuments();
 
         const instructorUser = await User.find({ role: "instructor" })

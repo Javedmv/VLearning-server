@@ -19,7 +19,7 @@ export interface IRepositories {
     getAllCoursesInstructor:(instructorId:string) => Promise<TOBE>;
     editCourse: (courseId:string, updates:TOBE,removeLessonIndex: number[]) => Promise<TOBE>;
 
-    getAllMyLearning:(userId:string) => Promise<TOBE>
+    getAllMyLearning:(userId:string,filters:CourseFilters) => Promise<TOBE>
     courseDetailMyLearning(enrollmentId:string,userId:string): Promise<IEnrollmentProgressResult[]>
     updateProgress(enrollmentId:string,lessonObject:LessonObject,allLessons:LessonObject[]): Promise<TOBE>
 
