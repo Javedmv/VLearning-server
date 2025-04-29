@@ -19,7 +19,7 @@ export interface IRepositories {
     updateProfile: (userId:string, data:UserEntity) => Promise<UserEntity | null>;
     updateReapply: (args: string[]) => Promise<UserEntity | null>;
     addBanner: ({title, status, type, imageUrl ,description,priority}:IAddBanner.Params) => Promise<TOBE>;
-    getAllBanner: () => Promise<IAddBanner.Result[] | null>;
+    getAllBanner: (filter:CourseFilters) => Promise<{ banner: IAddBanner.Result[]; total: number} | []>;
     deleteBanner: (id:string) => Promise<IAddBanner.Result>;
     toggleBannerStatus: (id:string, status:boolean) => Promise<boolean>;
     getAllActiveBanner: () => Promise<IAddBanner.Result[]>
