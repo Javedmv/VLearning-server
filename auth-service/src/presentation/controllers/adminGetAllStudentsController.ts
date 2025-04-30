@@ -6,10 +6,11 @@ export const adminGetAllStudentsController = (dependencies:IDependencies) => {
 
     return async(req:Request, res:Response, next:NextFunction) => {
         try {
-            const { page, limit} = req.query;
+            const { page, limit, search} = req.query;
             const filters = {
                 page: parseInt(page as string, 10) || 1,
                 limit: parseInt(limit as string, 10) || 6,
+                search: search ? (search as string).toString() : "",
             }
             const {studentUser, totalStudents } = await getAllStudentsUseCase(dependencies).execute(filters);
 

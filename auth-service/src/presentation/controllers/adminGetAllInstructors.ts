@@ -14,10 +14,11 @@ export const adminGetAllInstructorsController = (dependencies:IDependencies) => 
                 })
                 return;
             }
-            const {page ,limit} = req.query;
+            const {page ,limit , search} = req.query;
             const filters = {
                 page: parseInt(page as string, 10) || 1,
                 limit: parseInt(limit as string, 10) || 8,
+                search: search?.toString() as string || "",
             }
             const {  instructorUser = [],  totalInstructor = 0 } = await getAllInstructorsUseCase(dependencies).execute(filters);
             
