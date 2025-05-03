@@ -1,4 +1,4 @@
-import { compare } from "bcrypt"
+import {compare} from '@node-rs/bcrypt';
 
 export const comparePassword = async (original: string, encrypted: string): Promise<boolean> => {
     try {

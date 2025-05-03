@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IDependencies } from "../../application/interfaces/IDependencies";
-import { compare } from 'bcrypt';
+import { compare } from '@node-rs/bcrypt';;
 import { ErrorResponse } from "../../_lib/common/error";
-import { hash } from 'bcrypt';
 import { hashPassword } from '../../_lib/bcrypt/hashPassword';
 import { createResponse, StatusCode } from "../../_lib/common";
 
