@@ -30,7 +30,7 @@ app.use('*',(req:Request,res:Response)=>{
 app.use(errorHandler)
 
 app.listen(PORT,() => {
-    console.log(`auth server running on port: http://localhost${PORT}`);
+    console.log(`auth server running on ports: http://localhost${PORT}`);
 })
 
 export default app;

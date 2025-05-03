@@ -44,7 +44,7 @@ app.use(routes(fullDependencies));
 app.use(errorHandler)
 
 server.listen(PORT,() => {
-    console.log(`Chat server running on port: http://localhost${PORT}`);
+    console.log(`Chat server running on ports: http://localhost${PORT}`);
 })
 
 export default app;

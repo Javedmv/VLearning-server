@@ -22,7 +22,7 @@ app.get("/",(req:Request, res:Response) => {
 app.use("/notification", notificationRoutes(dependencies))
 
 app.listen(PORT,() => {
-    console.log(`connected to notification service at http://localhost:${PORT}`);  
+    console.log(`connected to notification services at http://localhost:${PORT}`);  
 })
 
 export default app;
