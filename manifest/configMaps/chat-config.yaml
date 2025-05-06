@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chat-config
+  labels:
+    app: vlearning-chat-service
+data:
+  PORT: "3005"
+  MONGO_URI: "mongodb+srv://javedmv777:IbRGBvUceBGuJWvL@cluster0.d07jm.mongodb.net/chat?retryWrites=true&w=majority&appName=Cluster0"
+  CLIENT_URL: "http://localhost:5173"
+  JWT_ACCESS_TOKEN_SECRET: "97f69b2fb4b08c9608d5ae726bcb2b65bf67d41a3c4fcb90925a1bd3d6a32ca"
+  JWT_REFRESH_TOKEN_SECRET: "437f23b483f96edff214e585cfc00b739f7fbca02be34948e405a22c559cffaf"
+  WHEREBY_API_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmFwcGVhci5pbiIsImF1ZCI6Imh0dHBzOi8vYXBpLmFwcGVhci5pbi92MSIsImV4cCI6OTAwNzE5OTI1NDc0MDk5MSwiaWF0IjoxNzQ1NjUxNDE3LCJvcmdhbml6YXRpb25JZCI6MzE0ODYwLCJqdGkiOiIwZjc4ZGNlNS01ODkzLTQxYTctOTdjNS0xODUxYzAyMmE0NGQifQ.VHNBiRrh3JnBi7kNs0vG5AjKl_LC2PU6WAyN2Pu8O_o"

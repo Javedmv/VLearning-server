@@ -26,6 +26,6 @@ app.use('*', (req, res) => {
 });
 app.use(error_1.errorHandler);
 app.listen(config_1.PORT, () => {
-    console.log(`auth server running on port: http://localhost${config_1.PORT}`);
+    console.log(`auth server running on ports: http://localhost${config_1.PORT}`);
 });
 exports.default = app;

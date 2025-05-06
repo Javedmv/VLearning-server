@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vlearning-notification-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vlearning-notification-service
+  template:
+    metadata:
+      labels:
+        app: vlearning-notification-service
+    spec:
+      containers:
+        - name: vlearning-notification-service
+          image: javedmv/notification-service:latest  # Replace with your actual Docker image name
+          ports:
+            - containerPort: 3002
+          envFrom:
+            - configMapRef:
+                name: notification-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vlearning-notification-service
+spec:
+  selector:
+    app: vlearning-notification-service
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3002
