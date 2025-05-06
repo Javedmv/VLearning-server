@@ -1,0 +1,59 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vlearning-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod  # ✅ Change if you're not using Let's Encrypt or using a different issuer
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "v-learning-client-5r8j.vercel.app"  # 🔧 Change to your actual frontend domain
+    nginx.ingress.kubernetes.io/enable-access-log: "true"
+    nginx.ingress.kubernetes.io/websocket-services: "vlearning-chat-service"  # ✅ Ensure this matches your chat service name
+spec:
+  ingressClassName: webapprouting.kubernetes.azure.com  # 🔧 Change if not using Azure or a different ingress class
+  rules:
+    - host: vlearning.live  # 🔧 Change to your actual domain
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: vlearning-auth-service  # ✅ Make sure service name matches your K8s service
+                port:
+                  number: 3001
+          - path: /course
+            pathType: Prefix
+            backend:
+              service:
+                name: vlearning-course-srv  # ✅ Confirm this matches your course service name
+                port:
+                  number: 3003
+          - path: /notification
+            pathType: Prefix
+            backend:
+              service:
+                name: vlearning-notification-service
+                port:
+                  number: 3002
+          - path: /payment
+            pathType: Prefix
+            backend:
+              service:
+                name: vlearning-payment-srv
+                port:
+                  number: 3004
+          - path: /chat
+            pathType: Prefix
+            backend:
+              service:
+                name: vlearning-chat-service
+                port:
+                  number: 3005
+          - path: /socket.io
+            pathType: Prefix
+            backend:
+              service:
+                name: vlearning-chat-service
+                port:
+                  number: 3005
