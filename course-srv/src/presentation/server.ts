@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 // app.use(bodyParser.text({type: '/'}));
 app.use(cors({
-    origin: 'http://localhost:5173', // Your frontend URL
+    origin: 'https://welearning.online',
     credentials: true,
     allowedHeaders: ['Range', 'Authorization', 'Content-Type','Accept'],
     exposedHeaders: ['Content-Disposition','Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],

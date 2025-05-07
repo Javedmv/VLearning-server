@@ -33,7 +33,7 @@ app.get("/",(req:Request, res:Response) => {
 app.use(routes(dependencies))
 
 app.listen(PORT,() => {
-    console.log(`connected to Payment services at http://localhost:${PORT}`);  
+    console.log(`connected to Payment services ats http://localhost:${PORT}s`);  
 })
 
 export default app;

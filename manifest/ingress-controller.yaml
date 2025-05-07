@@ -8,25 +8,40 @@ metadata:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/cors-allow-origin: "v-learning-client-5r8j.vercel.app"  # 🔧 Change to your actual frontend domain
     nginx.ingress.kubernetes.io/enable-access-log: "true"
-    nginx.ingress.kubernetes.io/websocket-services: "vlearning-chat-service"  # ✅ Ensure this matches your chat service name
+    nginx.ingress.kubernetes.io/websocket-services: "chat-service"  # ✅ Ensure this matches your chat service name
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com  # 🔧 Change if not using Azure or a different ingress class
   rules:
-    - host: vlearning.live  # 🔧 Change to your actual domain
+    - host: welearning.online
       http:
         paths:
-          - path: /auth
-            pathType: Prefix
+          - path: /auth/multipart(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: vlearning-auth-service  # ✅ Make sure service name matches your K8s service
+                name: vlearning-auth-service
                 port:
                   number: 3001
-          - path: /course
-            pathType: Prefix
+          - path: /auth(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
-                name: vlearning-course-srv  # ✅ Confirm this matches your course service name
+                name: vlearning-auth-service
+                port:
+                  number: 3001
+          - path: /course/multipart(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: vlearning-course-srv
+                port:
+                  number: 3003
+
+          - path: /course(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: vlearning-course-srv
                 port:
                   number: 3003
           - path: /notification
