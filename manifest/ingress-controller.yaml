@@ -4,9 +4,14 @@ metadata:
   name: vlearning-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Disable automatic SSL redirect
-    nginx.ingress.kubernetes.io/rewrite-target: /$2    # Rewrite path to remove prefix
-    nginx.ingress.kubernetes.io/use-regex: "true"      # Enable regex in paths
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true" 
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://v-learning-client-5r8j.vercel.app"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, PATCH, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Range"
+    nginx.ingress.kubernetes.io/cors-expose-headers: "Content-Disposition,Content-Range,Accept-Ranges,Content-Length,Content-Type"
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
 spec:
   rules:
   - host: welearning.online
@@ -54,8 +59,3 @@ spec:
             name: vlearning-frontend
             port:
               number: 80
-  # If you're using HTTPS, add TLS configuration here
-  # tls:
-  # - hosts:
-  #   - welearning.online
-  #   secretName: welearning-tls
