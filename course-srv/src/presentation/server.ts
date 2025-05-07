@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 // app.use(bodyParser.text({type: '/'}));
 app.use(cors({
-    origin: 'https://welearning.online',
+    origin: 'https://v-learning-client-5r8j.vercel.app',
     credentials: true,
     allowedHeaders: ['Range', 'Authorization', 'Content-Type','Accept'],
     exposedHeaders: ['Content-Disposition','Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
