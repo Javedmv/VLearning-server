@@ -1,3 +1,4 @@
+// Updated routes.ts file with improved logging and error handling
 import { Application, Request, Response } from "express";
 import proxy from "express-http-proxy";
 import { Service } from "./config";
@@ -6,14 +7,14 @@ import { Service } from "./config";
 const createMultipartProxy = (serviceUrl: string) => {
     return proxy(serviceUrl, {
         proxyReqPathResolver(req) {
-            console.log(`Creating multipart proxy for ${serviceUrl}${req.url}`);
+            console.log(`Multipart proxy: ${serviceUrl}${req.url}`);
             return "/multipart" + req.url;
         },
         parseReqBody: false,
         reqBodyEncoding: null,
         proxyErrorHandler: function(err, res, next) {
             console.error(`Multipart proxy error for ${serviceUrl}: ${err.message}`);
-            res.status(500).json({ error: `Service temporarily unavailable: ${err.message}` });
+            res.status(500).json({ error: `Service unavailable: ${err.message}` });
         }
     });
 };
@@ -22,66 +23,53 @@ const createMultipartProxy = (serviceUrl: string) => {
 const createRegularProxy = (serviceUrl: string) => {
     return proxy(serviceUrl, {
         proxyReqPathResolver(req) {
-            console.log(`Proxying request to ${serviceUrl}${req.url}`);
+            console.log(`Regular proxy: ${serviceUrl}${req.url}`);
             return req.url;
         },
         userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
             console.log(`Response from ${serviceUrl}${userReq.url}: Status ${proxyRes.statusCode}`);
-            try {
-                return proxyResData;
-            } catch (e) {
-                console.error('Error in response decorator:', e);
-                return proxyResData;
-            }
+            // Don't modify headers that might cause redirects
+            return proxyResData;
         },
         proxyErrorHandler: function(err, res, next) {
             console.error(`Proxy error for ${serviceUrl}: ${err.message}`);
-            res.status(500).json({ error: `Service temporarily unavailable: ${err.message}` });
+            res.status(500).json({ error: `Service unavailable: ${err.message}` });
         },
         timeout: 60000
     });
 };
 
 export const routes = (app: Application) => {
-    // Add a root health check endpoint
-    app.get("/", (req: Request, res: Response) => {
-        res.status(200).json({ status: "API Gateway is running", services: Object.keys(Service) });
+    // Add more debugging for incoming requests
+    app.use((req, res, next) => {
+        console.log(`API Gateway received: ${req.method} ${req.url}`);
+        console.log(`Headers: ${JSON.stringify(req.headers, null, 2)}`);
+        next();
     });
-    
+
     app.get("/health", (req: Request, res: Response) => {
-        res.status(200).json({ status: "API Gateway is running" });
+        res.status(200).json({ status: "api-gateway is running" });
     });
 
     // Use multipart proxy only for file upload routes
     app.use("/auth/multipart", createMultipartProxy(Service.AUTH_SERVICE_URL));
     // Use regular proxy for other auth routes
     app.use("/auth", createRegularProxy(Service.AUTH_SERVICE_URL));
-    
+
     app.use("/notification", createRegularProxy(Service.NOTIFICATION_SERVICE_URL));
-    
+
     // Use multipart proxy only for file upload routes
     app.use("/course/multipart", createMultipartProxy(Service.COURSE_SERVICE_URL));
     // Use regular proxy for other course routes
     app.use("/course", createRegularProxy(Service.COURSE_SERVICE_URL));
-    
+
     app.use("/payment", createRegularProxy(Service.PAYMENT_SERVICE_URL));
-    
+
     app.use("/chat", createRegularProxy(Service.CHAT_SERVICE_URL));
     
-    // Improve 404 handling with more information
+    // Catch-all route handler
     app.use("*", (req: Request, res: Response) => {
         console.log(`404 Not Found: ${req.method} ${req.originalUrl}`);
-        res.status(404).json({
-            error: "Route not found", 
-            path: req.originalUrl,
-            availableRoutes: [
-                "/health",
-                "/auth/*",
-                "/notification/*",
-                "/course/*",
-                "/payment/*",
-                "/chat/*"
-            ]
-        });
+        res.status(404).json({ error: "route not found" });
     });
 };

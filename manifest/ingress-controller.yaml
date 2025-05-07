@@ -3,31 +3,59 @@ kind: Ingress
 metadata:
   name: vlearning-ingress
   annotations:
-    nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://v-learning-client-5r8j.vercel.app"
-    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, PATCH, OPTIONS"
-    nginx.ingress.kubernetes.io/cors-allow-headers: "Content-Type, Authorization, Cookie, Range, Accept"
-    nginx.ingress.kubernetes.io/cors-expose-headers: "Content-Disposition, Content-Range, Accept-Ranges, Content-Length, Content-Type"
-    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"  # Adjust if you need to handle large files
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"  # Disable automatic SSL redirect
+    nginx.ingress.kubernetes.io/rewrite-target: /$2    # Rewrite path to remove prefix
+    nginx.ingress.kubernetes.io/use-regex: "true"      # Enable regex in paths
 spec:
-  ingressClassName: webapprouting.kubernetes.azure.com
-  tls:
-  - hosts:
-    - welearning.online
-    secretName: welearning-tls
   rules:
-    - host: welearning.online
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: vlearning-api-gateway
-                port:
-                  number: 3000
+  - host: welearning.online
+    http:
+      paths:
+      - path: /auth(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: vlearning-api-gateway
+            port:
+              number: 3000
+      - path: /course(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: vlearning-api-gateway
+            port:
+              number: 3000
+      - path: /notification(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: vlearning-api-gateway
+            port:
+              number: 3000
+      - path: /payment(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: vlearning-api-gateway
+            port:
+              number: 3000
+      - path: /chat(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: vlearning-api-gateway
+            port:
+              number: 3000
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: vlearning-frontend
+            port:
+              number: 80
+  # If you're using HTTPS, add TLS configuration here
+  # tls:
+  # - hosts:
+  #   - welearning.online
+  #   secretName: welearning-tls
