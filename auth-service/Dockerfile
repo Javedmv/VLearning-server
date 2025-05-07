@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:alpine
 WORKDIR /app
 
 # Copy package files and install all dependencies (including dev dependencies)

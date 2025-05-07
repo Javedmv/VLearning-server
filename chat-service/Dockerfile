@@ -1,5 +1,5 @@
 # Development stage Dockerfile for chat-service
-FROM node:20
+FROM node:alpine
 
 # Set working directory
 WORKDIR /app
