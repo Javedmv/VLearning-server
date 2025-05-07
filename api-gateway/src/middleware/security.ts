@@ -19,7 +19,7 @@ export const applySecurityMiddleware = (app: Application) => {
     console.log('Setting up CORS with client URL:', Service.CLIENT_URL);
     
     app.use(cors({
-        origin: Service.CLIENT_URL,
+        origin: "*",
         methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
