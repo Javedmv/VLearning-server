@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:20
 WORKDIR /app
 
 # Copy package files and install all dependencies (including dev dependencies)
