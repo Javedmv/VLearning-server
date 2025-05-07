@@ -21,7 +21,7 @@ app.get("/",(req:Request, res:Response) => {
 
 app.use("/notification", notificationRoutes(dependencies))
 
-app.listen(PORT,() => {
+app.listen(PORT,'0.0.0.0',() => {
     console.log(`connected to notification services at http://localhost:${PORT}`);  
 })
 
