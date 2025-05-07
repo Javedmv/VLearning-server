@@ -20,13 +20,23 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookieParser());
 
 const allowedOrigins = process.env.CLIENT_URL;
-const corsOptions = {
-    origin: allowedOrigins,
-    methods: ["GET,HEAD,PUT,POST,DELETE,OPTIONS"],
-    credentials : true
-}
 
-app.use(cors(corsOptions));
+// const corsOptions = {
+//     origin: allowedOrigins,
+//     methods: ["GET,HEAD,PUT,POST,DELETE,OPTIONS"],
+//     credentials : true
+// }
+
+// app.use(cors(corsOptions));
+
+app.use(cors({
+    origin:allowedOrigins,
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
+    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
+
 
 const server = createServer(app);
 

@@ -21,12 +21,21 @@ if(process.env.NODE_ENV === "development"){
     app.use(morgan("dev"))
 }
 
+// app.use(cors({
+//     origin: 'https://v-learning-client-5r8j.vercel.app',
+//     credentials: true,
+//     allowedHeaders: ['Range', 'Authorization', 'Content-Type','Accept'],
+//     exposedHeaders: ['Content-Disposition','Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+// }));
+
+
 app.use(cors({
     origin: 'https://v-learning-client-5r8j.vercel.app',
+    methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
-    allowedHeaders: ['Range', 'Authorization', 'Content-Type','Accept'],
-    exposedHeaders: ['Content-Disposition','Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
+    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
 }));
 
 app.use('/',routes(dependencies));

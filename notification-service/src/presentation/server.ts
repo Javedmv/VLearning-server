@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { notificationRoutes } from '../infrastructure/routes';
 import { dependencies } from '../__boot/dependencies';
+import cors from 'cors'
 
 dotenv.config();
 
@@ -12,6 +13,15 @@ const PORT:number = Number(process.env.PORT || 3002);
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
+
+app.use(cors({
+    origin: 'https://v-learning-client-5r8j.vercel.app',
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
+    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
+
 
 app.get("/",(req:Request, res:Response) => {
     res.status(200).json({
