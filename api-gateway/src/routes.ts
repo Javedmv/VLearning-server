@@ -49,7 +49,7 @@ const createRegularProxy = (serviceUrl: string) => {
 
 export const routes = (app: Application) => {
     app.get("/health", (req:Request, res:Response) => {
-        res.status(200).json({status: "api-gateway is running"})
+        res.status(200).json({status: "api-gateway is runnings"})
     })
 
     // Use multipart proxy only for file upload routes

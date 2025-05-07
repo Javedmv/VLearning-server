@@ -4,13 +4,13 @@ metadata:
   name: vlearning-ingress
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-prod  # ✅ Change if you're not using Let's Encrypt or using a different issuer
+    cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "v-learning-client-5r8j.vercel.app"  # 🔧 Change to your actual frontend domain
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://v-learning-client-5r8j.vercel.app"
     nginx.ingress.kubernetes.io/enable-access-log: "true"
-    nginx.ingress.kubernetes.io/websocket-services: "chat-service"  # ✅ Ensure this matches your chat service name
+    nginx.ingress.kubernetes.io/websocket-services: "vlearning-chat-service"
 spec:
-  ingressClassName: webapprouting.kubernetes.azure.com  # 🔧 Change if not using Azure or a different ingress class
+  ingressClassName: webapprouting.kubernetes.azure.com
   rules:
     - host: welearning.online
       http:
@@ -36,7 +36,6 @@ spec:
                 name: vlearning-course-srv
                 port:
                   number: 3003
-
           - path: /course(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
