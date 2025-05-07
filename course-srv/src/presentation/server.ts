@@ -1,8 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import { config } from 'dotenv';
-import bodyParser from "body-parser";
-import helmet from 'helmet';
+// import bodyParser from "body-parser";
+// import helmet from 'helmet';
 
 
 config();
@@ -10,7 +10,7 @@ config();
 import { errorHandler } from "../_lib/error";
 import {routes} from "../infrastructure/routes";
 import { dependencies } from "../__boot/dependencies";
-import  cors  from 'cors';
+// import  cors  from 'cors';
 
 
 const app: Application = express();
@@ -31,19 +31,19 @@ app.use(cookieParser());
 // }));
 
 
-app.use(cors({
-    origin: 'https://v-learning-client-5r8j.vercel.app',
-    credentials: true,
-    allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
-    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-}));
+// app.use(cors({
+//     origin: 'https://v-learning-client-5r8j.vercel.app',
+//     credentials: true,
+//     allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
+//     exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
+//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+// }));
 
 
 // Add helmet with CORP configuration
-app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
+// app.use(helmet({
+//     crossOriginResourcePolicy: { policy: "cross-origin" }
+// }));
 
 app.get("/",(req:Request, res:Response) => {
     res.status(200).json({
