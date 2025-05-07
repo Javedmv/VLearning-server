@@ -30,23 +30,13 @@ if(process.env.NODE_ENV === "development"){
 // }));
 
 
-// app.use(cors({
-//     origin: 'https://v-learning-client-5r8j.vercel.app',
-//     methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
-//     credentials: true,
-//     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
-//     exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
-// }));
-
-const corsOptions = {
-    origin: '*' ,
+app.use(cors({
+    origin: 'https://v-learning-client-5r8j.vercel.app',
     methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
     exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
-  };
-
-app.use(cors(corsOptions));
+}));
 
 app.use('/',routes(dependencies));
 

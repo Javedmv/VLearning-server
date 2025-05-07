@@ -19,6 +19,7 @@ export const redirectDebugMiddleware = (req: Request, res: Response, next: Funct
     cookies: req.cookies,
     query: req.query,
   };
+  console.log(requestInfo,"request information")
 
   // Clean up sensitive information
   if (requestInfo.headers.authorization) {
@@ -27,6 +28,17 @@ export const redirectDebugMiddleware = (req: Request, res: Response, next: Funct
   if (requestInfo.headers.cookie) {
     requestInfo.headers.cookie = '[REDACTED]';
   }
+  console.log({
+    message: "Redirect debugging information",
+    requestInfo,
+    serverInfo: {
+      timestamp: new Date().toISOString(),
+      nodeVersion: process.version,
+      env: {
+        NODE_ENV: process.env.NODE_ENV,
+      }
+    }
+  })
 
   res.status(200).json({
     message: "Redirect debugging information",
