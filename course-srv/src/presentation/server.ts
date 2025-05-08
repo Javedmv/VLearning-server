@@ -10,7 +10,7 @@ config();
 import { errorHandler } from "../_lib/error";
 import {routes} from "../infrastructure/routes";
 import { dependencies } from "../__boot/dependencies";
-// import  cors  from 'cors';
+import  cors  from 'cors';
 
 
 const app: Application = express();
@@ -31,13 +31,13 @@ app.use(cookieParser());
 // }));
 
 
-// app.use(cors({
-//     origin: 'https://v-learning-client-5r8j.vercel.app',
-//     credentials: true,
-//     allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
-//     exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-// }));
+app.use(cors({
+    origin: 'https://v-learning-client-5r8j.vercel.app',
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
+    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','HEAD']
+}));
 
 
 // Add helmet with CORP configuration

@@ -8,7 +8,7 @@ import { dependencies } from "../__boot/dependencies";
 import { createServer } from "http";
 import connectSokcetIo from "../infrastructure/socket/connection";
 import { SocketService } from "../infrastructure/socket/SocketService";
-// import cors from 'cors';
+import cors from 'cors';
 import { errorHandler } from "../_lib/error";
 
 dotenv.config();
@@ -29,13 +29,13 @@ const allowedOrigins = process.env.CLIENT_URL;
 
 // app.use(cors(corsOptions));
 
-// app.use(cors({
-//     origin:allowedOrigins,
-//     credentials: true,
-//     allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
-//     exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-// }));
+app.use(cors({
+    origin:allowedOrigins,
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
+    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','HEAD']
+}));
 
 
 const server = createServer(app);

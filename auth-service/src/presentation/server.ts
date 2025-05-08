@@ -10,7 +10,7 @@ import { dependencies } from "../__boot/dependencies";
 import { routes } from "../infrastructure/routes";
 import { errorHandler } from "../_lib/common/error";
 // import { multerError } from "../_lib/common/error/multerError";
-// import cors from "cors";
+import cors from "cors";
 const app:Application = express();
 
 app.use(express.json())
@@ -30,13 +30,13 @@ if(process.env.NODE_ENV === "development"){
 // }));
 
 
-// app.use(cors({
-//     origin: 'https://v-learning-client-5r8j.vercel.app',
-//     methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
-//     credentials: true,
-//     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
-//     exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
-// }));
+app.use(cors({
+    origin: 'https://v-learning-client-5r8j.vercel.app',
+    methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
+    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
+}));
 
 app.use('/',routes(dependencies));
 
