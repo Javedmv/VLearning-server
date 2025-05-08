@@ -31,10 +31,10 @@ const allowedOrigins = process.env.CLIENT_URL;
 
 app.use(cors({
     origin:allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','HEAD'],
     credentials: true,
-    allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
-    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','HEAD']
+    // allowedHeaders: ['Authorization', 'Content-Type', 'Range', 'Accept'],
+    // exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type'],
 }));
 
 

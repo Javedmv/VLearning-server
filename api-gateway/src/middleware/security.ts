@@ -22,8 +22,8 @@ export const applySecurityMiddleware = (app: Application) => {
         origin: "*",
         methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
         credentials: true,
-        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
-        exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
+        // allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
+        // exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
     }));
     
     const limiter = rateLimit({

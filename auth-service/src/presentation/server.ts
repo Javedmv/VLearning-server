@@ -34,8 +34,8 @@ app.use(cors({
     origin: 'https://v-learning-client-5r8j.vercel.app',
     methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
-    exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
+    // allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
+    // exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
 }));
 
 app.use('/',routes(dependencies));
