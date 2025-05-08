@@ -22,7 +22,10 @@ export const applySecurityMiddleware = (app: Application) => {
     // Apply rate limiter if needed
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutes
-        max: 100
+        max: 100,
+        standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+        legacyHeaders: false,
     });
+    
     app.use(limiter);
 };
