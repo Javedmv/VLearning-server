@@ -5,31 +5,24 @@ import { Application } from "express";
 import { Service } from "../config";
 
 export const applySecurityMiddleware = (app: Application) => {
-    // Add request logging
-    // app.use((req: Request, res: Response, next: NextFunction) => {
-    //     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    //     console.log('Headers:', JSON.stringify(req.headers));
-    //     next();
-    // });
+    // Apply Helmet with CORS-friendly settings
+    app.use(helmet({
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+    }));
 
-    // app.use(helmet({
-    //     crossOriginResourcePolicy: { policy: "cross-origin" },
-    // }));
-
-    // console.log('Setting up CORS with client URL:', Service.CLIENT_URL);
-    
+    // Configure CORS properly
     app.use(cors({
-        origin: "*",
+        origin: [Service.CLIENT_URL, "https://welearning.online"],
         methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
         credentials: true,
-        // allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept'],
-        // exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
+        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept', 'X-Requested-With'],
+        exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
     }));
-    
+
+    // Apply rate limiter if needed
     const limiter = rateLimit({
-        windowMs: 15 * 60 * 1000, // 15 minutes (fixed from 15 * 16 * 1000 which was incorrect)
+        windowMs: 15 * 60 * 1000, // 15 minutes
         max: 100
     });
-    
     app.use(limiter);
 };
