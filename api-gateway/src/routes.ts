@@ -47,6 +47,18 @@ export const routes = (app: Application) => {
         next();
     });
 
+    app.options('*', (req, res) => {
+        res.status(204).end();
+    });
+
+    app.get("/test-cors", (req: Request, res: Response) => {
+        res.header("Access-Control-Allow-Origin", "https://v-learning-client-5r8j.vercel.app");
+        res.header("Access-Control-Allow-Credentials", "true");
+        res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+        res.status(200).json({status: "CORS test successful"});
+    });
+
     app.get("/health", (req: Request, res: Response) => {
         res.status(200).json({ status: "api-gateway is running" });
     });

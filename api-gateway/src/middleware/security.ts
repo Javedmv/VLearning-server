@@ -12,7 +12,7 @@ export const applySecurityMiddleware = (app: Application) => {
 
     // Configure CORS properly
     app.use(cors({
-        origin: [Service.CLIENT_URL, "https://welearning.online"],
+        origin: true,
         methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept', 'X-Requested-With'],
