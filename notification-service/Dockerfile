@@ -1,6 +1,6 @@
 
 # Development stage Dockerfile for notification-service
-FROM node:alpine
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app

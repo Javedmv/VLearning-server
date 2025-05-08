@@ -1,5 +1,5 @@
 # Development stage Dockerfile for payment-srv
-FROM node:alpine
+FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app

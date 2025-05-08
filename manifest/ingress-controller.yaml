@@ -6,12 +6,20 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-origin: "https://v-learning-client-5r8j.vercel.app,https://welearning.online"
-    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, PUT, POST, DELETE, PATCH, OPTIONS"
-    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,X-Custom-Header,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Range,Accept,Origin"
-    nginx.ingress.kubernetes.io/cors-expose-headers: "Content-Disposition,Content-Range,Accept-Ranges,Content-Length,Content-Type"
-    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "false"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Access-Control-Allow-Origin: https://v-learning-client-5r8j.vercel.app";
+      more_set_headers "Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS";
+      more_set_headers "Access-Control-Allow-Headers: Authorization, Content-Type, X-Requested-With";
+      more_set_headers "Access-Control-Allow-Credentials: true";
+      
+      if ($request_method = 'OPTIONS') {
+        add_header 'Access-Control-Allow-Origin' 'https://v-learning-client-5r8j.vercel.app' always;
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
+        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        return 204;
+      }
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
@@ -22,45 +30,10 @@ spec:
   - host: welearning.online
     http:
       paths:
-      - path: /auth(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: vlearning-api-gateway
-            port:
-              number: 3000
-      - path: /course(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: vlearning-api-gateway
-            port:
-              number: 3000
-      - path: /notification(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: vlearning-api-gateway
-            port:
-              number: 3000
-      - path: /payment(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: vlearning-api-gateway
-            port:
-              number: 3000
-      - path: /chat(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: vlearning-api-gateway
-            port:
-              number: 3000
       - path: /(.*)
         pathType: Prefix
         backend:
           service:
-            name: vlearning-frontend
+            name: vlearning-api-gateway
             port:
-              number: 80
+              number: 3000
