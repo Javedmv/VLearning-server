@@ -2,9 +2,10 @@ import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import { Application } from "express";
-import { Service } from "../config";
 
 export const applySecurityMiddleware = (app: Application) => {
+    app.set('trust proxy', true);
+
     // Apply Helmet with CORS-friendly settings
     app.use(helmet({
         crossOriginResourcePolicy: { policy: "cross-origin" },
@@ -26,6 +27,6 @@ export const applySecurityMiddleware = (app: Application) => {
         standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
         legacyHeaders: false,
     });
-    
-    app.use(limiter);
+
+    // app.use(limiter);
 };
