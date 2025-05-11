@@ -7,7 +7,7 @@ import { routes } from "./routes";
 
 const app:Application = express();
 
-app.set('trust proxy', true);
+app.set('trust proxy', 'loopback');
 
 app.use(morgan("dev"))
 app.use(express.json())
