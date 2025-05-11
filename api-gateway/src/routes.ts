@@ -23,8 +23,9 @@ const createMultipartProxy = (serviceUrl: string) => {
 const createRegularProxy = (serviceUrl: string) => {
     return proxy(serviceUrl, {
         proxyReqPathResolver(req) {
-            console.log(`Regular proxy: ${serviceUrl}${req.url}`);
-            return req.url;
+            const resolvedPath = req.url;
+            console.log(`[PROXY] Forwarding ${req.method} ${req.originalUrl} → ${serviceUrl}${resolvedPath}`);
+            return resolvedPath;
         },
         userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
             console.log(`Response from ${serviceUrl}${userReq.url}: Status ${proxyRes.statusCode}`);
