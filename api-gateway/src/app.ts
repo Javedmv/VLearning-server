@@ -7,8 +7,6 @@ import { routes } from "./routes";
 
 const app:Application = express();
 
-app.set('trust proxy', true);
-
 app.use(morgan("dev"))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}));

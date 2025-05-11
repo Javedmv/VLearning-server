@@ -4,7 +4,6 @@ import rateLimit from "express-rate-limit";
 import { Application } from "express";
 
 export const applySecurityMiddleware = (app: Application) => {
-    app.set('trust proxy', true);
 
     // Apply Helmet with CORS-friendly settings
     app.use(helmet({
