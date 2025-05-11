@@ -11,9 +11,17 @@ export const applySecurityMiddleware = (app: Application) => {
         crossOriginResourcePolicy: { policy: "cross-origin" },
     }));
 
+    const allowedOrigins = ["https://v-learning-client-5r8j.vercel.app"];
+
     // Configure CORS properly
     app.use(cors({
-        origin: true,
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
         methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept', 'X-Requested-With', 'X-Forwarded-For'],
@@ -28,5 +36,5 @@ export const applySecurityMiddleware = (app: Application) => {
         legacyHeaders: false,
     });
 
-    // app.use(limiter);
+    app.use(limiter);
 };

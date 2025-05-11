@@ -10,7 +10,14 @@ spec:
     - host: welearning.online
       http:
         paths:
-          - path: /api/payments/webhook
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vlearning-api-gateway
+                port:
+                  number: 3000
+          - path: /payments/webhook
             pathType: Prefix
             backend:
               service:
@@ -24,10 +31,3 @@ spec:
                 name: vlearning-chat-service
                 port:
                   number: 3005
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: vlearning-api-gateway
-                port:
-                  number: 3000

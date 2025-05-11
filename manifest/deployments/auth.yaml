@@ -24,7 +24,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vlearning-auth-service
+  name: vlearning-auth-service3
 spec:
   selector:
     app: vlearning-auth-service
