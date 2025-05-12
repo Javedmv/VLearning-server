@@ -13,6 +13,8 @@ import { errorHandler } from "../_lib/common/error";
 // import cors from "cors";
 const app:Application = express();
 
+app.set('trust proxy', true); 
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser());
