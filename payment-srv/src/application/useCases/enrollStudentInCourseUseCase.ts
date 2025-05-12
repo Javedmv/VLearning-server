@@ -1,3 +1,4 @@
+import { producer } from "../../infrastructure/kafka";
 import { sendEnrollPaidUserProducer } from "../../infrastructure/kafka/producers";
 import { IDependencies } from "../interfaces/IDependencies";
 

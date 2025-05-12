@@ -1,12 +1,13 @@
 import Server from './presentation/server'
 import { connectDB } from './__boot/config';
 import { runConsumer, stopConsumer } from './__boot/consumer';
+import { producer } from './infrastructure/kafka';
 
 (async () => {
     try {
         Server;
         
-        await Promise.all([connectDB(), runConsumer()])
+        await Promise.all([connectDB(),producer.connect(), runConsumer()])
         // TODO: disconnected the consumer reconnect it when needed
         .then(() => {
             console.log("kafka consumer is running")
@@ -37,8 +38,12 @@ import { runConsumer, stopConsumer } from './__boot/consumer';
             console.log("Stopping Kafka consumer...");
             await stopConsumer();
             console.log("Kafka consumer stopped.");
+    
+            console.log("Disconnecting Kafka producer...");
+            await producer.disconnect();
+            console.log("Kafka producer disconnected.");
         } catch (error) {
-            console.error("Error while stopping Kafka consumer:", error);
+            console.error("Error while shutting down services:", error);
         } finally {
             console.log("Process exiting...");
             process.exit(0);
