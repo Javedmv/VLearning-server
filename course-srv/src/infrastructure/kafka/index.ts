@@ -8,7 +8,7 @@ import { Consumer, Kafka, Partitioners, Producer } from 'kafkajs';
 
 // production
 const kafka = new Kafka({
-    clientId: "auth-service",
+    clientId: "course-service",
     brokers: ["kafka:9092"],
     requestTimeout: 30000,
 })
