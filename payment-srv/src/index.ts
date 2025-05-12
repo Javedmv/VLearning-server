@@ -7,7 +7,7 @@ import { producer } from './infrastructure/kafka';
     try {
         Server;
         
-        await Promise.all([connectDB(),producer.connect(), runConsumer()])
+        await Promise.all([connectDB(), runConsumer()])
         // TODO: disconnected the consumer reconnect it when needed
         .then(() => {
             console.log("kafka consumer is running")

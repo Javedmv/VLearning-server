@@ -69,8 +69,8 @@ export const createSessionController = (dependencies: IDependencies) => {
                         quantity: 1,
                     },
                 ],
-                success_url: `${process.env.FRONTEND_URL}/payment/success/courseId=${course._id}`,
-                cancel_url: `${process.env.FRONTEND_URL}/payment/failed/courseId=${course._id}`,
+                success_url: `${process.env.FRONTEND_URL}/payment/success/courseId=${course?._id}`,
+                cancel_url: `${process.env.FRONTEND_URL}/payment/failed/courseId=${course?._id}`,
             });
             
             // **Update the session's metadata with the session ID**
