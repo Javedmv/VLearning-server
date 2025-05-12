@@ -31,7 +31,6 @@ export const addNewCourse = async (data: PTobe) => {
                 },
                 { overwrite: false } // Ensures no new fields are added
             );
-            console.log(`FUCK :++ Course updated successfully in Payment from Course: ${existingCourse._id}`);
             return;
         } else {
             // Create a new course with the provided data, ensuring `_id` fields are preserved
