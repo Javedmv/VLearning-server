@@ -23,7 +23,7 @@ export const applySecurityMiddleware = (app: Application) => {
         },
         methods: ["GET", "POST", "HEAD", "PUT", "PATCH", "DELETE", "OPTIONS"],
         credentials: true,
-        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept', 'X-Requested-With', 'X-Forwarded-For'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'Range', 'Accept', 'X-Requested-With', 'X-Forwarded-For', 'X-Forwarded-Proto'],
         exposedHeaders: ['Content-Disposition', 'Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Type']
     }));
 
