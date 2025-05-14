@@ -42,7 +42,7 @@ export const generateCertificateController = (dependencies: IDependencies) => {
         "Content-Disposition",
         `attachment; filename="${enrollment.courseId.basicDetails.title}_Certificate.pdf"`
       );
-      res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+      res.setHeader("Access-Control-Allow-Origin", "https://v-learning-client-5r8j.vercel.app");
       res.setHeader("Access-Control-Allow-Credentials", "true");
       res.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
 
