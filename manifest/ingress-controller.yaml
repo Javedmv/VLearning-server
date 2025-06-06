@@ -2,8 +2,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: vlearning-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
-  ingressClassName: gce
+  ingressClassName: nginx   # <-- Use "nginx" here to specify NGINX ingress controller
   rules:
     - host: welearning.online
       http:
