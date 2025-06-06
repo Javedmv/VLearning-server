@@ -3,9 +3,11 @@ kind: Ingress
 metadata:
   name: vlearning-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/enable-websocket: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
 spec:
-  ingressClassName: nginx   # <-- Use "nginx" here to specify NGINX ingress controller
+  ingressClassName: nginx
   rules:
     - host: welearning.online
       http:
@@ -31,24 +33,3 @@ spec:
                 name: vlearning-chat-service
                 port:
                   number: 3005
-          - path: /auth
-            pathType: Prefix
-            backend:
-              service:
-                name: vlearning-auth-service
-                port:
-                  number: 3001
-          - path: /course
-            pathType: Prefix
-            backend:
-              service:
-                name: vlearning-course-srv
-                port:
-                  number: 3003
-          - path: /notification
-            pathType: Prefix
-            backend:
-              service:
-                name: vlearning-notification-service
-                port:
-                  number: 3002
