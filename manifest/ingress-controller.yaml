@@ -2,9 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: vlearning-ingress
-  annotations:
-    kubernetes.io/ingress.class: "gce"
 spec:
+  ingressClassName: gce
   rules:
     - host: welearning.online
       http:
@@ -16,7 +15,6 @@ spec:
                 name: vlearning-api-gateway
                 port:
                   number: 3000
-
           - path: /webhook
             pathType: Prefix
             backend:
@@ -24,7 +22,6 @@ spec:
                 name: vlearning-payment-srv
                 port:
                   number: 3004
-
           - path: /socket.io
             pathType: Prefix
             backend:
@@ -32,7 +29,6 @@ spec:
                 name: vlearning-chat-service
                 port:
                   number: 3005
-
           - path: /auth
             pathType: Prefix
             backend:
@@ -40,7 +36,6 @@ spec:
                 name: vlearning-auth-service
                 port:
                   number: 3001
-
           - path: /course
             pathType: Prefix
             backend:
@@ -48,7 +43,6 @@ spec:
                 name: vlearning-course-srv
                 port:
                   number: 3003
-
           - path: /notification
             pathType: Prefix
             backend:
